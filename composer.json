@@ -1,0 +1,29 @@
+{
+    "name": "koalafacade/diamond-console",
+    "description": "Laravel Package for generate DDD structure easily for your projects",
+    "keywords": [
+        "koala facade",
+        "koalafacade",
+        "ddd",
+        "laravel",
+        "laravelpackage",
+        "laravel ddd"
+    ],
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Koalafacade\\DiamondConsole\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Stiven Trizky Katuuk",
+            "email": "pemudakoding@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {}
+}
