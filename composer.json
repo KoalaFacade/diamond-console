@@ -13,7 +13,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Koalafacade\\DiamondConsole\\": "src/"
+            "KoalaFacade\\DiamondConsole\\": "src/"
         }
     },
     "authors": [
@@ -21,9 +21,16 @@
             "name": "Stiven Trizky Katuuk",
             "email": "pemudakoding@gmail.com",
             "role": "Developer"
+        },
+        {
+            "name": "Kevin Abrar Khansa",
+            "email": "kevariable@gmail.com",
+            "role": "Developer"
         }
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "require": {}
+    "require": {
+        "illuminate/support": "^9.41"
+    }
 }
