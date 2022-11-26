@@ -26,6 +26,11 @@
             "name": "Kevin Abrar Khansa",
             "email": "kevariable@gmail.com",
             "role": "Developer"
+        },
+        {
+            "name": "Holiq Ibrahim",
+            "email": "holiq.ibrahim376@gmail.com",
+            "role": "Developer"
         }
     ],
     "minimum-stability": "dev",
