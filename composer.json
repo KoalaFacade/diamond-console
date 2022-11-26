@@ -31,6 +31,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "illuminate/support": "^9.41"
+        "illuminate/support": "^9.41",
+        "illuminate/console": "^9.41"
     }
 }
