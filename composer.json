@@ -26,11 +26,17 @@
             "name": "Kevin Abrar Khansa",
             "email": "kevariable@gmail.com",
             "role": "Developer"
+        },
+        {
+            "name": "Holiq Ibrahim",
+            "email": "holiq.ibrahim376@gmail.com",
+            "role": "Developer"
         }
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "illuminate/support": "^9.41"
+        "illuminate/support": "^9.41",
+        "illuminate/console": "^9.41"
     }
 }
