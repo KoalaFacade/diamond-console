@@ -38,5 +38,8 @@
     "require": {
         "illuminate/support": "^9.41",
         "illuminate/console": "^9.41"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.9"
     }
 }
