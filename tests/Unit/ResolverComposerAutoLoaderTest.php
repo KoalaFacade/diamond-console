@@ -30,7 +30,7 @@ it(
         expect($composerResolver)->toBeTrue()
             ->and(array_keys($loadedComposer->autoload['psr-4']))->toContain(...$supportedStructureNamespaces);
     }
-)->group('composer');
+)->group('unit');
 
 function fetchComposerContents(): object
 {

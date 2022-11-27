@@ -19,11 +19,6 @@ class ResolveComposerAutoLoaderAction extends Action
         //
     }
 
-    protected const BASE_STRUCTURES = [
-        'Infrastructure',
-        'Domain',
-    ];
-
     /**
      * @throws FileNotFoundException
      * @throws UnableToReadFile
@@ -36,7 +31,7 @@ class ResolveComposerAutoLoaderAction extends Action
         $baseDirectory = config(key: 'diamond.base_directory');
         $composer = $this->fetchComposerContents();
 
-        foreach (self::BASE_STRUCTURES as $structure) {
+        foreach ($this->resolveBaseStructures() as $structure) {
             $namespace = Str::of(string: $structure)->finish(cap: '\\');
             $directory = $namespace->replace(search: '\\', replace: '/');
 
@@ -103,5 +98,16 @@ class ResolveComposerAutoLoaderAction extends Action
     protected function resolveBasePathForComposer(): string
     {
         return base_path(path: 'composer.json');
+    }
+
+    /**
+     * @return array<string>
+     */
+    protected function resolveBaseStructures(): array
+    {
+        /** @var array<string> $structures */
+        $structures = config(key: 'diamond.structures');
+
+        return $structures;
     }
 }
