@@ -8,7 +8,7 @@ use Illuminate\Filesystem\Filesystem;
 use KoalaFacade\DiamondConsole\Actions\Composer\ResolveComposerAutoLoaderAction;
 use Throwable;
 
-class GenerateBaseStructureCommand extends Command
+class InstallCommand extends Command
 {
     protected $signature = 'diamond:install';
 
@@ -30,7 +30,7 @@ class GenerateBaseStructureCommand extends Command
             $path = $this->resolveBaseDirectoryPath() . $structure;
 
             if ($fileSystem->exists(path: $path)) {
-                $this->line(string: 'Skipping generating ' . $structure . ' , the base directory is exists');
+                $this->line(string: 'Skipping generate ' . $structure . ' , the base directory is exists');
 
                 continue;
             }
