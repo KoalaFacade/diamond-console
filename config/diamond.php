@@ -18,11 +18,12 @@ return [
      | --------------------------------------------------------------------
      |
      | We made a configuration for the structure, so you can add or change the name
-     | anything you want
+     | anything you want. * please only change the value not the key,
+     | because the key as identifier, so we not recommend to change the identifier
      |
      */
     'structures' => [
-        'Infrastructure',
-        'Domain',
+        'infrastructure' => 'Infrastructure',
+        'domain' => 'Domain',
     ],
 ];
