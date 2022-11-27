@@ -34,10 +34,10 @@ it(
 
 function fetchComposerContents(): object
 {
-    $composerPath = base_path('composer.json');
+    $path = base_path('composer.json');
 
     return (object) json_decode(
-        json: (new Illuminate\Filesystem\Filesystem())->get($composerPath),
+        json: (new Illuminate\Filesystem\Filesystem())->get($path),
         associative: true
     );
 }

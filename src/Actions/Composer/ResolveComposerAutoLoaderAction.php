@@ -45,7 +45,9 @@ class ResolveComposerAutoLoaderAction extends Action
             Arr::set(
                 array: $composer->autoload['psr-4'],
                 key: $namespace->toString(),
-                value: $directory->toString()
+                value: $directory
+                    ->start(prefix: config(key: 'diamond.base_directory'))
+                    ->toString()
             );
         }
 
