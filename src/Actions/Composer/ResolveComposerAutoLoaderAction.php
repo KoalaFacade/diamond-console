@@ -35,6 +35,8 @@ class ResolveComposerAutoLoaderAction extends Action
         $composer = $this->fetchComposerContents();
 
         foreach (self::BASE_STRUCTURES as $structure) {
+            /** @var string $baseDirectory */
+            $baseDirectory = config(key: 'diamond.base_directory');
             $namespace = Str::of(string: $structure)->finish(cap: '\\');
             $directory = $namespace->replace(search: '\\', replace: '/');
 
@@ -46,7 +48,7 @@ class ResolveComposerAutoLoaderAction extends Action
                 array: $composer->autoload['psr-4'],
                 key: $namespace->toString(),
                 value: $directory
-                    ->start(prefix: config(key: 'diamond.base_directory'))
+                    ->start(prefix: $baseDirectory)
                     ->toString()
             );
         }
