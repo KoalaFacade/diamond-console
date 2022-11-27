@@ -32,11 +32,11 @@ class ResolveComposerAutoLoaderAction extends Action
      */
     public function execute(): bool
     {
+        /** @var string $baseDirectory */
+        $baseDirectory = config(key: 'diamond.base_directory');
         $composer = $this->fetchComposerContents();
 
         foreach (self::BASE_STRUCTURES as $structure) {
-            /** @var string $baseDirectory */
-            $baseDirectory = config(key: 'diamond.base_directory');
             $namespace = Str::of(string: $structure)->finish(cap: '\\');
             $directory = $namespace->replace(search: '\\', replace: '/');
 
