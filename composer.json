@@ -38,7 +38,8 @@
     "require": {
         "php": "^8.0",
         "illuminate/support": "^9.41",
-        "illuminate/console": "^9.41"
+        "illuminate/console": "^9.41",
+        "illuminate/filesystem": "^9.41"
     },
     "require-dev": {
         "phpstan/phpstan": "^1.9",
@@ -49,6 +50,13 @@
     "config": {
         "allow-plugins": {
             "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "KoalaFacade\\DiamondConsole\\DiamondConsoleServiceProvider"
+            ]
         }
     }
 }
