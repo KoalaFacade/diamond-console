@@ -36,19 +36,10 @@ class MakeMailCommand extends Command
          */
         $infrastructurePath = config(key: 'diamond.structures.infrastructure');
 
-        /**
-         * @var  string  $namespace
-         */
         $namespace = "$infrastructurePath\\$domain\\Mail";
 
-        /**
-         * @var  string  $destinationPath
-         */
         $destinationPath = base_path(path: "src/$infrastructurePath/$domain/Mail");
 
-        /**
-         * @var  string  $stubPath
-         */
         $stubPath = __DIR__ . '/../../stubs/mail.stub';
 
         /**
@@ -71,7 +62,13 @@ class MakeMailCommand extends Command
         $existsFile = $filesystem->exists(path: $destinationPath . '/' . $fileName);
 
         if (! $existsFile) {
-            CopyStubAction::resolve()->execute($stubPath, $destinationPath, $fileName, $placeholders);
+            CopyStubAction::resolve()
+                ->execute(
+                    stubPath: $stubPath,
+                    destinationPath: $destinationPath,
+                    fileName: $fileName,
+                    placeholders: $placeholders
+                );
         } else {
             $this->error(string: $fileName . ' already exists.');
         }
