@@ -13,14 +13,14 @@ class CopyStubAction extends Action
      *
      * @param  string  $stubPath
      * @param  string  $destinationPath
-     * @param  string  $name
-     * @param  array<string>  $replacements
+     * @param  string  $fileName
+     * @param  array<string>  $placeholders
      * @return void
      */
-    public function execute($stubPath, $destinationPath, $name, $replacements): void
+    public function execute($stubPath, $destinationPath, $fileName, $placeholders): void
     {
+        $filePath = $destinationPath . '/' . $fileName;
         $filesystem = new Filesystem;
-        $filePath = $destinationPath . '/' . $name . '.php';
         $filesystem->ensureDirectoryExists(
             Str::of($destinationPath)
                 ->beforeLast('/'),
@@ -28,6 +28,6 @@ class CopyStubAction extends Action
         $filesystem->makeDirectory($destinationPath);
         $filesystem->copy($stubPath, $filePath);
 
-        ReplacePlaceholderAction::resolve()->execute($filePath, $replacements);
+        ReplacePlaceholderAction::resolve()->execute($filePath, $placeholders);
     }
 }

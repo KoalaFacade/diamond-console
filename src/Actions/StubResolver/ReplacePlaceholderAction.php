@@ -12,16 +12,16 @@ class ReplacePlaceholderAction extends Action
      * Replace Placeholder Stub data
      *
      * @param  string  $filePath
-     * @param  array<string>  $replacements
+     * @param  array<string>  $placeholders
      * @return void
      */
-    public function execute($filePath, $replacements): void
+    public function execute($filePath, $placeholders): void
     {
         $filesystem = new Filesystem;
         $stub = Str::of($filesystem->get($filePath));
 
-        foreach ($replacements as $key => $replacement) {
-            $stub = $stub->replace("{{ {$key} }}", $replacement);
+        foreach ($placeholders as $placeholder => $replacement) {
+            $stub = $stub->replace("{{ {$placeholder} }}", $replacement);
         }
 
         $contents = $stub;

@@ -6,7 +6,6 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\StubResolver\CopyStubAction;
-use KoalaFacade\DiamondConsole\Actions\StubResolver\ExistsFileAction;
 
 class MakeMailCommand extends Command
 {
@@ -29,14 +28,19 @@ class MakeMailCommand extends Command
         $domain = $this->argument('domain');
 
         /**
+         * @var string $infrastructurePath
+         */
+        $infrastructurePath = config('diamond.structures.infrastructure');
+
+        /**
          * @var  string  $namespace
          */
-        $namespace = "Infrastructure\\{$domain}\\Mail";
+        $namespace = "{$infrastructurePath}\\{$domain}\\Mail";
 
         /**
          * @var  string  $destinationPath
          */
-        $destinationPath = base_path("src/Infrastructure/{$domain}/Mail");
+        $destinationPath = base_path("src/{$infrastructurePath}/{$domain}/Mail");
 
         /**
          * @var  string  $stubPath
@@ -44,25 +48,28 @@ class MakeMailCommand extends Command
         $stubPath = __DIR__ . '/../../stubs/mail.stub';
 
         /**
-         * @var  array<string>  $replacements
+         * @var  array<string>  $placeholders
          */
-        $replacements = [
+        $placeholders = [
             'namespace' => $namespace,
             'class' => $name,
             'subject' => Str::ucfirst($name),
         ];
 
+        $filesystem = new Filesystem;
+
         if ($this->option('force')) {
-            $filesystem = new Filesystem;
             $filesystem->deleteDirectory($destinationPath);
         }
 
-        $existsFile = ExistsFileAction::resolve()->execute($destinationPath, $name);
+        $fileName = $name . '.php';
+
+        $existsFile = $filesystem->exists($destinationPath . '/' . $fileName);
 
         if (! $existsFile) {
-            CopyStubAction::resolve()->execute($stubPath, $destinationPath, $name, $replacements);
+            CopyStubAction::resolve()->execute($stubPath, $destinationPath, $fileName, $placeholders);
         } else {
-            $this->error(string: $name . ' already exists.');
+            $this->error(string: $fileName . ' already exists.');
         }
 
         $this->info(string: 'Successfully generate base file');
