@@ -12,11 +12,12 @@ class CopyStubAction extends Action
     /**
      * Copy Stub to Diamond Infrastructure
      *
-     * @param string $stubPath
-     * @param string $destinationPath
-     * @param string $fileName
-     * @param array<string> $placeholders
+     * @param  string  $stubPath
+     * @param  string  $destinationPath
+     * @param  string  $fileName
+     * @param  array<string>  $placeholders
      * @return void
+     *
      * @throws FileNotFoundException
      */
     public function execute(string $stubPath, string $destinationPath, string $fileName, array $placeholders): void
