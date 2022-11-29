@@ -3,6 +3,7 @@
 namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\StubResolver\CopyStubAction;
@@ -13,6 +14,9 @@ class MakeMailCommand extends Command
 
     protected $description = 'create new mail';
 
+    /**
+     * @throws FileNotFoundException
+     */
     public function handle(): void
     {
         $this->info(string: 'Generating files to our project');
@@ -20,27 +24,27 @@ class MakeMailCommand extends Command
         /**
          * @var  string  $name
          */
-        $name = $this->argument('name');
+        $name = $this->argument(key: 'name');
 
         /**
          * @var  string  $domain
          */
-        $domain = $this->argument('domain');
+        $domain = $this->argument(key: 'domain');
 
         /**
          * @var string $infrastructurePath
          */
-        $infrastructurePath = config('diamond.structures.infrastructure');
+        $infrastructurePath = config(key: 'diamond.structures.infrastructure');
 
         /**
          * @var  string  $namespace
          */
-        $namespace = "{$infrastructurePath}\\{$domain}\\Mail";
+        $namespace = "$infrastructurePath\\$domain\\Mail";
 
         /**
          * @var  string  $destinationPath
          */
-        $destinationPath = base_path("src/{$infrastructurePath}/{$domain}/Mail");
+        $destinationPath = base_path(path: "src/$infrastructurePath/$domain/Mail");
 
         /**
          * @var  string  $stubPath
@@ -56,15 +60,15 @@ class MakeMailCommand extends Command
             'subject' => Str::ucfirst($name),
         ];
 
-        $filesystem = new Filesystem;
+        $filesystem = new Filesystem();
 
-        if ($this->option('force')) {
+        if ($this->option(key: 'force')) {
             $filesystem->deleteDirectory($destinationPath);
         }
 
         $fileName = $name . '.php';
 
-        $existsFile = $filesystem->exists($destinationPath . '/' . $fileName);
+        $existsFile = $filesystem->exists(path: $destinationPath . '/' . $fileName);
 
         if (! $existsFile) {
             CopyStubAction::resolve()->execute($stubPath, $destinationPath, $fileName, $placeholders);

@@ -18,7 +18,7 @@ class {{ class }} extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(): void
     {
         //
     }
@@ -28,7 +28,7 @@ class {{ class }} extends Mailable
      *
      * @return \Illuminate\Mail\Mailables\Envelope
      */
-    public function envelope()
+    public function envelope(): \Illuminate\Mail\Mailables\Envelope
     {
         return new Envelope(
             subject: '{{ subject }}',
@@ -40,7 +40,7 @@ class {{ class }} extends Mailable
      *
      * @return \Illuminate\Mail\Mailables\Content
      */
-    public function content()
+    public function content(): \Illuminate\Mail\Mailables\Content
     {
         return new Content(
             view: 'view.name',
@@ -52,7 +52,7 @@ class {{ class }} extends Mailable
      *
      * @return array
      */
-    public function attachments()
+    public function attachments(): array
     {
         return [];
     }
