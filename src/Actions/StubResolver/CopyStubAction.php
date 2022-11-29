@@ -24,12 +24,9 @@ class CopyStubAction extends Action
     {
         $filePath = $destinationPath . '/' . $fileName;
         $filesystem = new Filesystem();
-        $filesystem->ensureDirectoryExists(
-            Str::of($destinationPath)
-                ->beforeLast('/'),
-        );
+        $filesystem->ensureDirectoryExists(path: Str::of($destinationPath)->beforeLast(search: '/'));
         $filesystem->makeDirectory($destinationPath);
-        $filesystem->copy($stubPath, $filePath);
+        $filesystem->copy(path: $stubPath, target: $filePath);
 
         ReplacePlaceholderAction::resolve()->execute($filePath, $placeholders);
     }

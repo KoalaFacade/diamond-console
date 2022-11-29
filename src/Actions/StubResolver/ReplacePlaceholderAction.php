@@ -21,19 +21,16 @@ class ReplacePlaceholderAction extends Action
     public function execute(string $filePath, array $placeholders): void
     {
         $filesystem = new Filesystem();
-        $stub = Str::of($filesystem->get(path: $filePath));
+        $stub = Str::of(string: $filesystem->get(path: $filePath));
 
         foreach ($placeholders as $placeholder => $replacement) {
-            $stub = $stub->replace("{{ $placeholder }}", $replacement);
+            $stub = $stub->replace(search: "{{ $placeholder }}", replace: $replacement);
         }
 
         $contents = $stub;
 
-        $filesystem->ensureDirectoryExists(
-            Str::of($filePath)
-                ->beforeLast('/'),
-        );
+        $filesystem->ensureDirectoryExists(path: Str::of($filePath)->beforeLast(search: '/'));
 
-        $filesystem->put($filePath, $contents);
+        $filesystem->put(path: $filePath, contents: $contents);
     }
 }
