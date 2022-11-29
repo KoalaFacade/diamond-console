@@ -24,7 +24,7 @@ class CopyStubAction extends Action
     {
         $filePath = $destinationPath . '/' . $fileName;
         $filesystem = new Filesystem();
-        $filesystem->ensureDirectoryExists(path: Str::of($destinationPath)->beforeLast(search: '/') );
+        $filesystem->ensureDirectoryExists(path: Str::of($destinationPath)->beforeLast(search: '/'));
         $filesystem->makeDirectory($destinationPath);
         $filesystem->copy(path: $stubPath, target: $filePath);
 

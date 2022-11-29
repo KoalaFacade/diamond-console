@@ -29,7 +29,7 @@ class ReplacePlaceholderAction extends Action
 
         $contents = $stub;
 
-        $filesystem->ensureDirectoryExists(path: Str::of($filePath)->beforeLast(search: '/'),);
+        $filesystem->ensureDirectoryExists(path: Str::of($filePath)->beforeLast(search: '/'));
 
         $filesystem->put(path: $filePath, contents: $contents);
     }
