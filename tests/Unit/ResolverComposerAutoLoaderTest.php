@@ -44,5 +44,8 @@ function fetchComposerContents(): object
 
 function supportedStructures(): array
 {
-    return ['Infrastructure\\', 'Domain\\'];
+    $domainPath = config(key: 'diamond.structures.domain');
+    $infrastructurePath = config(key: 'diamond.structures.infrastructure');
+
+    return ["$infrastructurePath\\", "$domainPath\\"];
 }

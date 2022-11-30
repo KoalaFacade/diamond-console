@@ -5,21 +5,21 @@ namespace KoalaFacade\DiamondConsole\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Artisan;
 use KoalaFacade\DiamondConsole\Actions\StubResolver\CopyStubAction;
 
-class MakeMailCommand extends Command
+class MakeModelCommand extends Command
 {
-    protected $signature = 'diamond:mail {name} {domain} {--force}';
+    protected $signature = 'diamond:model {name} {domain} {--m|migration} {--force}';
 
-    protected $description = 'create new mail';
+    protected $description = 'create new model';
 
     /**
      * @throws FileNotFoundException
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating files to our project');
+        $this->info(string: 'Generating model files to your project');
 
         /**
          * @var  string  $name
@@ -37,15 +37,15 @@ class MakeMailCommand extends Command
         $basePath = config(key: 'diamond.base_directory');
 
         /**
-         * @var string $infrastructurePath
+         * @var string $domainPath
          */
-        $infrastructurePath = config(key: 'diamond.structures.infrastructure');
+        $domainPath = config(key: 'diamond.structures.domain');
 
-        $namespace = "$infrastructurePath\\$domain\\Mail";
+        $namespace = "$domainPath\\Shared\\$domain\\Models";
 
-        $destinationPath = base_path(path: "$basePath/$infrastructurePath/$domain/Mail");
+        $destinationPath = base_path(path: "$basePath/$domainPath/Shared/$domain/Models");
 
-        $stubPath = __DIR__ . '/../../stubs/mail.stub';
+        $stubPath = __DIR__ . '/../../stubs/model.stub';
 
         /**
          * @var  array<string>  $placeholders
@@ -53,7 +53,6 @@ class MakeMailCommand extends Command
         $placeholders = [
             'namespace' => $namespace,
             'class' => $name,
-            'subject' => Str::ucfirst($name),
         ];
 
         $filesystem = new Filesystem();
@@ -65,6 +64,10 @@ class MakeMailCommand extends Command
         $fileName = $name . '.php';
 
         $existsFile = $filesystem->exists(path: $destinationPath . '/' . $fileName);
+
+        if (($this->option('migration') && ! $existsFile) || ($this->option('migration') && $this->option('force'))) {
+            Artisan::call(command: "diamond:migration $name");
+        }
 
         if (! $existsFile) {
             CopyStubAction::resolve()
@@ -78,6 +81,6 @@ class MakeMailCommand extends Command
             $this->error(string: $fileName . ' already exists.');
         }
 
-        $this->info(string: 'Successfully generate base file');
+        $this->info(string: 'Successfully generate model file');
     }
 }
