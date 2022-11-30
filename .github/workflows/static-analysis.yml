@@ -1,0 +1,29 @@
+name: static-analysis
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  static-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          tools: composer:v2
+          coverage: none
+
+      - name: Install PHP dependencies
+        run: composer update --prefer-stable --no-interaction --no-progress --ansi
+
+      - name: Run phpstan
+        run: vendor/bin/phpstan
+
+
+
