@@ -5,11 +5,12 @@ namespace KoalaFacade\DiamondConsole\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Artisan;
 use KoalaFacade\DiamondConsole\Actions\StubResolver\CopyStubAction;
 
 class MakeModelCommand extends Command
 {
-    protected $signature = 'diamond:model {name} {domain} {--force}';
+    protected $signature = 'diamond:model {name} {domain} {--m|migration} {--force}';
 
     protected $description = 'create new model';
 
@@ -58,6 +59,10 @@ class MakeModelCommand extends Command
         $fileName = $name . '.php';
 
         $existsFile = $filesystem->exists(path: $destinationPath . '/' . $fileName);
+
+        if (($this->option('migration') && ! $existsFile) || ($this->option('migration') && $this->option('force'))) {
+            Artisan::call(command: "diamond:migration $name");
+        }
 
         if (! $existsFile) {
             CopyStubAction::resolve()

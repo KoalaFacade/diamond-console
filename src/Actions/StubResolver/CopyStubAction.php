@@ -4,7 +4,6 @@ namespace KoalaFacade\DiamondConsole\Actions\StubResolver;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Foundation\Action;
 
 class CopyStubAction extends Action
@@ -24,8 +23,7 @@ class CopyStubAction extends Action
     {
         $filePath = $destinationPath . '/' . $fileName;
         $filesystem = new Filesystem();
-        $filesystem->ensureDirectoryExists(path: Str::of($destinationPath)->beforeLast(search: '/'));
-        $filesystem->makeDirectory($destinationPath);
+        $filesystem->ensureDirectoryExists(path: $destinationPath);
         $filesystem->copy(path: $stubPath, target: $filePath);
 
         ReplacePlaceholderAction::resolve()->execute($filePath, $placeholders);
