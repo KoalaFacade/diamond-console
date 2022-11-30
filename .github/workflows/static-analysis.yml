@@ -1,7 +1,7 @@
 name: static-analysis
 
 on:
-  pull:
+  pull_request:
   push:
 
 jobs:
