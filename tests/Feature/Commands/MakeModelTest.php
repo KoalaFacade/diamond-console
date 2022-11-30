@@ -10,16 +10,16 @@ use Illuminate\Support\Str;
 it(
     description: 'can generate new model class',
     closure: function () {
-        if (File::exists(base_path('src/Infrastructure/User/Model/User.php'))) {
-            unlink(base_path('src/Infrastructure/User/Model/User.php'));
+        if (File::exists(base_path('src/Domain/Shared/User/Models/User.php'))) {
+            unlink(base_path('src/Domain/Shared/User/Models/User.php'));
         }
 
-        $this->assertFalse(File::exists(base_path('src/Infrastructure/User/Model/User.php')));
+        $this->assertFalse(File::exists(base_path('src/Domain/Shared/User/Models/User.php')));
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'diamond:model User User');
 
-        $this->assertTrue(File::exists(base_path('src/Infrastructure/User/Model/User.php')));
+        $this->assertTrue(File::exists(base_path('src/Domain/Shared/User/Models/User.php')));
 
         $filesystem = new Filesystem();
         $filesystem->deleteDirectory(base_path('src'));
@@ -29,7 +29,7 @@ it(
 it(
     description: 'can force generate exists model class',
     closure: function () {
-        $this->assertFalse(File::exists(base_path('src/Infrastructure/User/Model/User.php')));
+        $this->assertFalse(File::exists(base_path('src/Domain/Shared/User/Models/User.php')));
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'diamond:model User User');
@@ -39,7 +39,7 @@ it(
 
         Artisan::call(command: 'diamond:model User User --force');
 
-        $this->assertTrue(File::exists(base_path('src/Infrastructure/User/Model/User.php')));
+        $this->assertTrue(File::exists(base_path('src/Domain/Shared/User/Models/User.php')));
 
         $filesystem = new Filesystem();
         $filesystem->deleteDirectory(base_path('src'));
@@ -49,16 +49,16 @@ it(
 it(
     description: 'can generate new model class with migration',
     closure: function () {
-        if (File::exists(base_path('src/Infrastructure/User/Model/User.php'))) {
-            unlink(base_path('src/Infrastructure/User/Model/User.php'));
+        if (File::exists(base_path('src/Domain/Shared/User/Models/User.php'))) {
+            unlink(base_path('src/Domain/Shared/User/Models/User.php'));
         }
 
-        $this->assertFalse(File::exists(base_path('src/Infrastructure/User/Model/User.php')));
+        $this->assertFalse(File::exists(base_path('src/Domain/Shared/User/Models/User.php')));
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'diamond:model User User -m');
 
-        $this->assertTrue(File::exists(base_path('src/Infrastructure/User/Model/User.php')));
+        $this->assertTrue(File::exists(base_path('src/Domain/Shared/User/Models/User.php')));
 
         $filesystem = new Filesystem();
         $filesystem->deleteDirectory(base_path('src'));
@@ -72,7 +72,7 @@ it(
 it(
     description: 'can force generate exists model class with migration',
     closure: function () {
-        $this->assertFalse(File::exists(base_path('src/Infrastructure/User/Model/User.php')));
+        $this->assertFalse(File::exists(base_path('src/Domain/Shared/User/Models/User.php')));
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'diamond:model User User -m');
@@ -82,7 +82,7 @@ it(
 
         Artisan::call(command: 'diamond:model User User -m --force');
 
-        $this->assertTrue(File::exists(base_path('src/Infrastructure/User/Model/User.php')));
+        $this->assertTrue(File::exists(base_path('src/Domain/Shared/User/Models/User.php')));
 
         $filesystem = new Filesystem();
         $filesystem->deleteDirectory(base_path('src'));

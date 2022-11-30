@@ -32,13 +32,13 @@ class MakeModelCommand extends Command
         $domain = $this->argument(key: 'domain');
 
         /**
-         * @var string $infrastructurePath
+         * @var string $domainPath
          */
-        $infrastructurePath = config(key: 'diamond.structures.infrastructure');
+        $domainPath = config(key: 'diamond.structures.domain');
 
-        $namespace = "$infrastructurePath\\$domain\\Mail";
+        $namespace = "$domainPath\\Shared\\$domain\\Models";
 
-        $destinationPath = base_path(path: "src/$infrastructurePath/$domain/Model");
+        $destinationPath = base_path(path: "src/$domainPath/Shared/$domain/Models");
 
         $stubPath = __DIR__ . '/../../stubs/model.stub';
 
