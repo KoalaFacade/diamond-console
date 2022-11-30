@@ -32,13 +32,18 @@ class MakeMailCommand extends Command
         $domain = $this->argument(key: 'domain');
 
         /**
+         * @var string $basePath
+         */
+        $basePath = config(key: 'diamond.base_directory');
+
+        /**
          * @var string $infrastructurePath
          */
         $infrastructurePath = config(key: 'diamond.structures.infrastructure');
 
         $namespace = "$infrastructurePath\\$domain\\Mail";
 
-        $destinationPath = base_path(path: "src/$infrastructurePath/$domain/Mail");
+        $destinationPath = base_path(path: "$basePath/$infrastructurePath/$domain/Mail");
 
         $stubPath = __DIR__ . '/../../stubs/mail.stub';
 
