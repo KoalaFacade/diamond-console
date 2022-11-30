@@ -7,7 +7,6 @@ on:
 jobs:
   static-analysis:
     runs-on: ubuntu-latest
-    strategy:
 
     steps:
       - name: Checkout
