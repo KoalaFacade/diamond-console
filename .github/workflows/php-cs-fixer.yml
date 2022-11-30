@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-          token: ${{ secrets.SECRET_KOALA }}
+          token: ${{ secrets.KOALA_SECRET }}
 
       - name: Run php-cs-fixer
         uses: docker://oskarstark/php-cs-fixer-ga
