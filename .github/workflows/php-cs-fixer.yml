@@ -1,0 +1,33 @@
+name: php-cs-fixer
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  php-cs-fixer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.KOALA_SECRET }}
+
+      - name: Run php-cs-fixer
+        uses: docker://oskarstark/php-cs-fixer-ga
+
+      - name: execute pint
+        uses: aglipanci/laravel-pint-action@1.0.0
+        with:
+          verboseMode: true
+          testMode: true
+          configPath: "./pint.json"
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Apply pint changes
+          commit_user_name: pemudakoding
+          commit_user_email: pemudakoding@gmail.com
+          commit_author: Author <pemudakoding@gmail.com>
