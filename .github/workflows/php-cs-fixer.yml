@@ -15,9 +15,6 @@ jobs:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.KOALA_SECRET }}
 
-      - name: Run php-cs-fixer
-        uses: docker://oskarstark/php-cs-fixer-ga
-
       - name: execute pint
         uses: aglipanci/laravel-pint-action@1.0.0
         with:
