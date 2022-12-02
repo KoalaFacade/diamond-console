@@ -47,9 +47,6 @@ class MakeModelCommand extends Command
 
         $stubPath = __DIR__ . '/../../stubs/model.stub';
 
-        /**
-         * @var  array<string>  $placeholders
-         */
         $placeholders = [
             'namespace' => $namespace,
             'class' => $name,
@@ -77,10 +74,12 @@ class MakeModelCommand extends Command
                     fileName: $fileName,
                     placeholders: $placeholders
                 );
-        } else {
-            $this->error(string: $fileName . ' already exists.');
+
+            $this->info(string: 'Successfully generate model file');
+
+            return;
         }
 
-        $this->info(string: 'Successfully generate model file');
+        $this->error(string: $fileName . ' already exists.');
     }
 }
