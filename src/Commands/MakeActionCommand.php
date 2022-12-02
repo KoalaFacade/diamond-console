@@ -5,21 +5,20 @@ namespace KoalaFacade\DiamondConsole\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Artisan;
 use KoalaFacade\DiamondConsole\Actions\StubResolver\CopyStubAction;
 
-class MakeModelCommand extends Command
+class MakeActionCommand extends Command
 {
-    protected $signature = 'diamond:model {name} {domain} {--m|migration} {--force}';
+    protected $signature = 'diamond:action {name} {domain} {--force}';
 
-    protected $description = 'create new model';
+    protected $description = 'create new action';
 
     /**
      * @throws FileNotFoundException
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating model files to your project');
+        $this->info(string: 'Generating action files to your project');
 
         /**
          * @var  string  $name
@@ -41,11 +40,11 @@ class MakeModelCommand extends Command
          */
         $domainPath = config(key: 'diamond.structures.domain');
 
-        $namespace = "$domainPath\\Shared\\$domain\\Models";
+        $namespace = "$domainPath\\$domain\\Actions";
 
-        $destinationPath = base_path(path: "$basePath/$domainPath/Shared/$domain/Models");
+        $destinationPath = base_path(path: "$basePath/$domainPath/$domain/Actions");
 
-        $stubPath = __DIR__ . '/../../stubs/model.stub';
+        $stubPath = __DIR__ . '/../../stubs/action.stub';
 
         /**
          * @var  array<string>  $placeholders
@@ -65,10 +64,6 @@ class MakeModelCommand extends Command
 
         $isFileExists = $filesystem->exists(path: $destinationPath . '/' . $fileName);
 
-        if (($this->option('migration') && ! $isFileExists) || ($this->option('migration') && $this->option('force'))) {
-            Artisan::call(command: "diamond:migration $name");
-        }
-
         if (! $isFileExists) {
             CopyStubAction::resolve()
                 ->execute(
@@ -81,6 +76,6 @@ class MakeModelCommand extends Command
             $this->error(string: $fileName . ' already exists.');
         }
 
-        $this->info(string: 'Successfully generate model file');
+        $this->info(string: 'Successfully generate action file');
     }
 }

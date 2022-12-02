@@ -56,17 +56,17 @@ class MakeMailCommand extends Command
             'subject' => Str::ucfirst($name),
         ];
 
+        $fileName = $name . '.php';
+
         $filesystem = new Filesystem();
 
         if ($this->option(key: 'force')) {
-            $filesystem->deleteDirectory($destinationPath);
+            $filesystem->delete($destinationPath . '/' . $fileName);
         }
 
-        $fileName = $name . '.php';
+        $isFileExists = $filesystem->exists(path: $destinationPath . '/' . $fileName);
 
-        $existsFile = $filesystem->exists(path: $destinationPath . '/' . $fileName);
-
-        if (! $existsFile) {
+        if (! $isFileExists) {
             CopyStubAction::resolve()
                 ->execute(
                     stubPath: $stubPath,
