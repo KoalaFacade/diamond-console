@@ -63,13 +63,13 @@ class MakeModelCommand extends Command
 
         $fileName = $name . '.php';
 
-        $existsFile = $filesystem->exists(path: $destinationPath . '/' . $fileName);
+        $isFileExists = $filesystem->exists(path: $destinationPath . '/' . $fileName);
 
-        if (($this->option('migration') && ! $existsFile) || ($this->option('migration') && $this->option('force'))) {
+        if (($this->option('migration') && ! $isFileExists) || ($this->option('migration') && $this->option('force'))) {
             Artisan::call(command: "diamond:migration $name");
         }
 
-        if (! $existsFile) {
+        if (! $isFileExists) {
             CopyStubAction::resolve()
                 ->execute(
                     stubPath: $stubPath,

@@ -64,9 +64,9 @@ class MakeMailCommand extends Command
 
         $fileName = $name . '.php';
 
-        $existsFile = $filesystem->exists(path: $destinationPath . '/' . $fileName);
+        $isFileExists = $filesystem->exists(path: $destinationPath . '/' . $fileName);
 
-        if (! $existsFile) {
+        if (! $isFileExists) {
             CopyStubAction::resolve()
                 ->execute(
                     stubPath: $stubPath,
