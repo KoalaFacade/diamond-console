@@ -11,6 +11,6 @@
     "explicit_indirect_variable": true,
     "method_chaining_indentation": true,
     "no_blank_lines_after_class_opening": true,
-    "strings_containing_single_quote_chars": "true"
+    "single_quote": true
   }
 }

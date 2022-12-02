@@ -5,10 +5,15 @@ namespace KoalaFacade\DiamondConsole\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\StubResolver\CopyStubAction;
+use KoalaFacade\DiamondConsole\Commands\concerns\HasBaseArguments;
+use KoalaFacade\DiamondConsole\Commands\concerns\InteractsWithPath;
 
 class MakeEnumCommand extends Command
 {
+    use InteractsWithPath, HasBaseArguments;
+
     protected $signature = 'diamond:enum {name} {domain} {--force}';
 
     protected $description = 'create new enum';
@@ -20,35 +25,17 @@ class MakeEnumCommand extends Command
     {
         $this->info(string: 'Generating enum files to your project');
 
-        /**
-         * @var  string  $name
-         */
-        $name = $this->argument(key: 'name');
+        $name = $name = $this->resolveArgumentForName() . '.php';
 
-        /**
-         * @var  string  $domain
-         */
-        $domain = $this->argument(key: 'domain');
+        $namespace = Str::of(string: 'Enums')
+            ->start(prefix: $this->resolveArgumentForDomain() . '\\')
+            ->start(prefix: $this->resolvePathForDomain() . '\\');
 
-        /**
-         * @var string $basePath
-         */
-        $basePath = config(key: 'diamond.base_directory');
-
-        /**
-         * @var string $domainPath
-         */
-        $domainPath = config(key: 'diamond.structures.domain');
-
-        $namespace = "$domainPath\\$domain\\Enums";
-
-        $destinationPath = base_path(path: "$basePath/$domainPath/$domain/Enums");
-
-        $stubPath = __DIR__ . '/../../stubs/enum.stub';
+        $destinationPath = $this->resolveDestinationByNamespace(namespace: $namespace);
 
         $placeholders = [
-            'namespace' => $namespace,
-            'class' => $name,
+            'namespace' => $namespace->toString(),
+            'class' => $this->resolveClassNameByFile(name: $name),
         ];
 
         if (version_compare(PHP_VERSION, '8.1.0', '<=')) {
@@ -57,30 +44,28 @@ class MakeEnumCommand extends Command
             return;
         }
 
-        $fileName = $name . '.php';
-
         $filesystem = new Filesystem();
 
         if ($this->option(key: 'force')) {
-            $filesystem->delete($destinationPath . '/' . $fileName);
+            $filesystem->delete($destinationPath . '/' . $name);
         }
 
-        $isFileExists = $filesystem->exists(path: $destinationPath . '/' . $fileName);
+        $isFileExists = $filesystem->exists(path: $destinationPath . '/' . $name);
 
-        if (! $isFileExists) {
-            CopyStubAction::resolve()
-                ->execute(
-                    stubPath: $stubPath,
-                    destinationPath: $destinationPath,
-                    fileName: $fileName,
-                    placeholders: $placeholders
-                );
-
-            $this->info(string: 'Successfully generate enum file');
+        if ($isFileExists) {
+            $this->warn(string: $name . ' already exists.');
 
             return;
         }
 
-        $this->error(string: $fileName . ' already exists.');
+        CopyStubAction::resolve()
+            ->execute(
+                stubPath: $this->resolvePathForStub(name: 'enum'),
+                destinationPath: $destinationPath,
+                fileName: $name,
+                placeholders: $placeholders
+            );
+
+        $this->info(string: 'Successfully generate enum file');
     }
 }
