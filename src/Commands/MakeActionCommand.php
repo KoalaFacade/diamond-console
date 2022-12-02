@@ -9,7 +9,7 @@ use KoalaFacade\DiamondConsole\Actions\StubResolver\CopyStubAction;
 
 class MakeActionCommand extends Command
 {
-    protected $signature = 'diamond:action {name} {domain} {--m|migration} {--force}';
+    protected $signature = 'diamond:action {name} {domain} {--force}';
 
     protected $description = 'create new action';
 
