@@ -46,9 +46,6 @@ class MakeActionCommand extends Command
 
         $stubPath = __DIR__ . '/../../stubs/action.stub';
 
-        /**
-         * @var  array<string>  $placeholders
-         */
         $placeholders = [
             'namespace' => $namespace,
             'class' => $name,
@@ -72,10 +69,12 @@ class MakeActionCommand extends Command
                     fileName: $fileName,
                     placeholders: $placeholders
                 );
-        } else {
-            $this->error(string: $fileName . ' already exists.');
+
+            $this->info(string: 'Successfully generate action file');
+
+            return;
         }
 
-        $this->info(string: 'Successfully generate action file');
+        $this->error(string: $fileName . ' already exists.');
     }
 }
