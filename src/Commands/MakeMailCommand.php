@@ -74,10 +74,12 @@ class MakeMailCommand extends Command
                     fileName: $fileName,
                     placeholders: $placeholders
                 );
-        } else {
-            $this->error(string: $fileName . ' already exists.');
+
+            $this->info(string: 'Successfully generate base file');
+
+            return;
         }
 
-        $this->info(string: 'Successfully generate base file');
+        $this->error(string: $fileName . ' already exists.');
     }
 }
