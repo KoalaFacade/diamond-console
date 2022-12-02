@@ -55,13 +55,13 @@ class MakeModelCommand extends Command
             'class' => $name,
         ];
 
+        $fileName = $name . '.php';
+
         $filesystem = new Filesystem();
 
         if ($this->option(key: 'force')) {
-            $filesystem->deleteDirectory($destinationPath);
+            $filesystem->delete($destinationPath . '/' . $fileName);
         }
-
-        $fileName = $name . '.php';
 
         $isFileExists = $filesystem->exists(path: $destinationPath . '/' . $fileName);
 
