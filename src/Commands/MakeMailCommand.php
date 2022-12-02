@@ -7,9 +7,13 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\StubResolver\CopyStubAction;
+use KoalaFacade\DiamondConsole\Commands\concerns\HasBaseArguments;
+use KoalaFacade\DiamondConsole\Commands\concerns\InteractsWithPath;
 
 class MakeMailCommand extends Command
 {
+    use InteractsWithPath, HasBaseArguments;
+
     protected $signature = 'diamond:mail {name} {domain} {--force}';
 
     protected $description = 'create new mail';
@@ -26,32 +30,17 @@ class MakeMailCommand extends Command
          */
         $name = $this->argument(key: 'name');
 
-        /**
-         * @var  string  $domain
-         */
-        $domain = $this->argument(key: 'domain');
+        $namespace = Str::of(string: 'Mail')
+            ->start(prefix: $this->resolveArgumentForDomain() . '\\')
+            ->start(prefix: $this->resolvePathForInfrastructure() . '\\');
 
-        /**
-         * @var string $basePath
-         */
-        $basePath = config(key: 'diamond.base_directory');
-
-        /**
-         * @var string $infrastructurePath
-         */
-        $infrastructurePath = config(key: 'diamond.structures.infrastructure');
-
-        $namespace = "$infrastructurePath\\$domain\\Mail";
-
-        $destinationPath = base_path(path: "$basePath/$infrastructurePath/$domain/Mail");
-
-        $stubPath = __DIR__ . '/../../stubs/mail.stub';
+        $destinationPath = $this->resolveDestinationByNamespace(namespace: $namespace);
 
         /**
          * @var  array<string>  $placeholders
          */
         $placeholders = [
-            'namespace' => $namespace,
+            'namespace' => $namespace->toString(),
             'class' => $name,
             'subject' => Str::ucfirst($name),
         ];
@@ -66,20 +55,20 @@ class MakeMailCommand extends Command
 
         $isFileExists = $filesystem->exists(path: $destinationPath . '/' . $fileName);
 
-        if (! $isFileExists) {
-            CopyStubAction::resolve()
-                ->execute(
-                    stubPath: $stubPath,
-                    destinationPath: $destinationPath,
-                    fileName: $fileName,
-                    placeholders: $placeholders
-                );
-
-            $this->info(string: 'Successfully generate base file');
+        if ($isFileExists) {
+            $this->error(string: $fileName . ' already exists.');
 
             return;
         }
 
-        $this->error(string: $fileName . ' already exists.');
+        CopyStubAction::resolve()
+            ->execute(
+                stubPath: $this->resolvePathForStub(name: 'mail'),
+                destinationPath: $destinationPath,
+                fileName: $fileName,
+                placeholders: $placeholders
+            );
+
+        $this->info(string: 'Successfully generate base file');
     }
 }
