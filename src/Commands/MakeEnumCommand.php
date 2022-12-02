@@ -46,9 +46,6 @@ class MakeEnumCommand extends Command
 
         $stubPath = __DIR__ . '/../../stubs/enum.stub';
 
-        /**
-         * @var  array<string>  $placeholders
-         */
         $placeholders = [
             'namespace' => $namespace,
             'class' => $name,
@@ -78,10 +75,12 @@ class MakeEnumCommand extends Command
                     fileName: $fileName,
                     placeholders: $placeholders
                 );
-        } else {
-            $this->error(string: $fileName . ' already exists.');
+
+            $this->info(string: 'Successfully generate enum file');
+
+            return;
         }
 
-        $this->info(string: 'Successfully generate enum file');
+        $this->error(string: $fileName . ' already exists.');
     }
 }
