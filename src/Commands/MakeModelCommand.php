@@ -4,17 +4,19 @@ namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
-use KoalaFacade\DiamondConsole\Commands\Concerns\HasBaseArguments;
+use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
+use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
+use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
+use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 
 class MakeModelCommand extends Command
 {
-    use InteractsWithPath, HasBaseArguments;
+    use InteractsWithPath, HasArguments, HasOptions;
 
     protected $signature = 'diamond:model {name} {domain} {--m|migration} {--force}';
 
@@ -27,37 +29,35 @@ class MakeModelCommand extends Command
     {
         $this->info(string: 'Generating model files to your project');
 
-        $name = $this->resolveArgumentForName() . '.php';
+        $fileName = $this->resolveNameArgument() . '.php';
 
-        $namespace = Str::of(string: 'Models')
-            ->start(prefix: $this->resolveArgumentForDomain() . '\\')
-            ->start(prefix: 'Shared\\')
-            ->start(prefix: $this->resolvePathForDomain() . '\\');
+        $namespace = $this->resolveNamespace(
+            identifier: 'Models',
+            domain: 'Shared\\' . $this->resolveDomainArgument(),
+        );
 
-        $destinationPath = $this->resolveDestinationByNamespace(namespace: $namespace);
+        $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 
-        $placeholders = [
-            'namespace' => $namespace->toString(),
-            'class' => $this->resolveClassNameByFile(name: $name),
-        ];
+        $placeholders = new PlaceholderData(
+            namespace: $namespace,
+            class: $this->resolveClassNameByFile(name: $fileName),
+        );
 
-        $filesystem = new Filesystem();
+        $filePresent = FilePresentAction::resolve()
+            ->execute(
+                data: new FilePresentData(
+                    fileName: $fileName,
+                    destinationPath: $destinationPath,
+                ),
+                withForce: $this->resolveForceOption()
+            );
 
-        if ($this->option(key: 'force')) {
-            $filesystem->delete($destinationPath . '/' . $name);
+        if ($this->option('migration') && (! $filePresent || $this->resolveForceOption())) {
+            Artisan::call(command: 'diamond:migration ' . $this->resolveClassNameByFile(name: $fileName));
         }
 
-        $isFileExists = $filesystem->exists(path: $destinationPath . '/' . $name);
-
-        if (
-            ($this->option('migration') && ! $isFileExists)
-            || ($this->option('migration') && $this->option('force'))
-        ) {
-            Artisan::call(command: 'diamond:migration ' . $this->resolveClassNameByFile(name: $name));
-        }
-
-        if ($isFileExists) {
-            $this->warn(string: $name . ' already exists.');
+        if ($filePresent) {
+            $this->warn(string: $fileName . ' already exists.');
 
             return;
         }
@@ -67,7 +67,7 @@ class MakeModelCommand extends Command
                 data: new CopyStubData(
                     stubPath: $this->resolvePathForStub(name: 'model'),
                     destinationPath: $destinationPath,
-                    fileName: $name,
+                    fileName: $fileName,
                     placeholders: $placeholders,
                 )
             );

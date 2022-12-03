@@ -4,16 +4,19 @@ namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
-use KoalaFacade\DiamondConsole\Commands\Concerns\HasBaseArguments;
+use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
+use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
+use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
+use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 
 class MakeMailCommand extends Command
 {
-    use InteractsWithPath, HasBaseArguments;
+    use InteractsWithPath, HasArguments, HasOptions;
 
     protected $signature = 'diamond:mail {name} {domain} {--force}';
 
@@ -26,37 +29,30 @@ class MakeMailCommand extends Command
     {
         $this->info(string: 'Generating files to our project');
 
-        /**
-         * @var  string  $name
-         */
-        $name = $this->argument(key: 'name');
-
         $namespace = Str::of(string: 'Mail')
-            ->start(prefix: $this->resolveArgumentForDomain() . '\\')
+            ->start(prefix: $this->resolveDomainArgument() . '\\')
             ->start(prefix: $this->resolvePathForInfrastructure() . '\\');
 
-        $destinationPath = $this->resolveDestinationByNamespace(namespace: $namespace);
+        $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 
-        /**
-         * @var  array<string>  $placeholders
-         */
-        $placeholders = [
-            'namespace' => $namespace->toString(),
-            'class' => $name,
-            'subject' => Str::ucfirst($name),
-        ];
+        $placeholders = new PlaceholderData(
+            namespace: $namespace->toString(),
+            class: $this->resolveNameArgument(),
+            subject: Str::ucfirst($this->resolveNameArgument()),
+        );
 
-        $fileName = $name . '.php';
+        $fileName = $this->resolveNameArgument() . '.php';
 
-        $filesystem = new Filesystem();
+        $filePresent = FilePresentAction::resolve()
+            ->execute(
+                data: new FilePresentData(
+                    fileName: $fileName,
+                    destinationPath: $destinationPath,
+                ),
+                withForce: $this->resolveForceOption(),
+            );
 
-        if ($this->option(key: 'force')) {
-            $filesystem->delete($destinationPath . '/' . $fileName);
-        }
-
-        $isFileExists = $filesystem->exists(path: $destinationPath . '/' . $fileName);
-
-        if ($isFileExists) {
+        if ($filePresent) {
             $this->error(string: $fileName . ' already exists.');
 
             return;

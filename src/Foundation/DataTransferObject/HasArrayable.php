@@ -10,14 +10,14 @@ trait HasArrayable
     /**
      * Prevent properties to included on update
      *
-     * @var array
+     * @var array<string>
      */
     protected array $excludedPropertiesOnCreate = [];
 
     /**
      * Prevent properties to included on update
      *
-     * @var array
+     * @var array<string>
      */
     protected array $excludedPropertiesOnUpdate = [];
 
@@ -25,25 +25,27 @@ trait HasArrayable
      * a method that will resolve the inheritance properties
      * naming to snake case that can fit with database column naming
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {
         $excludedPropertyKeys = [
-            "\x00*\x00excludedPropertiesOnCreation",
+            "\x00*\x00excludedPropertiesOnCreate",
             "\x00*\x00excludedPropertiesOnUpdate",
         ];
 
         return Collection::wrap((array) $this)
             ->except(keys: $excludedPropertyKeys)
-            ->mapWithKeys(callback: fn ($value, $key): array => [Str::snake($key) => $value])
+            ->mapWithKeys(
+                callback: fn ($value, $key): array => [Str::snake($key) => $value]
+            )
             ->toArray();
     }
 
     /**
      * Lookup the properties those excluded in create
      *
-     * @return array
+     * @return array<string>
      */
     public function toExcludedPropertiesOnCreate(): array
     {
@@ -53,7 +55,7 @@ trait HasArrayable
     /**
      * Lookup the properties those excluded in create
      *
-     * @return array
+     * @return array<string>
      */
     public function toExcludedPropertiesOnUpdate(): array
     {

@@ -51,7 +51,7 @@ trait HasResolvable
     /**
      * Resolve unstructured data from FormRequest
      *
-     * @param FormRequest $request
+     * @param  FormRequest  $request
      * @return static
      */
     public static function resolveFromFormRequest(FormRequest $request): static
@@ -62,7 +62,7 @@ trait HasResolvable
     /**
      * Resolve unstructured data from Model
      *
-     * @param Model $model
+     * @param  Model  $model
      * @return static
      */
     public static function resolveFromModel(Model $model): static

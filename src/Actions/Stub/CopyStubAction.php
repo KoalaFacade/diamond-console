@@ -12,7 +12,7 @@ class CopyStubAction extends Action
     /**
      * Copy Stub to Diamond Infrastructure
      *
-     * @param CopyStubData $data
+     * @param  CopyStubData  $data
      * @return void
      *
      * @throws FileNotFoundException
@@ -20,8 +20,11 @@ class CopyStubAction extends Action
     public function execute(CopyStubData $data): void
     {
         $filePath = $data->destinationPath . '/' . $data->fileName;
-        $filesystem = new Filesystem();
+
+        $filesystem = new Filesystem;
+
         $filesystem->ensureDirectoryExists(path: $data->destinationPath);
+
         $filesystem->copy(
             path: $data->stubPath,
             target: $filePath,

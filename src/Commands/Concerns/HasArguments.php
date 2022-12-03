@@ -7,9 +7,9 @@ use Illuminate\Console\Command;
 /**
  * @mixin Command
  */
-trait HasBaseArguments
+trait HasArguments
 {
-    protected function resolveArgumentForDomain(): string
+    protected function resolveDomainArgument(): string
     {
         /** @var string $argument */
         $argument = $this->argument(key: 'domain');
@@ -17,7 +17,7 @@ trait HasBaseArguments
         return $argument;
     }
 
-    protected function resolveArgumentForName(): string
+    protected function resolveNameArgument(): string
     {
         /** @var string $argument */
         $argument = $this->argument(key: 'name');
