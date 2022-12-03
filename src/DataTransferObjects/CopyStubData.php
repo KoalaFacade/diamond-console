@@ -13,10 +13,10 @@ final class CopyStubData extends DataTransferObject
      * @param array<string> $placeholders
      */
     public function __construct(
-        public readonly string $stubPath,
-        public readonly string $destinationPath,
-        public readonly string $fileName,
-        public readonly array $placeholders,
+        public string $stubPath,
+        public string $destinationPath,
+        public string $fileName,
+        public array $placeholders,
     ) {
         //
     }
