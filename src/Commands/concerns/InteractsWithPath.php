@@ -9,7 +9,7 @@ trait InteractsWithPath
 {
     protected function resolvePathForStructure(string $identifier): string
     {
-        /** @var String $path */
+        /** @var string $path */
         $path = config(key: 'diamond.structures.' . $identifier);
 
         return $path;
