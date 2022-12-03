@@ -12,7 +12,7 @@ class CopyStubAction extends Action
     /**
      * Copy Stub to Diamond Infrastructure
      *
-     * @param CopyStubData $data
+     * @param  CopyStubData  $data
      * @return void
      *
      * @throws FileNotFoundException
