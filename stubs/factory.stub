@@ -1,11 +1,11 @@
 <?php
 
-namespace Infrastructure\User\Database\Factories;
+namespace {{ namespace }}
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use KoalaFacade\DiamondConsole\Contracts\Factory as HasFactoryResolver;
 
-final class PackageFactory extends Factory implements HasFactoryResolver
+final class {{ class }} extends Factory implements HasFactoryResolver
 {
     /**
      * Define the model's default state.

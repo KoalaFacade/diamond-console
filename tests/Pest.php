@@ -39,3 +39,27 @@ expect()->extend('toBeOne', function () {
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
+
+function basePath(): string
+{
+    /** @var string $path */
+    $path = config(key: 'diamond.base_directory');
+
+    return base_path(path: $path);
+}
+
+function domainPath(): string
+{
+    /** @var string $path */
+    $path = config(key: 'diamond.structures.domain');
+
+    return $path;
+}
+
+function infrastructurePath(): string
+{
+    /** @var string $path */
+    $path = config(key: 'diamond.structures.infrastructure');
+
+    return $path;
+}
