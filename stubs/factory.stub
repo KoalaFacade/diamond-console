@@ -1,0 +1,31 @@
+<?php
+
+namespace Infrastructure\User\Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use KoalaFacade\DiamondConsole\Contracts\Factory as HasFactoryResolver;
+
+final class PackageFactory extends Factory implements HasFactoryResolver
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition()
+    {
+        return [
+            //
+        ];
+    }
+
+    /**
+    * Resolver method for dependency injection
+    *
+    * @return Factory
+    */
+    public function resolveFactory(): Factory
+    {
+        return new static;
+    }
+}

@@ -1,0 +1,10 @@
+<?php
+
+namespace {{ namespace }};
+
+use KoalaFacade\DiamondConsole\Contracts\Factory;
+
+interface {{ class }} extends Factory
+{
+
+}
