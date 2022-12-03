@@ -2,7 +2,7 @@
 
 <p align="center">
     <a href="https://github.com/KoalaFacade/diamond-console/actions/workflows/run-test.yml"><img src="https://img.shields.io/github/workflow/status/KoalaFacade/diamond-console/run-tests?label=Test&style=for-the-badge" alt="Test Passing"/></a>
-    <a href="https://laravel.com""><img src="https://img.shields.io/badge/Laravel-8.x-red?style=for-the-badge&logo=Laravel" alt="Laravel </a>
+    <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-8.x-red?style=for-the-badge&logo=Laravel" alt="Laravel" /></a> 
     <a href="https://php.net"><img src="https://img.shields.io/badge/PHP-8.x-7A86B8?style=for-the-badge&logo=php" alt="PHP Badge"/></a>
 </p>
 
@@ -10,5 +10,5 @@
 and advanced.
 
 ### Contribution
-Thanks for consideration to contribute to Diamond Console of Domain Driven Design you can go through to 
+Thanks for consideration to contribute to Diamond Console of Domain Driven Design you can go through to
 [Contribute Area](https://github.com/KoalaFacade/diamond-console/blob/main/CONTRIBUTE.md)
