@@ -2,7 +2,7 @@
 
 namespace KoalaFacade\DiamondConsole\Foundation;
 
-use KoalaFacade\DiamondConsole\DataTransferObject\HasResolvable;
+use KoalaFacade\DiamondConsole\Foundation\DataTransferObject\HasResolvable;
 
 abstract class DataTransferObject
 {
