@@ -50,7 +50,6 @@ it(
 
         $factoryInterfacePath = basePath() . domainPath() . '/Shared/' . $domainName . '/Models' . '/Contracts' . '/Abstract' . $factoryName . '.php';
         $factoryConcretePath = basePath() . infrastructurePath() . '/' . $domainName . '/Database' . '/Factories/' . $factoryName . '.php';
-        $filesystem = new Filesystem();
 
         expect(value: File::exists(path: $factoryInterfacePath))->toBeFalse()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeFalse();

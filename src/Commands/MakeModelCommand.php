@@ -16,7 +16,7 @@ class MakeModelCommand extends Command
 {
     use InteractsWithPath, HasBaseArguments;
 
-    protected $signature = 'diamond:model {name} {domain} {--m|migration} {--force}';
+    protected $signature = 'diamond:model {name} {domain} {--f|factory} {--m|migration} {--force}';
 
     protected $description = 'create new model';
 
@@ -44,17 +44,10 @@ class MakeModelCommand extends Command
         $filesystem = new Filesystem();
 
         if ($this->option(key: 'force')) {
-            $filesystem->delete($destinationPath . '/' . $name);
+            $filesystem->delete(paths: $destinationPath . '/' . $name);
         }
 
         $isFileExists = $filesystem->exists(path: $destinationPath . '/' . $name);
-
-        if (
-            ($this->option('migration') && ! $isFileExists)
-            || ($this->option('migration') && $this->option('force'))
-        ) {
-            Artisan::call(command: 'diamond:migration ' . $this->resolveClassNameByFile(name: $name));
-        }
 
         if ($isFileExists) {
             $this->warn(string: $name . ' already exists.');
@@ -72,6 +65,30 @@ class MakeModelCommand extends Command
                 )
             );
 
+        $this->resolveForMigration(name: $name);
+
+        $this->resolveForFactory(name: $name);
+
         $this->info(string: 'Successfully generate model file');
+    }
+
+    protected function resolveForFactory(string $name): void
+    {
+        if ($this->option(key: 'factory')) {
+            Artisan::call(
+                command: 'diamond:factory',
+                parameters: [
+                    'name' => $this->resolveClassNameByFile(name: $name) . 'Factory',
+                    'domain' => $this->resolveArgumentForDomain(),
+                ]
+            );
+        }
+    }
+
+    protected function resolveForMigration(string $name): void
+    {
+        if ($this->option(key: 'migration') && $this->option('force')) {
+            Artisan::call(command: 'diamond:migration ' . $this->resolveClassNameByFile(name: $name));
+        }
     }
 }

@@ -17,7 +17,7 @@ class ReplacePlaceholderAction extends Action
      * Replace Placeholder Stub data
      *
      * @param  string  $filePath
-     * @param  array<string> $placeholders
+     * @param  array<string>  $placeholders
      * @return void
      *
      * @throws FileNotFoundException

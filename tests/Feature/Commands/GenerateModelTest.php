@@ -104,3 +104,28 @@ it(
         unlink(base_path("database/migrations/$fileName"));
     }
 )->group('commands');
+
+it(
+    description: 'can generate model with factory',
+    closure: function () {
+        $factoryName = 'RoleFactory';
+        $domainName = 'Role';
+        $modelName = 'Role';
+
+        $factoryInterfacePath = basePath() . domainPath() . '/Shared/' . $domainName . '/Models' . '/Contracts' . '/Abstract' . $factoryName . '.php';
+        $factoryConcretePath = basePath() . infrastructurePath() . '/' . $domainName . '/Database' . '/Factories/' . $factoryName . '.php';
+        $modelConcretePath = basePath() . domainPath() . '/Shared/' . $domainName . '/Models/' . $modelName . '.php';
+
+        expect(value: File::exists(path: $factoryInterfacePath))->toBeFalse()
+            ->and(value: File::exists(path: $factoryConcretePath))->toBeFalse()
+            ->and(value: File::exists(path: $modelConcretePath))->toBeFalse();
+
+        Artisan::call(command: 'diamond:model ' . $modelName . ' ' . $domainName . ' --factory --force');
+
+        expect(value: File::exists(path: $factoryInterfacePath))->toBeTrue()
+            ->and(value: File::exists(path: $factoryConcretePath))->toBeTrue()
+            ->and(value: File::exists(path: $modelConcretePath))->toBeTrue();
+
+        File::delete(paths: [$factoryInterfacePath, $factoryConcretePath, $modelConcretePath]);
+    }
+)->group('commands');

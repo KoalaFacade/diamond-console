@@ -6,9 +6,10 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
-use KoalaFacade\DiamondConsole\Actions\StubResolver\CopyStubAction;
-use KoalaFacade\DiamondConsole\Commands\concerns\HasBaseArguments;
-use KoalaFacade\DiamondConsole\Commands\concerns\InteractsWithPath;
+use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
+use KoalaFacade\DiamondConsole\Commands\Concerns\HasBaseArguments;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
+use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 
 class MakeFactoryCommand extends Command
 {
@@ -30,6 +31,9 @@ class MakeFactoryCommand extends Command
         $this->resolveGenerateForFactoryConcrete();
     }
 
+    /**
+     * @throws FileNotFoundException
+     */
     protected function resolveGenerateForFactoryInterface(): void
     {
         $name = 'Abstract' . $this->resolveArgumentForName() . '.php';
@@ -59,14 +63,17 @@ class MakeFactoryCommand extends Command
             'class' => $this->resolveClassNameByFile(name: $name),
         ];
 
-        CopyStubAction::resolve()->execute(
-            stubPath: $this->resolvePathForStub(name: 'factory-interface'),
-            destinationPath: $destination,
-            fileName: $name,
-            placeholders: $placeholders
-        );
+        CopyStubAction::resolve()
+            ->execute(
+                new CopyStubData(
+                    stubPath: $this->resolvePathForStub(name: 'factory-interface'),
+                    destinationPath: $destination,
+                    fileName: $name,
+                    placeholders: $placeholders
+                )
+            );
 
-        $this->info(string: 'Succeed generate Factory Interface at ' . $destination);
+        $this->info(string: 'Succeed generate Factory Interface at ' . $destination . '/' . $name);
     }
 
     /**
@@ -100,13 +107,16 @@ class MakeFactoryCommand extends Command
             'class' => $this->resolveClassNameByFile(name: $name),
         ];
 
-        CopyStubAction::resolve()->execute(
-            stubPath: $this->resolvePathForStub(name: 'factory'),
-            destinationPath: $destination,
-            fileName: $name,
-            placeholders: $placeholders
-        );
+        CopyStubAction::resolve()
+            ->execute(
+                new CopyStubData(
+                    stubPath: $this->resolvePathForStub(name: 'factory'),
+                    destinationPath: $destination,
+                    fileName: $name,
+                    placeholders: $placeholders
+                )
+            );
 
-        $this->info(string: 'Succeed generate Factory concrete at ' . $destination);
+        $this->info(string: 'Succeed generate Factory concrete at ' . $destination . '/' . $name);
     }
 }

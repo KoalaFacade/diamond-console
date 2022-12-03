@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Artisan;
 
+beforeEach(closure: function () {
+    (new Illuminate\Filesystem\Filesystem())
+        ->deleteDirectory(directory: base_path(path: config(key: 'diamond.base_directory')));
+});
+
 afterEach(closure: function () {
     (new Illuminate\Filesystem\Filesystem())
         ->deleteDirectory(directory: base_path(path: config(key: 'diamond.base_directory')));
