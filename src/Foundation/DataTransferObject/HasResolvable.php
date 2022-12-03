@@ -1,6 +1,6 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\DataTransferObject;
+namespace KoalaFacade\DiamondConsole\Foundation\DataTransferObject;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
@@ -8,12 +8,26 @@ use Illuminate\Support\Arr;
 
 trait HasResolvable
 {
-    public static function resolve(mixed $data): static
+    /**
+     * @template Tkey of array-key
+     * @template Tvalue
+     *
+     * @param  array<Tkey, Tvalue>  $data
+     * @return static
+     */
+    public static function resolve(array $data): static
     {
         return throw new \RuntimeException;
     }
 
-    public static function resolveFrom(mixed $abstract): static
+    /**
+     * @template Tkey of array-key
+     * @template Tvalue
+     *
+     * @param  FormRequest|Model|array<Tkey, Tvalue>  $abstract
+     * @return static
+     */
+    public static function resolveFrom(FormRequest | Model | array $abstract): static
     {
         if ($abstract instanceof FormRequest) {
             return static::resolveFromFormRequest(request: $abstract);
