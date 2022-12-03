@@ -16,11 +16,7 @@ jobs:
           token: ${{ secrets.KOALA_SECRET }}
 
       - name: execute pint
-        uses: aglipanci/laravel-pint-action@1.0.0
-        with:
-          verboseMode: true
-          testMode: true
-          configPath: "./pint.json"
+        run: vendor/bin/pint
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
