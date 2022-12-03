@@ -1,0 +1,10 @@
+<?php
+
+namespace {{ namespace }};
+
+use KoalaFacade\DiamondConsole\Foundation\DataTransferObject;
+
+class {{ class }} extends DataTransferObject
+{
+    //
+}
