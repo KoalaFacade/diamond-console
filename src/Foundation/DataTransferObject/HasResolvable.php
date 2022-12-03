@@ -9,22 +9,26 @@ use Illuminate\Support\Arr;
 trait HasResolvable
 {
     /**
-     * @template Tkey of array-key
-     * @template Tvalue
+     * Resolve unstructured data from array
      *
-     * @param  array<Tkey, Tvalue>  $data
+     * @template TKey of array-key
+     * @template TValue
+     *
+     * @param  array<TKey, TValue>  $data
      * @return static
      */
-    public static function resolve(array $data): static
+    public static function resolveFromArray(array $data): static
     {
-        return throw new \RuntimeException;
+        return throw new \RuntimeException();
     }
 
     /**
-     * @template Tkey of array-key
-     * @template Tvalue
+     * Resolve unstructured data from polymorphism types
      *
-     * @param  FormRequest|Model|array<Tkey, Tvalue>  $abstract
+     * @template TKey of array-key
+     * @template TValue
+     *
+     * @param  FormRequest | Model | array<TKey, TValue>  $abstract
      * @return static
      */
     public static function resolveFrom(FormRequest | Model | array $abstract): static
@@ -38,17 +42,29 @@ trait HasResolvable
         }
 
         if (Arr::accessible($abstract)) {
-            return static::resolve(data: $abstract);
+            return static::resolveFromArray(data: $abstract);
         }
 
         return throw new \RuntimeException;
     }
 
+    /**
+     * Resolve unstructured data from FormRequest
+     *
+     * @param FormRequest $request
+     * @return static
+     */
     public static function resolveFromFormRequest(FormRequest $request): static
     {
         return throw new \RuntimeException;
     }
 
+    /**
+     * Resolve unstructured data from Model
+     *
+     * @param Model $model
+     * @return static
+     */
     public static function resolveFromModel(Model $model): static
     {
         return throw new \RuntimeException;
