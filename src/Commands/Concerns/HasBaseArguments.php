@@ -1,6 +1,6 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Commands\concerns;
+namespace KoalaFacade\DiamondConsole\Commands\Concerns;
 
 use Illuminate\Console\Command;
 
