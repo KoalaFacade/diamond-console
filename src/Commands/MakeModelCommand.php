@@ -87,7 +87,7 @@ class MakeModelCommand extends Command
 
     protected function resolveForMigration(string $name): void
     {
-        if ($this->option(key: 'migration') && $this->option('force')) {
+        if ($this->option(key: 'migration')) {
             Artisan::call(command: 'diamond:migration ' . $this->resolveClassNameByFile(name: $name));
         }
     }
