@@ -6,9 +6,10 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
-use KoalaFacade\DiamondConsole\Actions\StubResolver\CopyStubAction;
-use KoalaFacade\DiamondConsole\Commands\concerns\HasBaseArguments;
-use KoalaFacade\DiamondConsole\Commands\concerns\InteractsWithPath;
+use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
+use KoalaFacade\DiamondConsole\Commands\Concerns\HasBaseArguments;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
+use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 
 class MakeActionCommand extends Command
 {
@@ -54,10 +55,12 @@ class MakeActionCommand extends Command
 
         CopyStubAction::resolve()
             ->execute(
-                stubPath: $this->resolvePathForStub(name: 'action'),
-                destinationPath: $destinationPath,
-                fileName: $name,
-                placeholders: $placeholders
+                data: new CopyStubData(
+                    stubPath: $this->resolvePathForStub(name: 'action'),
+                    destinationPath: $destinationPath,
+                    fileName: $name,
+                    placeholders: $placeholders
+                )
             );
 
         $this->info(string: 'Successfully generate action file');

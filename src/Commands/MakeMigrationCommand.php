@@ -5,7 +5,8 @@ namespace KoalaFacade\DiamondConsole\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Str;
-use KoalaFacade\DiamondConsole\Actions\StubResolver\CopyStubAction;
+use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
+use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 
 class MakeMigrationCommand extends Command
 {
@@ -42,10 +43,12 @@ class MakeMigrationCommand extends Command
 
         CopyStubAction::resolve()
             ->execute(
-                stubPath: $stubPath,
-                destinationPath: $destinationPath,
-                fileName: $fileName,
-                placeholders: $placeholders
+                data: new CopyStubData(
+                    stubPath: $stubPath,
+                    destinationPath: $destinationPath,
+                    fileName: $fileName,
+                    placeholders: $placeholders
+                )
             );
 
         $this->info(string: 'Successfully generate migration file');
