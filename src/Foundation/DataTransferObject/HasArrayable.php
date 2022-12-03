@@ -7,45 +7,55 @@ use Illuminate\Support\Str;
 
 trait HasArrayable
 {
-    protected Collection $collection;
+    /**
+     * Prevent properties to included on update
+     *
+     * @var array
+     */
+    protected array $excludedPropertiesOnCreate = [];
 
-    protected array $excludedPropertiesOnCreation = [];
-
+    /**
+     * Prevent properties to included on update
+     *
+     * @var array
+     */
     protected array $excludedPropertiesOnUpdate = [];
 
     /**
      * a method that will resolve the inheritance properties
      * naming to snake case that can fit with database column naming
      *
-     * @return Collection
+     * @return array
      */
-    public function toCollection(): Collection
+    public function toArray(): array
     {
         $excludedPropertyKeys = [
             "\x00*\x00excludedPropertiesOnCreation",
             "\x00*\x00excludedPropertiesOnUpdate",
         ];
 
-        $this->collection = Collection::wrap((array) $this)
+        return Collection::wrap((array) $this)
             ->except(keys: $excludedPropertyKeys)
-            ->mapWithKeys(fn ($value, $key): array => [Str::snake($key) => $value]);
-
-        return $this->collection;
-    }
-
-    public function toArray(): array
-    {
-        return $this
-            ->toCollection()
+            ->mapWithKeys(callback: fn ($value, $key): array => [Str::snake($key) => $value])
             ->toArray();
     }
 
-    public function resolveForExcludedPropertiesOnCreation(): array
+    /**
+     * Lookup the properties those excluded in create
+     *
+     * @return array
+     */
+    public function toExcludedPropertiesOnCreate(): array
     {
-        return $this->excludedPropertiesOnCreation;
+        return $this->excludedPropertiesOnCreate;
     }
 
-    public function resolveForExcludedPropertiesOnUpdate(): array
+    /**
+     * Lookup the properties those excluded in create
+     *
+     * @return array
+     */
+    public function toExcludedPropertiesOnUpdate(): array
     {
         return $this->excludedPropertiesOnUpdate;
     }
