@@ -9,9 +9,7 @@ class FileAlreadyExistException extends \Exception
     public function __construct(public string $fileName)
     {
         parent::__construct(
-            message: (string) __(':fileName already exists.', [
-                'fileName' => $this->fileName,
-            ]),
+            message: $this->fileName .'already exists.',
             code: Response::HTTP_FORBIDDEN,
         );
     }

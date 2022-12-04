@@ -28,7 +28,7 @@ class MakeDTOCommand extends Command
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating DTO files to your project');
+        $this->info(string: 'Generating DTO file to your project');
 
         $fileName = $this->resolveNameArgument() . '.php';
 
