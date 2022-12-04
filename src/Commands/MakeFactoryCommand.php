@@ -39,12 +39,9 @@ class MakeFactoryCommand extends Command
      */
     protected function resolveFactoryContract(): void
     {
-        $fileName = $this->resolveNameArgument() . 'Contract' . '.php';
+        $fileName = $this->resolveFactoryFileName();
 
-        $namespace = $this->resolveNamespace(
-            identifier: 'Models\\Contracts\\',
-            domain: 'Shared\\' . $this->resolveDomainArgument(),
-        );
+        $namespace = $this->resolveFactoryContractNamespace();
 
         $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 
@@ -70,7 +67,7 @@ class MakeFactoryCommand extends Command
         CopyStubAction::resolve()
             ->execute(
                 data: new CopyStubData(
-                    stubPath: $this->resolvePathForStub(name: 'factory-interface'),
+                    stubPath: $this->resolvePathForStub(name: 'factory-contract'),
                     destinationPath: $destinationPath,
                     fileName: $fileName,
                     placeholders: $placeholders,
@@ -110,7 +107,9 @@ class MakeFactoryCommand extends Command
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,
-            class: $this->resolveClassNameByFile(name: $fileName)
+            class: $this->resolveClassNameByFile(name: $fileName),
+            FactoryContract:  $this->resolveClassNameByFile(name: $this->resolveFactoryFileName()),
+            factoryContractNamespace: $this->resolveFactoryContractNamespace()
         );
 
         CopyStubAction::resolve()
@@ -124,5 +123,18 @@ class MakeFactoryCommand extends Command
             );
 
         $this->info(string: 'Succeed generate Factory concrete at ' . $destinationPath . '/' . $fileName);
+    }
+
+    protected function resolveFactoryContractNamespace(): string
+    {
+        return $this->resolveNamespace(
+            identifier: 'Contracts\\Database\\Factories\\',
+            domain: 'Shared',
+        );
+    }
+
+    protected function resolveFactoryFileName(): string
+    {
+        return $this->resolveNameArgument() . 'Contract.php';
     }
 }

@@ -38,10 +38,16 @@ class MakeModelCommand extends Command
 
         $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 
+        $factoryContractClassName = $this->resolveClassNameByFile(name: $fileName) . 'FactoryContract';
+
         $placeholders = new PlaceholderData(
             namespace: $namespace,
             class: $this->resolveClassNameByFile(name: $fileName),
-            modelFactoryInterface: $this->resolveClassNameByFile(name: $fileName) . 'FactoryContract'
+            FactoryContract: $factoryContractClassName,
+            factoryContractNamespace: $this->resolveNamespace(
+                identifier: 'Contracts\\Database\\Factories\\',
+                domain: 'Shared',
+            )
         );
 
         $filePresent = FilePresentAction::resolve()

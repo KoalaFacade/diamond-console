@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use {{ namespace }}\Contracts\{{ model_factory_interface }}
+use {{ factory_contract_namespace }}{{ factory_contract }}
 
 class {{ class }} extends Model
 {
@@ -19,8 +19,8 @@ class {{ class }} extends Model
     */
     protected static function newFactory(): Factory
     {
-        /** @var {{ model_factory_interface }} $factory */
-        $factory = resolve({{ model_factory_interface }}::class);
+        /** @var {{ factory_contract }} $factory */
+        $factory = resolve({{ factory_contract }}::class);
 
         return $factory->resolveFactory();
     }

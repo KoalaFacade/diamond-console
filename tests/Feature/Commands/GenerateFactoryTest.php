@@ -10,20 +10,20 @@ it(
         $factoryName = 'TestFactory';
         $domainName = 'Test';
 
-        $factoryInterfacePath = basePath() . domainPath() . '/Shared/' . $domainName . '/Models' . '/Contracts/' . $factoryName . 'Contract' . '.php';
+        $factoryContractPath = basePath() . domainPath() . '/Shared/Contracts/Database/Factories/' . $factoryName . 'Contract.php';
         $factoryConcretePath = basePath() . infrastructurePath() . '/' . $domainName . '/Database' . '/Factories/' . $factoryName . '.php';
 
-        expect(value: File::exists(path: $factoryInterfacePath))->toBeFalse()
+        expect(value: File::exists(path: $factoryContractPath))->toBeFalse()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeFalse();
 
         Artisan::call(command: 'diamond:factory ' . $factoryName . ' ' . $domainName);
 
-        expect(value: File::exists(path: $factoryInterfacePath))->toBeTrue()
+        expect(value: File::exists(path: $factoryContractPath))->toBeTrue()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeTrue()
             ->and(value:
                 Str::contains(
                     haystack: Artisan::output(),
-                    needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Interface']
+                    needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Contract']
                 )
             )->toBeTrue();
 
@@ -36,7 +36,7 @@ it(
             )
         );
 
-        File::delete([$factoryInterfacePath, $factoryConcretePath]);
+        File::delete([$factoryContractPath, $factoryConcretePath]);
     }
 )->group('commands');
 
@@ -46,20 +46,20 @@ it(
         $factoryName = 'TestFactory';
         $domainName = 'Test';
 
-        $factoryInterfacePath = basePath() . domainPath() . '/Shared/' . $domainName . '/Models' . '/Contracts/' . $factoryName . 'Contract' . '.php';
+        $factoryContractPath = basePath() . domainPath() . '/Shared/Contracts/Database/Factories/' . $factoryName . 'Contract.php';
         $factoryConcretePath = basePath() . infrastructurePath() . '/' . $domainName . '/Database' . '/Factories/' . $factoryName . '.php';
 
-        expect(value: File::exists(path: $factoryInterfacePath))->toBeFalse()
+        expect(value: File::exists(path: $factoryContractPath))->toBeFalse()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeFalse();
 
         Artisan::call(command: 'diamond:factory ' . $factoryName . ' ' . $domainName);
 
-        expect(value: File::exists(path: $factoryInterfacePath))->toBeTrue()
+        expect(value: File::exists(path: $factoryContractPath))->toBeTrue()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeTrue()
             ->and(value:
                 Str::contains(
                     haystack: Artisan::output(),
-                    needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Interface']
+                    needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Contract']
                 )
             )->toBeTrue();
 
@@ -74,15 +74,15 @@ it(
 
         Artisan::call(command: 'diamond:factory ' . $factoryName . ' ' . $domainName . ' --force');
 
-        expect(value: File::exists(path: $factoryInterfacePath))->toBeTrue()
+        expect(value: File::exists(path: $factoryContractPath))->toBeTrue()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeTrue()
             ->and(value:
                 Str::contains(
                     haystack: Artisan::output(),
-                    needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Interface']
+                    needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Contract']
                 )
             )->toBeTrue();
 
-        File::delete([$factoryInterfacePath, $factoryConcretePath]);
+        File::delete([$factoryContractPath, $factoryConcretePath]);
     }
 )->group('commands');
