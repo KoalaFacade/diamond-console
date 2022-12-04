@@ -26,7 +26,7 @@ class MakeEnumCommand extends Command
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating enum files to your project');
+        $this->info(string: 'Generating enum file to your project');
 
         $fileName = $this->resolveNameArgument() . '.php';
 

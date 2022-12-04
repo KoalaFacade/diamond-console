@@ -27,7 +27,7 @@ class MakeMailCommand extends Command
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating files to our project');
+        $this->info(string: 'Generating file to our project');
 
         $namespace = Str::of(string: 'Mail')
             ->start(prefix: $this->resolveDomainArgument() . '\\')

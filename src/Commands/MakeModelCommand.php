@@ -27,7 +27,7 @@ class MakeModelCommand extends Command
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating model files to your project');
+        $this->info(string: 'Generating model file to your project');
 
         $fileName = $this->resolveNameArgument() . '.php';
 
