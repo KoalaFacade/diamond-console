@@ -6,48 +6,40 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-it(
-    description: 'can generate new mail class',
-    closure: function () {
-        $basePath = config(key: 'diamond.base_directory');
-        $infrastructurePath = config(key: 'diamond.structures.infrastructure');
+it(description: 'can generate new mail class')
+    ->tap(function () {
+        $fileName = '/User/Mail/UserApproved.php';
 
-        if (File::exists(base_path("$basePath/$infrastructurePath/User/Mail/UserApproved.php"))) {
-            unlink(base_path("$basePath/$infrastructurePath/User/Mail/UserApproved.php"));
-        }
-
-        $this->assertFalse(File::exists(base_path("$basePath/$infrastructurePath/User/Mail/UserApproved.php")));
+        expect(filePresent($fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'diamond:mail UserApproved User');
 
-        $this->assertTrue(File::exists(base_path("$basePath/$infrastructurePath/User/Mail/UserApproved.php")));
+        expect(filePresent($fileName, prefix: infrastructurePath()))->toBeTrue();
+    })
+    ->group('commands');
 
-        $filesystem = new Filesystem();
-        $filesystem->deleteDirectory(base_path($basePath));
-    }
-)->group('commands');
+it(description: 'can force generate exists mail class')
+    ->tap(function () {
+        $fileName = '/User/Mail/UserApproved.php';
 
-it(
-    description: 'can force generate exists mail class',
-    closure: function () {
-        $basePath = config(key: 'diamond.base_directory');
-        $infrastructurePath = config(key: 'diamond.structures.infrastructure');
-
-        $this->assertFalse(File::exists(base_path("$basePath/$infrastructurePath/User/Mail/UserApproved.php")));
+        expect(filePresent($fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'diamond:mail UserApproved User');
-        Artisan::call(command: 'diamond:mail UserApproved User');
-
-        $this->assertTrue(Str::contains(Artisan::output(), needles: 'UserApproved.php already exists.'));
-
         Artisan::call(command: 'diamond:mail UserApproved User --force');
 
-        $this->assertTrue(File::exists(base_path("$basePath/$infrastructurePath/User/Mail/UserApproved.php")));
+        expect(filePresent($fileName, prefix: infrastructurePath()))->toBeTrue();
+    })
+    ->group(groups: 'commands');
 
-        $filesystem = new Filesystem();
-        $filesystem->deleteDirectory(base_path($basePath));
-    }
-)->group('commands');
+it(description: 'file already exist')
+    ->tap(function () {
+        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'diamond:mail UserApproved User');
+        Artisan::call(command: 'diamond:mail UserApproved User');
+    })
+    ->group(groups: 'commands')
+    ->throws(exception: FileAlreadyExistException::class);

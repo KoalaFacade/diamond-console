@@ -13,6 +13,7 @@ use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
+use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 class MakeMailCommand extends Command
 {
@@ -24,6 +25,7 @@ class MakeMailCommand extends Command
 
     /**
      * @throws FileNotFoundException
+     * @throws FileAlreadyExistException
      */
     public function handle(): void
     {
@@ -43,7 +45,7 @@ class MakeMailCommand extends Command
 
         $fileName = $this->resolveNameArgument() . '.php';
 
-        $filePresent = FilePresentAction::resolve()
+        FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
@@ -51,12 +53,6 @@ class MakeMailCommand extends Command
                 ),
                 withForce: $this->resolveForceOption(),
             );
-
-        if ($filePresent) {
-            $this->error(string: $fileName . ' already exists.');
-
-            return;
-        }
 
         CopyStubAction::resolve()
             ->execute(
