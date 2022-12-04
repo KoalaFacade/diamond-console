@@ -12,6 +12,7 @@
 */
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\File;
 
 uses(Tests\TestCase::class)
     ->beforeEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(baseDirectory()))
@@ -60,4 +61,11 @@ function domainPath(): string
     $path = config(key: 'diamond.structures.domain');
 
     return $path;
+}
+
+function filePresent(string $fileName): bool
+{
+    return File::exists(
+        path: baseDirectory() . domainPath() . $fileName
+    );
 }
