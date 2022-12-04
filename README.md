@@ -45,7 +45,7 @@ The command below will generate namespace in composer and base directory structu
 #### `diamond:action GenerateProfileAction User`
 Command for generate an action inside your domain directory.
 
-**Argument**
+**Arguments**
 
 |  Name  |    Description    |
 |:------:|:-----------------:|
@@ -63,7 +63,7 @@ Command for generate an action inside your domain directory.
 #### `diamond:enum Role User`
 Command for generate an enum to your domain directory.
 
-**Argument**
+**Arguments**
 
 |  Name  |   Description   |
 |:------:|:---------------:|
@@ -81,7 +81,7 @@ Command for generate an enum to your domain directory.
 #### `diamond:dto RoleData User`
 Command for generate a Data Transfer Object with plain PHP to your domain directory.
 
-**Argument**
+**Arguments**
 
 |  Name  |           Description            |
 |:------:|:--------------------------------:|
@@ -99,7 +99,7 @@ Command for generate a Data Transfer Object with plain PHP to your domain direct
 #### `diamond:migration users`
 Command for generate a migration file
 
-**Argument**
+**Arguments**
 
 |  Name  | Description |
 |:------:|:-----------:|
@@ -113,7 +113,7 @@ Command for generate a model inside Shared in Domain directory,
 all model will store shared folder since another domain probably consume
 the model at the same time.
 
-**Argument**
+**Arguments**
 
 |  Name  | Description |
 |:------:|:-----------:|
@@ -141,7 +141,7 @@ The bottom of reason why we did this, cause Factories is an Infrastructure
 component then Domain can't consume any stuff inside infrastructure, 
 so you can do Dependency Injection at Service Provider for resolve this one.
 
-**Argument**
+**Arguments**
 
 |  Name  | Description  |
 |:------:|:------------:|
@@ -161,7 +161,7 @@ Command for generate a Mail class.
 this command will generate Mail class into Infrastructure side because this class purpose is
 store to external.
 
-**Argument**
+**Arguments**
 
 |  Name  |   Description   |
 |:------:|:---------------:|
