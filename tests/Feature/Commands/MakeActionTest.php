@@ -41,7 +41,6 @@ it(description: 'file already exist')
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'diamond:action StoreUserAction User');
         Artisan::call(command: 'diamond:action StoreUserAction User');
-
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);
