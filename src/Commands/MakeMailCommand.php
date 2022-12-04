@@ -31,7 +31,7 @@ class MakeMailCommand extends Command
 
         $namespace = Str::of(string: 'Mail')
             ->start(prefix: $this->resolveDomainArgument() . '\\')
-            ->start(prefix: $this->resolvePathForInfrastructure() . '\\');
+            ->start(prefix: $this->resolvePathInfrastructure() . '\\');
 
         $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 

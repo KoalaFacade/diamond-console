@@ -18,7 +18,7 @@ class MakeModelCommand extends Command
 {
     use InteractsWithPath, HasArguments, HasOptions;
 
-    protected $signature = 'diamond:model {name} {domain} {--m|migration} {--force}';
+    protected $signature = 'diamond:model {name} {domain} {--f|factory} {--m|migration} {--force}';
 
     protected $description = 'create new model';
 
@@ -38,9 +38,16 @@ class MakeModelCommand extends Command
 
         $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 
+        $factoryContractClassName = $this->resolveClassNameByFile(name: $fileName) . 'FactoryContract';
+
         $placeholders = new PlaceholderData(
             namespace: $namespace,
             class: $this->resolveClassNameByFile(name: $fileName),
+            factoryContract: $factoryContractClassName,
+            factoryContractNamespace: $this->resolveNamespace(
+                identifier: 'Contracts\\Database\\Factories\\',
+                domain: 'Shared',
+            )
         );
 
         $filePresent = FilePresentAction::resolve()
@@ -52,10 +59,6 @@ class MakeModelCommand extends Command
                 withForce: $this->resolveForceOption()
             );
 
-        if ($this->option('migration') && (! $filePresent || $this->resolveForceOption())) {
-            Artisan::call(command: 'diamond:migration ' . $this->resolveClassNameByFile(name: $fileName));
-        }
-
         if ($filePresent) {
             $this->warn(string: $fileName . ' already exists.');
 
@@ -65,13 +68,39 @@ class MakeModelCommand extends Command
         CopyStubAction::resolve()
             ->execute(
                 data: new CopyStubData(
-                    stubPath: $this->resolvePathForStub(name: 'model'),
+                    stubPath: $this->resolveFactoryOption()
+                        ? $this->resolvePathForStub(name: 'model-factory')
+                        : $this->resolvePathForStub(name: 'model'),
                     destinationPath: $destinationPath,
                     fileName: $fileName,
                     placeholders: $placeholders,
                 )
             );
 
+        $this->resolveMigration(fileName: $fileName);
+
+        $this->resolveFactory(fileName: $fileName);
+
         $this->info(string: 'Successfully generate model file');
+    }
+
+    protected function resolveFactory(string $fileName): void
+    {
+        if ($this->resolveFactoryOption()) {
+            Artisan::call(
+                command: 'diamond:factory',
+                parameters: [
+                    'name' => $this->resolveClassNameByFile(name: $fileName) . 'Factory',
+                    'domain' => $this->resolveDomainArgument(),
+                ]
+            );
+        }
+    }
+
+    protected function resolveMigration(string $fileName): void
+    {
+        if ($this->option(key: 'migration')) {
+            Artisan::call(command: 'diamond:migration ' . $this->resolveClassNameByFile(name: $fileName));
+        }
     }
 }

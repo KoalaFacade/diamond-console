@@ -104,3 +104,30 @@ it(
         unlink(base_path("database/migrations/$fileName"));
     }
 )->group('commands');
+
+it(
+    description: 'can generate model with factory',
+    closure: function () {
+        $factoryName = 'RoleFactory';
+        $domainName = 'Role';
+        $modelName = 'Role';
+
+        $factoryContractPath = basePath() . domainPath() . '/Shared/Contracts/Database/Factories/' . $factoryName . 'Contract.php';
+        $factoryConcretePath = basePath() . infrastructurePath() . '/' . $domainName . '/Database' . '/Factories/' . $factoryName . '.php';
+        $modelConcretePath = basePath() . domainPath() . '/Shared/' . $domainName . '/Models/' . $modelName . '.php';
+
+        expect(value: File::exists(path: $factoryContractPath))->toBeFalse();
+
+        Artisan::call(command: 'diamond:model ' . $modelName . ' ' . $domainName . ' --factory --force');
+
+        expect(value: File::exists(path: $factoryContractPath))->toBeTrue()
+            ->and(value: File::exists(path: $factoryConcretePath))->toBeTrue()
+            ->and(value: File::exists(path: $modelConcretePath))->toBeTrue();
+
+        $modelConcretePath = File::get(path: $modelConcretePath);
+
+        expect(value: Str::contains(haystack: $modelConcretePath, needles: ['{{ factory_contract }}', '{{ factory_contract_namespace }}']))->toBeFalse();
+
+        File::delete(paths: [$factoryContractPath, $factoryConcretePath, $modelConcretePath]);
+    }
+)->group('commands');
