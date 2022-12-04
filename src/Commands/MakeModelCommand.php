@@ -43,7 +43,7 @@ class MakeModelCommand extends Command
         $placeholders = new PlaceholderData(
             namespace: $namespace,
             class: $this->resolveClassNameByFile(name: $fileName),
-            FactoryContract: $factoryContractClassName,
+            factoryContract: $factoryContractClassName,
             factoryContractNamespace: $this->resolveNamespace(
                 identifier: 'Contracts\\Database\\Factories\\',
                 domain: 'Shared',

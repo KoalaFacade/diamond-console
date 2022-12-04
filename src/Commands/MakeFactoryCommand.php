@@ -108,7 +108,7 @@ class MakeFactoryCommand extends Command
         $placeholders = new PlaceholderData(
             namespace: $namespace,
             class: $this->resolveClassNameByFile(name: $fileName),
-            FactoryContract:  $this->resolveClassNameByFile(name: $this->resolveFactoryFileName()),
+            factoryContract:  $this->resolveClassNameByFile(name: $this->resolveFactoryFileName()),
             factoryContractNamespace: $this->resolveFactoryContractNamespace()
         );
 
