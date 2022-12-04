@@ -77,11 +77,3 @@ function filePresent(string $fileName, null | string $prefix = null): bool
         path: baseDirectory() . $prefix ?? domainPath() . $fileName
     );
 }
-
-function infrastructurePath(): string
-{
-    /** @var string $path */
-    $path = config(key: 'diamond.structures.infrastructure');
-
-    return $path;
-}
