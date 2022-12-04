@@ -8,12 +8,13 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 
 class MakeMigrationCommand extends Command
 {
-    use HasArguments;
+    use HasArguments, InteractsWithPath;
 
     protected $signature = 'diamond:migration {name} {--force}';
 
@@ -24,11 +25,11 @@ class MakeMigrationCommand extends Command
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating migration files to your project');
+        $this->info(string: 'Generating migration file to your project');
 
         $destinationPath = base_path(path: 'database/migrations');
 
-        $stubPath = __DIR__ . '/../../stubs/migration.stub';
+        $stubPath = $this->resolvePathForStub(name: 'migration');
 
         $tableName = Str::snake(Str::pluralStudly($this->resolveNameArgument()));
 

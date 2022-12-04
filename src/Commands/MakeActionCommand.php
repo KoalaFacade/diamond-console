@@ -25,7 +25,7 @@ class MakeActionCommand extends Command
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating action files to your project');
+        $this->info(string: 'Generating action file to your project');
 
         $fileName = $this->resolveNameArgument() . '.php';
 
