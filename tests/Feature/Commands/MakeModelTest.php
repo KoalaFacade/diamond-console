@@ -2,9 +2,7 @@
 
 namespace Tests\Feature\Commands;
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 it(description: 'can generate new model class')
@@ -48,7 +46,7 @@ it(description: 'can generate new model class with migration')
         $tableName = Str::snake(Str::pluralStudly('User'));
 
         unlink(base_path(
-            path: 'database/migrations/'. now()->format('Y_m_d_his') . '_create_' . $tableName . '_table.php'
+            path: 'database/migrations/' . now()->format('Y_m_d_his') . '_create_' . $tableName . '_table.php'
         ));
     })
     ->group(groups: 'commands');
