@@ -15,7 +15,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 
 uses(Tests\TestCase::class)
-    ->beforeEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(baseDirectory()))
+    ->beforeEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(basePath()))
     ->in(__DIR__ . '/Feature');
 
 uses(Tests\TestCase::class)
@@ -47,7 +47,7 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function baseDirectory(): string
+function basePath(): string
 {
     /* @var string $path */
     $path = config(key: 'diamond.base_directory');
@@ -74,6 +74,6 @@ function infrastructurePath(): string
 function filePresent(string $fileName, null | string $prefix = null): bool
 {
     return File::exists(
-        path: baseDirectory() . $prefix ?? domainPath() . $fileName
+        path: basePath() . $prefix ?? domainPath() . $fileName
     );
 }
