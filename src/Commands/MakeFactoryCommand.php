@@ -13,6 +13,7 @@ use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
+use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 class MakeFactoryCommand extends Command
 {
@@ -24,6 +25,7 @@ class MakeFactoryCommand extends Command
 
     /**
      * @throws FileNotFoundException
+     * @throws FileAlreadyExistException
      */
     public function handle(): void
     {
@@ -36,6 +38,7 @@ class MakeFactoryCommand extends Command
 
     /**
      * @throws FileNotFoundException
+     * @throws FileAlreadyExistException
      */
     protected function resolveFactoryContract(): void
     {
@@ -45,19 +48,14 @@ class MakeFactoryCommand extends Command
 
         $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 
-        $filePresent = FilePresentAction::resolve()->execute(
-            data: new FilePresentData(
-                fileName: $fileName,
-                destinationPath: $destinationPath,
-            ),
-            withForce: $this->resolveForceOption()
-        );
-
-        if ($filePresent) {
-            $this->warn(string: $fileName . ' is already exists at ' . $destinationPath);
-
-            return;
-        }
+        FilePresentAction::resolve()
+            ->execute(
+                data: new FilePresentData(
+                    fileName: $fileName,
+                    destinationPath: $destinationPath,
+                ),
+                withForce: $this->resolveForceOption()
+            );
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,
@@ -79,6 +77,7 @@ class MakeFactoryCommand extends Command
 
     /**
      * @throws FileNotFoundException
+     * @throws FileAlreadyExistException
      */
     protected function resolveFactoryConcrete(): void
     {
@@ -91,19 +90,14 @@ class MakeFactoryCommand extends Command
 
         $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 
-        $filePresent = FilePresentAction::resolve()->execute(
-            data: new FilePresentData(
-                fileName: $fileName,
-                destinationPath: $destinationPath,
-            ),
-            withForce: $this->resolveForceOption()
-        );
-
-        if ($filePresent) {
-            $this->warn(string: $fileName . ' is already exists at ' . $destinationPath);
-
-            return;
-        }
+        FilePresentAction::resolve()
+            ->execute(
+                data: new FilePresentData(
+                    fileName: $fileName,
+                    destinationPath: $destinationPath,
+                ),
+                withForce: $this->resolveForceOption()
+            );
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,

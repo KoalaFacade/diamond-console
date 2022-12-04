@@ -7,14 +7,16 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
+use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
+use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 class MakeActionCommand extends Command
 {
-    use InteractsWithPath, HasArguments;
+    use InteractsWithPath, HasArguments, HasOptions;
 
     protected $signature = 'diamond:action {name} {domain} {--force}';
 
@@ -22,6 +24,7 @@ class MakeActionCommand extends Command
 
     /**
      * @throws FileNotFoundException
+     * @throws FileAlreadyExistException
      */
     public function handle(): void
     {
@@ -41,19 +44,14 @@ class MakeActionCommand extends Command
             class: $this->resolveClassNameByFile(name: $fileName),
         );
 
-        $filePresent = FilePresentAction::resolve()
+        FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
                     destinationPath: $destinationPath,
-                )
+                ),
+                withForce: $this->resolveForceOption()
             );
-
-        if ($filePresent) {
-            $this->warn(string: $fileName . ' already exists.');
-
-            return;
-        }
 
         CopyStubAction::resolve()
             ->execute(

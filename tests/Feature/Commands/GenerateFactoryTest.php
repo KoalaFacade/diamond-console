@@ -27,15 +27,6 @@ it(
                 )
             )->toBeTrue();
 
-        Artisan::call(command: 'diamond:factory ' . $factoryName . ' ' . $domainName);
-
-        expect(value:
-            Str::contains(
-                haystack: Artisan::output(),
-                needles: 'is already exists at'
-            )
-        );
-
         File::delete([$factoryContractPath, $factoryConcretePath]);
     }
 )->group('commands');
@@ -62,15 +53,6 @@ it(
                     needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Contract']
                 )
             )->toBeTrue();
-
-        Artisan::call(command: 'diamond:factory ' . $factoryName . ' ' . $domainName);
-
-        expect(value:
-            Str::contains(
-                haystack: Artisan::output(),
-                needles: 'is already exists at'
-            )
-        );
 
         Artisan::call(command: 'diamond:factory ' . $factoryName . ' ' . $domainName . ' --force');
 
