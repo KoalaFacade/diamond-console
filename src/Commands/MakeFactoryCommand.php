@@ -4,16 +4,19 @@ namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
-use KoalaFacade\DiamondConsole\Commands\Concerns\HasBaseArguments;
+use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
+use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
+use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
+use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 
 class MakeFactoryCommand extends Command
 {
-    use InteractsWithPath, HasBaseArguments;
+    use InteractsWithPath, HasArguments, HasOptions;
 
     protected $signature = 'diamond:factory {name} {domain} {--force}';
 
@@ -36,44 +39,45 @@ class MakeFactoryCommand extends Command
      */
     protected function resolveGenerateForFactoryInterface(): void
     {
-        $name = 'Abstract' . $this->resolveArgumentForName() . '.php';
+        $fileName = 'Abstract' . $this->resolveNameArgument() . '.php';
 
-        $namespace = Str::of(string: 'Contracts')
-            ->start(prefix: 'Models\\')
-            ->start(prefix: $this->resolveArgumentForDomain() . '\\')
-            ->start(prefix: 'Shared\\')
-            ->start(prefix: $this->resolvePathForDomain() . '\\');
+        $namespace = $this->resolveNamespace(
+            identifier: 'Models\\Contracts',
+            domain: 'Shared\\' . $this->resolveDomainArgument(),
+        );
 
-        $destination = $this->resolveDestinationByNamespace(namespace: $namespace);
+        $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 
-        $filesystem = new Filesystem();
+        $filePresent = FilePresentAction::resolve()->execute(
+            data: new FilePresentData(
+                fileName: $fileName,
+                destinationPath: $destinationPath,
+            ),
+            withForce: $this->resolveForceOption()
+        );
 
-        if ($this->option(key: 'force')) {
-            $filesystem->delete(paths: $destination . '/' . $name);
-        }
-
-        if ($filesystem->exists(path:  $destination . '/' . $name)) {
-            $this->warn(string: $name . ' is already exists at ' . $destination);
+        if ($filePresent) {
+            $this->warn(string: $fileName . ' is already exists at ' . $destinationPath);
 
             return;
         }
 
-        $placeholders = [
-            'namespace' => $namespace->toString(),
-            'class' => $this->resolveClassNameByFile(name: $name),
-        ];
+        $placeholders = new PlaceholderData(
+            namespace: $namespace,
+            class: $this->resolveClassNameByFile(name: $fileName)
+        );
 
         CopyStubAction::resolve()
             ->execute(
-                new CopyStubData(
+                data: new CopyStubData(
                     stubPath: $this->resolvePathForStub(name: 'factory-interface'),
-                    destinationPath: $destination,
-                    fileName: $name,
-                    placeholders: $placeholders
+                    destinationPath: $destinationPath,
+                    fileName: $fileName,
+                    placeholders: $placeholders,
                 )
             );
 
-        $this->info(string: 'Succeed generate Factory Interface at ' . $destination . '/' . $name);
+        $this->info(string: 'Succeed generate Factory Interface at ' . $destinationPath . '/' . $fileName);
     }
 
     /**
@@ -81,42 +85,44 @@ class MakeFactoryCommand extends Command
      */
     protected function resolveGenerateForFactoryConcrete(): void
     {
-        $name = $this->resolveArgumentForName() . '.php';
+        $fileName = $this->resolveNameArgument() . '.php';
 
         $namespace = Str::of(string: 'Factories')
             ->start(prefix: 'Database\\')
-            ->start(prefix: $this->resolveArgumentForDomain() . '\\')
+            ->start(prefix: $this->resolveDomainArgument() . '\\')
             ->start(prefix: $this->resolvePathForInfrastructure() . '\\');
 
-        $destination = $this->resolveDestinationByNamespace(namespace: $namespace);
+        $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 
-        $filesystem = new Filesystem();
+        $filePresent = FilePresentAction::resolve()->execute(
+            data: new FilePresentData(
+                fileName: $fileName,
+                destinationPath: $destinationPath,
+            ),
+            withForce: $this->resolveForceOption()
+        );
 
-        if ($this->option(key: 'force')) {
-            $filesystem->delete(paths: $destination . '/' . $name);
-        }
-
-        if ($filesystem->exists(path:  $destination . '/' . $name)) {
-            $this->warn(string: $name . ' is already exists at ' . $destination);
+        if ($filePresent) {
+            $this->warn(string: $fileName . ' is already exists at ' . $destinationPath);
 
             return;
         }
 
-        $placeholders = [
-            'namespace' => $namespace->toString(),
-            'class' => $this->resolveClassNameByFile(name: $name),
-        ];
+        $placeholders = new PlaceholderData(
+            namespace: $namespace,
+            class: $this->resolveClassNameByFile(name: $fileName)
+        );
 
         CopyStubAction::resolve()
             ->execute(
                 new CopyStubData(
                     stubPath: $this->resolvePathForStub(name: 'factory'),
-                    destinationPath: $destination,
-                    fileName: $name,
+                    destinationPath: $destinationPath,
+                    fileName: $fileName,
                     placeholders: $placeholders
                 )
             );
 
-        $this->info(string: 'Succeed generate Factory concrete at ' . $destination . '/' . $name);
+        $this->info(string: 'Succeed generate Factory concrete at ' . $destinationPath . '/' . $fileName);
     }
 }

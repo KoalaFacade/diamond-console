@@ -3,7 +3,6 @@
 namespace KoalaFacade\DiamondConsole\Commands\Concerns;
 
 use Illuminate\Support\Str;
-use Illuminate\Support\Stringable;
 
 trait InteractsWithPath
 {
@@ -33,11 +32,25 @@ trait InteractsWithPath
         return $path;
     }
 
-    protected function resolveDestinationByNamespace(Stringable $namespace): string
+    protected function resolveNamespaceTarget(string $namespace): string
     {
         return base_path(
-            path: $this->resolveBasePath() . $namespace->replace(search: '\\', replace: '/')->toString()
+            path: $this->resolveBasePath() . Str::replace(
+                search: '\\',
+                replace: '/',
+                subject: $namespace
+            )
         );
+    }
+
+    protected function resolveNamespace(string $identifier, string $domain): string
+    {
+        return Str::of(string: '')
+            ->append(
+                $this->resolvePathForDomain() . '\\',
+                $domain . '\\',
+                $identifier,
+            );
     }
 
     protected function resolvePathForStub(string $name): string
