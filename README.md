@@ -8,7 +8,21 @@
 
 > Artisan command package to handle your Domain Driven Design project that suitable with Laravel base structures, made for comer of Domain Driven Design
 and advanced.
-> 
+>
+
+## Table of Contents
+
+1. [Documentation](#documentation)
+    - [Installation](#installation)
+    - [Commands](#commands)
+        - [Action](#diamondaction-generateprofileaction-user)
+        - [Enum](#diamondenum-role-user)
+        - [Data Transfer Object](#diamonddto-roledata-user)
+        - [Migration](#diamondmigration-users)
+        - [Model](#diamondmodel-user-user)
+        - [Factory](#diamondfactory-rolefactory-user)
+        - [Mail](#diamondmail-approveduser-user)
+2. [Contribution](#contribution)
 
 ## Documentation
 
