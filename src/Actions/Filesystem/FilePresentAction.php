@@ -4,14 +4,13 @@ namespace KoalaFacade\DiamondConsole\Actions\Filesystem;
 
 use Illuminate\Filesystem\Filesystem;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
+use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 use KoalaFacade\DiamondConsole\Foundation\Action;
 
 class FilePresentAction extends Action
 {
     /**
-     * @param  FilePresentData  $data
-     * @param  bool  $withForce
-     * @return bool
+     * @throws FileAlreadyExistException
      */
     public function execute(FilePresentData $data, bool $withForce = false): bool
     {
@@ -20,9 +19,13 @@ class FilePresentAction extends Action
         $path = $data->destinationPath . '/' . $data->fileName;
 
         if ($withForce) {
-            $filesystem->delete(paths: $path);
+            return $filesystem->delete(paths: $path);
         }
 
-        return $filesystem->exists(path: $path);
+        if ($filesystem->exists(path: $path)) {
+            return throw new FileAlreadyExistException($data->fileName);
+        }
+
+        return false;
     }
 }

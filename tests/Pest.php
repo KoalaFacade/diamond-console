@@ -11,8 +11,14 @@
 |
 */
 
-uses(Tests\TestCase::class)->in(__DIR__ . '/Feature');
-uses(Tests\TestCase::class)->in(__DIR__ . '/Unit');
+use Illuminate\Filesystem\Filesystem;
+
+uses(Tests\TestCase::class)
+    ->beforeEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(baseDirectory()))
+    ->in(__DIR__ . '/Feature');
+
+uses(Tests\TestCase::class)
+    ->in(__DIR__ . '/Unit');
 
 /*
 |--------------------------------------------------------------------------
@@ -39,3 +45,19 @@ expect()->extend('toBeOne', function () {
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
+
+function baseDirectory(): string
+{
+    /* @var string $path */
+    $path = config(key: 'diamond.base_directory');
+
+    return base_path($path);
+}
+
+function domainPath(): string
+{
+    /* @var string $path */
+    $path = config(key: 'diamond.structures.domain');
+
+    return $path;
+}
