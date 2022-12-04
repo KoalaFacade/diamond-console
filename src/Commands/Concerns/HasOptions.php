@@ -13,4 +13,9 @@ trait HasOptions
     {
         return (bool) $this->option(key: 'force');
     }
+
+    protected function resolveFactoryOption(): bool
+    {
+        return (bool) $this->option(key: 'factory');
+    }
 }

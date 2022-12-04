@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -8,12 +7,11 @@ use Illuminate\Support\Str;
 it(
     description: 'can generate factory concrete and interface',
     closure: function () {
-        $factoryName = 'PackageFactory';
-        $domainName = 'Package';
+        $factoryName = 'TestFactory';
+        $domainName = 'Test';
 
-        $factoryInterfacePath = basePath() . domainPath() . '/Shared/' . $domainName . '/Models' . '/Contracts' . '/Abstract' . $factoryName . '.php';
+        $factoryInterfacePath = basePath() . domainPath() . '/Shared/' . $domainName . '/Models' . '/Contracts/' . $factoryName . 'Contract' . '.php';
         $factoryConcretePath = basePath() . infrastructurePath() . '/' . $domainName . '/Database' . '/Factories/' . $factoryName . '.php';
-        $filesystem = new Filesystem();
 
         expect(value: File::exists(path: $factoryInterfacePath))->toBeFalse()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeFalse();
@@ -45,10 +43,10 @@ it(
 it(
     description: 'can generate factory concrete and interface with force option',
     closure: function () {
-        $factoryName = 'PackageFactory';
-        $domainName = 'Package';
+        $factoryName = 'TestFactory';
+        $domainName = 'Test';
 
-        $factoryInterfacePath = basePath() . domainPath() . '/Shared/' . $domainName . '/Models' . '/Contracts' . '/Abstract' . $factoryName . '.php';
+        $factoryInterfacePath = basePath() . domainPath() . '/Shared/' . $domainName . '/Models' . '/Contracts/' . $factoryName . 'Contract' . '.php';
         $factoryConcretePath = basePath() . infrastructurePath() . '/' . $domainName . '/Database' . '/Factories/' . $factoryName . '.php';
 
         expect(value: File::exists(path: $factoryInterfacePath))->toBeFalse()

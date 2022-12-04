@@ -3,10 +3,13 @@
 namespace {{ namespace }}
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use KoalaFacade\DiamondConsole\Contracts\Factory as HasFactoryResolver;
+use KoalaFacade\DiamondConsole\Contracts\Factory as FactoryContract;
+use KoalaFacade\DiamondConsole\Concerns\HasFactoryResolver;
 
-final class {{ class }} extends Factory implements HasFactoryResolver
+final class {{ class }} extends Factory implements FactoryContract
 {
+    use HasFactoryResolver;
+
     /**
      * Define the model's default state.
      *
@@ -17,15 +20,5 @@ final class {{ class }} extends Factory implements HasFactoryResolver
         return [
             //
         ];
-    }
-
-    /**
-    * Resolver method for dependency injection
-    *
-    * @return Factory
-    */
-    public function resolveFactory(): Factory
-    {
-        return new static;
     }
 }

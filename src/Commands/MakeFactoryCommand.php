@@ -20,7 +20,7 @@ class MakeFactoryCommand extends Command
 
     protected $signature = 'diamond:factory {name} {domain} {--force}';
 
-    protected $description = 'create new enum';
+    protected $description = 'Create model Factory';
 
     /**
      * @throws FileNotFoundException
@@ -29,20 +29,20 @@ class MakeFactoryCommand extends Command
     {
         $this->info(string: 'Generating factory & interface file to your project');
 
-        $this->resolveGenerateForFactoryInterface();
+        $this->resolveFactoryContract();
 
-        $this->resolveGenerateForFactoryConcrete();
+        $this->resolveFactoryConcrete();
     }
 
     /**
      * @throws FileNotFoundException
      */
-    protected function resolveGenerateForFactoryInterface(): void
+    protected function resolveFactoryContract(): void
     {
-        $fileName = 'Abstract' . $this->resolveNameArgument() . '.php';
+        $fileName = $this->resolveNameArgument() . 'Contract' . '.php';
 
         $namespace = $this->resolveNamespace(
-            identifier: 'Models\\Contracts',
+            identifier: 'Models\\Contracts\\',
             domain: 'Shared\\' . $this->resolveDomainArgument(),
         );
 
@@ -83,14 +83,14 @@ class MakeFactoryCommand extends Command
     /**
      * @throws FileNotFoundException
      */
-    protected function resolveGenerateForFactoryConcrete(): void
+    protected function resolveFactoryConcrete(): void
     {
         $fileName = $this->resolveNameArgument() . '.php';
 
         $namespace = Str::of(string: 'Factories')
             ->start(prefix: 'Database\\')
             ->start(prefix: $this->resolveDomainArgument() . '\\')
-            ->start(prefix: $this->resolvePathForInfrastructure() . '\\');
+            ->start(prefix: $this->resolvePathInfrastructure() . '\\');
 
         $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 

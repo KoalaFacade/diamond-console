@@ -40,7 +40,8 @@ class MakeModelCommand extends Command
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,
-            class: $this->resolveClassNameByFile(name: $fileName)
+            class: $this->resolveClassNameByFile(name: $fileName),
+            modelFactoryInterface: $this->resolveClassNameByFile(name: $fileName) . 'FactoryContract'
         );
 
         $filePresent = FilePresentAction::resolve()
@@ -61,23 +62,25 @@ class MakeModelCommand extends Command
         CopyStubAction::resolve()
             ->execute(
                 data: new CopyStubData(
-                    stubPath: $this->resolvePathForStub(name: 'model'),
+                    stubPath: $this->resolveFactoryOption()
+                        ? $this->resolvePathForStub(name: 'model-factory')
+                        : $this->resolvePathForStub(name: 'model'),
                     destinationPath: $destinationPath,
                     fileName: $fileName,
                     placeholders: $placeholders,
                 )
             );
 
-        $this->resolveForMigration(fileName: $fileName);
+        $this->resolveMigration(fileName: $fileName);
 
-        $this->resolveForFactory(fileName: $fileName);
+        $this->resolveFactory(fileName: $fileName);
 
         $this->info(string: 'Successfully generate model file');
     }
 
-    protected function resolveForFactory(string $fileName): void
+    protected function resolveFactory(string $fileName): void
     {
-        if ($this->option(key: 'factory')) {
+        if ($this->resolveFactoryOption()) {
             Artisan::call(
                 command: 'diamond:factory',
                 parameters: [
@@ -88,7 +91,7 @@ class MakeModelCommand extends Command
         }
     }
 
-    protected function resolveForMigration(string $fileName): void
+    protected function resolveMigration(string $fileName): void
     {
         if ($this->option(key: 'migration')) {
             Artisan::call(command: 'diamond:migration ' . $this->resolveClassNameByFile(name: $fileName));

@@ -112,19 +112,21 @@ it(
         $domainName = 'Role';
         $modelName = 'Role';
 
-        $factoryInterfacePath = basePath() . domainPath() . '/Shared/' . $domainName . '/Models' . '/Contracts' . '/Abstract' . $factoryName . '.php';
+        $factoryInterfacePath = basePath() . domainPath() . '/Shared/' . $domainName . '/Models' . '/Contracts/' . $factoryName . 'Contract' . '.php';
         $factoryConcretePath = basePath() . infrastructurePath() . '/' . $domainName . '/Database' . '/Factories/' . $factoryName . '.php';
         $modelConcretePath = basePath() . domainPath() . '/Shared/' . $domainName . '/Models/' . $modelName . '.php';
 
-        expect(value: File::exists(path: $factoryInterfacePath))->toBeFalse()
-            ->and(value: File::exists(path: $factoryConcretePath))->toBeFalse()
-            ->and(value: File::exists(path: $modelConcretePath))->toBeFalse();
+        expect(value: File::exists(path: $factoryInterfacePath))->toBeFalse();
 
         Artisan::call(command: 'diamond:model ' . $modelName . ' ' . $domainName . ' --factory --force');
 
         expect(value: File::exists(path: $factoryInterfacePath))->toBeTrue()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeTrue()
             ->and(value: File::exists(path: $modelConcretePath))->toBeTrue();
+
+        $modelConcretePath = File::get(path: $modelConcretePath);
+
+        expect(value: Str::contains(haystack: $modelConcretePath, needles: '{{ model_factory_interface }}'))->toBeFalse();
 
         File::delete(paths: [$factoryInterfacePath, $factoryConcretePath, $modelConcretePath]);
     }

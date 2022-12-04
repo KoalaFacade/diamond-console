@@ -2,12 +2,13 @@
 
 namespace KoalaFacade\DiamondConsole\Contracts;
 
+use Illuminate\Database\Eloquent\Factories\Factory as EloquentFactory;
 use Illuminate\Database\Eloquent\Model;
 
 interface Factory
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Factories\Factory<Model>
+     * @return EloquentFactory<Model>
      */
-    public function resolveFactory(): \Illuminate\Database\Eloquent\Factories\Factory;
+    public function resolveFactory(): EloquentFactory;
 }

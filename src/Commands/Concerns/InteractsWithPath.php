@@ -19,7 +19,7 @@ trait InteractsWithPath
         return $this->resolvePathForStructure(identifier: 'domain');
     }
 
-    protected function resolvePathForInfrastructure(): string
+    protected function resolvePathInfrastructure(): string
     {
         return $this->resolvePathForStructure(identifier: 'infrastructure');
     }
