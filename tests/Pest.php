@@ -63,10 +63,18 @@ function domainPath(): string
     return $path;
 }
 
-function filePresent(string $fileName): bool
+function infrastructurePath(): string
+{
+    /* @var string $path */
+    $path = config(key: 'diamond.structures.infrastructure');
+
+    return $path;
+}
+
+function filePresent(string $fileName, null | string $prefix = null): bool
 {
     return File::exists(
-        path: baseDirectory() . domainPath() . $fileName
+        path: baseDirectory() . $prefix ?? domainPath() . $fileName
     );
 }
 
