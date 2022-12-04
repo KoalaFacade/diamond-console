@@ -4,12 +4,17 @@ namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
+use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
+use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 
 class MakeMigrationCommand extends Command
 {
+    use HasArguments;
+
     protected $signature = 'diamond:migration {name} {--force}';
 
     protected $description = 'create new migration';
@@ -21,25 +26,15 @@ class MakeMigrationCommand extends Command
     {
         $this->info(string: 'Generating migration files to your project');
 
-        /**
-         * @var  string  $name
-         */
-        $name = $this->argument(key: 'name');
-
         $destinationPath = base_path(path: 'database/migrations');
 
         $stubPath = __DIR__ . '/../../stubs/migration.stub';
 
-        $tableName = Str::snake(Str::pluralStudly($name));
+        $tableName = Str::snake(Str::pluralStudly($this->resolveNameArgument()));
 
-        $fileName = now()->format('Y_m_d_his') . '_create_' . $tableName . '_table.php';
+        $fileName = Carbon::now()->format(format: 'Y_m_d_his') . '_create_' . $tableName . '_table.php';
 
-        /**
-         * @var  array<string>  $placeholders
-         */
-        $placeholders = [
-            'tableName' => $tableName,
-        ];
+        $placeholders = new PlaceholderData(tableName: $tableName);
 
         CopyStubAction::resolve()
             ->execute(

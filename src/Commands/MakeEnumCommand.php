@@ -4,16 +4,18 @@ namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
-use KoalaFacade\DiamondConsole\Commands\Concerns\HasBaseArguments;
+use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
+use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
+use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
+use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 
 class MakeEnumCommand extends Command
 {
-    use InteractsWithPath, HasBaseArguments;
+    use InteractsWithPath, HasArguments, HasOptions;
 
     protected $signature = 'diamond:enum {name} {domain} {--force}';
 
@@ -26,18 +28,19 @@ class MakeEnumCommand extends Command
     {
         $this->info(string: 'Generating enum files to your project');
 
-        $name = $this->resolveArgumentForName() . '.php';
+        $fileName = $this->resolveNameArgument() . '.php';
 
-        $namespace = Str::of(string: 'Enums')
-            ->start(prefix: $this->resolveArgumentForDomain() . '\\')
-            ->start(prefix: $this->resolvePathForDomain() . '\\');
+        $namespace = $this->resolveNamespace(
+            identifier: 'Enums',
+            domain: $this->resolveDomainArgument()
+        );
 
-        $destinationPath = $this->resolveDestinationByNamespace(namespace: $namespace);
+        $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 
-        $placeholders = [
-            'namespace' => $namespace->toString(),
-            'class' => $this->resolveClassNameByFile(name: $name),
-        ];
+        $placeholders = new PlaceholderData(
+            namespace: $namespace,
+            class: $this->resolveClassNameByFile(name: $fileName),
+        );
 
         if (version_compare(PHP_VERSION, '8.1.0', '<=')) {
             $this->error('The required PHP version is 8.1 while the version you have is ' . PHP_VERSION);
@@ -45,16 +48,17 @@ class MakeEnumCommand extends Command
             return;
         }
 
-        $filesystem = new Filesystem();
+        $filePresent = FilePresentAction::resolve()
+            ->execute(
+                data: new FilePresentData(
+                    fileName: $fileName,
+                    destinationPath: $destinationPath,
+                ),
+                withForce: $this->resolveForceOption(),
+            );
 
-        if ($this->option(key: 'force')) {
-            $filesystem->delete($destinationPath . '/' . $name);
-        }
-
-        $isFileExists = $filesystem->exists(path: $destinationPath . '/' . $name);
-
-        if ($isFileExists) {
-            $this->warn(string: $name . ' already exists.');
+        if ($filePresent) {
+            $this->warn(string: $fileName . ' already exists.');
 
             return;
         }
@@ -64,7 +68,7 @@ class MakeEnumCommand extends Command
                 data: new CopyStubData(
                     stubPath: $this->resolvePathForStub(name: 'enum'),
                     destinationPath: $destinationPath,
-                    fileName: $name,
+                    fileName: $fileName,
                     placeholders: $placeholders,
                 )
             );

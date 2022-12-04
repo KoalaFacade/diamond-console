@@ -13,16 +13,16 @@ it(
         $basePath = config(key: 'diamond.base_directory');
         $domainPath = config(key: 'diamond.structures.domain');
 
-        if (File::exists(base_path("$basePath/$domainPath/Post/Enums/PostData.php"))) {
-            unlink(base_path("$basePath/$domainPath/Post/Enums/PostData.php"));
+        if (File::exists(base_path($basePath . $domainPath . '/Post/Enums/PostData.php'))) {
+            unlink(base_path($basePath . $domainPath . '/Post/Enums/PostData.php'));
         }
 
-        $this->assertFalse(File::exists(base_path("$basePath/$domainPath/Post/DataTransferObjects/PostData.php")));
+        $this->assertFalse(File::exists(base_path($basePath . $domainPath . '/Post/DataTransferObjects/PostData.php')));
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'diamond:dto PostData Post');
 
-        $this->assertTrue(File::exists(base_path("$basePath/$domainPath/Post/DataTransferObjects/PostData.php")));
+        $this->assertTrue(File::exists(base_path($basePath . $domainPath . '/Post/DataTransferObjects/PostData.php')));
 
         $filesystem = new Filesystem();
         $filesystem->deleteDirectory(base_path($basePath));
@@ -35,7 +35,7 @@ it(
         $basePath = config(key: 'diamond.base_directory');
         $domainPath = config(key: 'diamond.structures.domain');
 
-        $this->assertFalse(File::exists(base_path("$basePath/$domainPath/Post/DataTransferObjects/StoreUserAction.php")));
+        $this->assertFalse(File::exists(base_path($basePath . $domainPath . '/Post/DataTransferObjects/StoreUserAction.php')));
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'diamond:dto PostData Post');
@@ -45,7 +45,7 @@ it(
 
         Artisan::call(command: 'diamond:dto PostData Post --force');
 
-        $this->assertTrue(File::exists(base_path("$basePath/$domainPath/Post/DataTransferObjects/PostData.php")));
+        $this->assertTrue(File::exists(base_path($basePath . $domainPath . '/Post/DataTransferObjects/PostData.php')));
 
         $filesystem = new Filesystem();
         $filesystem->deleteDirectory(base_path($basePath));
