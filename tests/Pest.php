@@ -12,6 +12,7 @@
 */
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\File;
 
 uses(Tests\TestCase::class)
     ->beforeEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(baseDirectory()))
@@ -46,20 +47,27 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function basePath(): string
+function baseDirectory(): string
 {
-    /** @var string $path */
+    /* @var string $path */
     $path = config(key: 'diamond.base_directory');
 
-    return base_path(path: $path);
+    return base_path($path);
 }
 
 function domainPath(): string
 {
-    /** @var string $path */
+    /* @var string $path */
     $path = config(key: 'diamond.structures.domain');
 
     return $path;
+}
+
+function filePresent(string $fileName): bool
+{
+    return File::exists(
+        path: baseDirectory() . domainPath() . $fileName
+    );
 }
 
 function infrastructurePath(): string
