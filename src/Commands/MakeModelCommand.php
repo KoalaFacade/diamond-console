@@ -13,6 +13,7 @@ use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
+use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 class MakeModelCommand extends Command
 {
@@ -24,6 +25,7 @@ class MakeModelCommand extends Command
 
     /**
      * @throws FileNotFoundException
+     * @throws FileAlreadyExistException
      */
     public function handle(): void
     {
@@ -43,7 +45,7 @@ class MakeModelCommand extends Command
             class: $this->resolveClassNameByFile(name: $fileName),
         );
 
-        $filePresent = FilePresentAction::resolve()
+        FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
@@ -52,14 +54,8 @@ class MakeModelCommand extends Command
                 withForce: $this->resolveForceOption()
             );
 
-        if ($this->option('migration') && (! $filePresent || $this->resolveForceOption())) {
+        if ($this->option('migration') || $this->resolveForceOption()) {
             Artisan::call(command: 'diamond:migration ' . $this->resolveClassNameByFile(name: $fileName));
-        }
-
-        if ($filePresent) {
-            $this->warn(string: $fileName . ' already exists.');
-
-            return;
         }
 
         CopyStubAction::resolve()
