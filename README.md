@@ -8,6 +8,7 @@
 
 > Artisan command package to handle your Domain Driven Design project that suitable with Laravel base structures, made for comer of Domain Driven Design
 and advanced.
+> 
 
 ## Documentation
 
@@ -113,6 +114,8 @@ the model at the same time.
 |  -f or --factory  | Create factory class when model created this option will generate two files, <br/> Factory contract and Factory concrete |
 |      --force      |                                                  Force create the enum                                                   |
 
+
+---
 
 #### `diamond:factory RoleFactory User`
 Command for generate a factory class, this command would generate two files :
