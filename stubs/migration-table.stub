@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table(table: '{{ table_name }}', callback: function (Blueprint $table) {
+        Schema::table(table: '{{ tableName }}', callback: function (Blueprint $table) {
             //
         });
     }
@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table(table: '{{ table_name }}', callback: function (Blueprint $table) {
+        Schema::table(table: '{{ tableName }}', callback: function (Blueprint $table) {
             //
         });
     }

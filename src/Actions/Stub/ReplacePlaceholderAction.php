@@ -4,6 +4,7 @@ namespace KoalaFacade\DiamondConsole\Actions\Stub;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Foundation\Action;
@@ -27,21 +28,29 @@ class ReplacePlaceholderAction extends Action
     {
         $filesystem = new Filesystem;
 
-        $stub = Str::of(string: $filesystem->get(path: $filePath));
+        $resolved = $placeholders
+            ->resolveArrayKeyUsing(fn (string $key) => Str::camel($key))
+            ->toArray();
 
-        /**
-         * @var string $placeholder
-         * @var string $replacement
-         */
-        foreach ($placeholders->toArray() as $placeholder => $replacement) {
-            if (filled($replacement)) {
-                $stub = $stub
-                    ->replace(
+        $stub = $filesystem->get(path: $filePath);
+
+        Collection::make($resolved)
+            ->filter()
+            ->each(
+                function ($value, $key) use (&$stub) {
+                    /**
+                     * @var string $replacement
+                     * @var string $placeholder
+                     */
+                    [$replacement, $placeholder] = [$value, $key];
+
+                    $stub = Str::replace(
                         search: "{{ $placeholder }}",
-                        replace: $replacement
+                        replace: $replacement,
+                        subject: $stub
                     );
-            }
-        }
+                }
+            );
 
         $contents = $stub;
 
