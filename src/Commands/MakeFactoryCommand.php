@@ -19,9 +19,9 @@ class MakeFactoryCommand extends Command
 {
     use InteractsWithPath, HasArguments, HasOptions;
 
-    protected $signature = 'diamond:factory {name} {domain} {--force}';
+    protected $signature = 'infrastructure:make:factory {name} {domain} {--force}';
 
-    protected $description = 'Create model Factory';
+    protected $description = 'Create a model Factory';
 
     /**
      * @throws FileNotFoundException

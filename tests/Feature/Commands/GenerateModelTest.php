@@ -17,7 +17,7 @@ it(description: 'can generate new model class')
         expect(filePresent($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:model User User');
+        Artisan::call(command: 'domain:make:model User User');
 
         expect(filePresent($fileName))->toBeTrue();
 
@@ -36,8 +36,8 @@ it(description: 'can force generate exists model class')
         expect(filePresent($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:model User User');
-        Artisan::call(command: 'diamond:model User User --force');
+        Artisan::call(command: 'domain:make:model User User');
+        Artisan::call(command: 'domain:make:model User User --force');
 
         expect(filePresent($fileName))->toBeTrue();
 
@@ -60,7 +60,7 @@ it(description: 'can generate new model class with migration')
         expect(filePresent($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:model User User -m');
+        Artisan::call(command: 'domain:make:model User User -m');
 
         expect(filePresent($fileName))->toBeTrue();
 
@@ -81,8 +81,8 @@ it(description: 'can force generate exists model class with migration')
         expect(filePresent($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:model User User -m');
-        Artisan::call(command: 'diamond:model User User -m --force');
+        Artisan::call(command: 'domain:make:model User User -m');
+        Artisan::call(command: 'domain:make:model User User -m --force');
 
         expect(filePresent($fileName))->toBeTrue();
 
@@ -108,7 +108,7 @@ it(description: 'can generate model with factory')
 
         expect(value: File::exists(path: $factoryContractPath))->toBeFalse();
 
-        Artisan::call(command: 'diamond:model ' . $modelName . ' ' . $domainName . ' --factory --force');
+        Artisan::call(command: 'domain:make:model ' . $modelName . ' ' . $domainName . ' --factory --force');
 
         expect(value: File::exists(path: $factoryContractPath))->toBeTrue()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeTrue()

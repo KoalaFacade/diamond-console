@@ -19,9 +19,9 @@ class MakeMailCommand extends Command
 {
     use InteractsWithPath, HasArguments, HasOptions;
 
-    protected $signature = 'diamond:mail {name} {domain} {--force}';
+    protected $signature = 'infrastructure:make:mail {name} {domain} {--force}';
 
-    protected $description = 'create new mail';
+    protected $description = 'Create a new mail';
 
     /**
      * @throws FileNotFoundException

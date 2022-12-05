@@ -14,7 +14,7 @@ it(description: 'can generate new create migration')
 
         $this->assertFalse(File::exists(base_path("database/migrations/$fileName")));
 
-        Artisan::call(command: 'diamond:migration CreateUsersTable --create=users');
+        Artisan::call(command: 'application:migration CreateUsersTable --create=users');
 
         $this->assertTrue(File::exists(base_path("database/migrations/$fileName")));
 
@@ -34,7 +34,7 @@ it(description: 'can generate new table migration')
 
         $this->assertFalse(File::exists(base_path("database/migrations/$fileName")));
 
-        Artisan::call(command: 'diamond:migration UpdateUsersTable --table=users');
+        Artisan::call(command: 'application:migration UpdateUsersTable --table=users');
 
         $this->assertTrue(File::exists(base_path("database/migrations/$fileName")));
 
@@ -54,7 +54,7 @@ it(description: 'can generate new migration')
 
         $this->assertFalse(File::exists(base_path("database/migrations/$fileName")));
 
-        Artisan::call(command: 'diamond:migration UserPost');
+        Artisan::call(command: 'application:migration UserPost');
 
         $this->assertTrue(File::exists(base_path("database/migrations/$fileName")));
 

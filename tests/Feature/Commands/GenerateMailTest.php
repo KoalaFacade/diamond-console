@@ -14,7 +14,7 @@ it(description: 'can generate new mail class')
         expect(filePresent($fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:mail UserApproved User');
+        Artisan::call(command: 'infrastructure:make:mail UserApproved User');
 
         expect(filePresent($fileName, prefix: infrastructurePath()))->toBeTrue();
 
@@ -31,8 +31,8 @@ it(description: 'can force generate exists mail class')
         expect(filePresent($fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:mail UserApproved User');
-        Artisan::call(command: 'diamond:mail UserApproved User --force');
+        Artisan::call(command: 'infrastructure:make:mail UserApproved User');
+        Artisan::call(command: 'infrastructure:make:mail UserApproved User --force');
 
         expect(filePresent($fileName, prefix: infrastructurePath()))->toBeTrue();
 
@@ -45,8 +45,8 @@ it(description: 'can force generate exists mail class')
 it(description: 'file already exist')
     ->tap(function () {
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:mail UserApproved User');
-        Artisan::call(command: 'diamond:mail UserApproved User');
+        Artisan::call(command: 'infrastructure:make:mail UserApproved User');
+        Artisan::call(command: 'infrastructure:make:mail UserApproved User');
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);

@@ -15,7 +15,7 @@ it(description: 'can generate new enum')
         expect(filePresent($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:enum PostStatus Post');
+        Artisan::call(command: 'domain:make:enum PostStatus Post');
 
         expect(filePresent($fileName))->toBeTrue();
 
@@ -33,8 +33,8 @@ it(description: 'can force generate exists enum')
         expect(filePresent($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:enum PostStatus Post');
-        Artisan::call(command: 'diamond:enum PostStatus Post --force');
+        Artisan::call(command: 'domain:make:enum PostStatus Post');
+        Artisan::call(command: 'domain:make:enum PostStatus Post --force');
 
         expect(filePresent($fileName))->toBeTrue();
 
@@ -48,8 +48,8 @@ it(description: 'file already exist')
     ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
     ->tap(function () {
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:enum PostStatus Post');
-        Artisan::call(command: 'diamond:enum PostStatus Post');
+        Artisan::call(command: 'domain:make:enum PostStatus Post');
+        Artisan::call(command: 'domain:make:enum PostStatus Post');
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);
