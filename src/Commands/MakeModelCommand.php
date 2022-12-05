@@ -5,6 +5,7 @@ namespace KoalaFacade\DiamondConsole\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
@@ -59,7 +60,7 @@ class MakeModelCommand extends Command
                 withForce: $this->resolveForceOption()
             );
 
-        if ($filePresent) {
+        if ($filePresent && ! $this->resolveForceOption()) {
             $this->warn(string: $fileName . ' already exists.');
 
             return;
@@ -100,7 +101,9 @@ class MakeModelCommand extends Command
     protected function resolveMigration(string $fileName): void
     {
         if ($this->option(key: 'migration')) {
-            Artisan::call(command: 'diamond:migration ' . $this->resolveClassNameByFile(name: $fileName));
+            $tableName = $this->resolveClassNameByFile(name: $fileName);
+
+            Artisan::call(command: 'diamond:migration Create' . Str::pluralStudly($tableName) . 'Table --create=' . $tableName);
         }
     }
 }
