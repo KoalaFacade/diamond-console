@@ -17,9 +17,9 @@ class MakeMigrationCommand extends Command
 {
     use HasArguments, HasOptions, InteractsWithPath;
 
-    protected $signature = 'diamond:migration {name} {--create=} {--table=} {--force}';
+    protected $signature = 'application:migration {name} {--create=} {--table=} {--force}';
 
-    protected $description = 'create new migration';
+    protected $description = 'Create a new migration';
 
     /**
      * @throws FileNotFoundException

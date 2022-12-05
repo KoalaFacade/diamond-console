@@ -16,7 +16,7 @@ it(
         expect(value: File::exists(path: $factoryContractPath))->toBeFalse()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeFalse();
 
-        Artisan::call(command: 'diamond:factory ' . $factoryName . ' ' . $domainName);
+        Artisan::call(command: 'infrastructure:make:factory ' . $factoryName . ' ' . $domainName);
 
         expect(value: File::exists(path: $factoryContractPath))->toBeTrue()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeTrue()
@@ -49,7 +49,7 @@ it(
         expect(value: File::exists(path: $factoryContractPath))->toBeFalse()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeFalse();
 
-        Artisan::call(command: 'diamond:factory ' . $factoryName . ' ' . $domainName);
+        Artisan::call(command: 'infrastructure:make:factory ' . $factoryName . ' ' . $domainName);
 
         expect(value: File::exists(path: $factoryContractPath))->toBeTrue()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeTrue()
@@ -60,7 +60,7 @@ it(
                 )
             )->toBeTrue();
 
-        Artisan::call(command: 'diamond:factory ' . $factoryName . ' ' . $domainName . ' --force');
+        Artisan::call(command: 'infrastructure:make:factory ' . $factoryName . ' ' . $domainName . ' --force');
 
         expect(value: File::exists(path: $factoryContractPath))->toBeTrue()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeTrue()
