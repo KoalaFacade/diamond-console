@@ -3,9 +3,9 @@
 namespace {{ namespace }};
 
 use KoalaFacade\DiamondConsole\Foundation\CreateNewFactory;
-use {{ factory_contract_namespace }}\{{ factory_contract }};
+use {{ factory_contract_namespace }}\{{ factory_contract }} as HasFactory;
 
-final class {{ class }} extends CreateNewFactory implements {{ factory_contract }}
+final class {{ class }} extends CreateNewFactory implements HasFactory
 {
     /**
      * Define the model's default state.
