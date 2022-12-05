@@ -60,8 +60,8 @@ it(description: 'can generate new model class with migration')
 
         $filesystem = new Filesystem();
         $filesystem->deleteDirectory(base_path($basePath));
-        $tableName = Str::snake(Str::pluralStudly('User'));
-        $fileName = now()->format('Y_m_d_his') . '_create_' . $tableName . '_table.php';
+        $tableName = Str::snake('User');
+        $fileName = now()->format('Y_m_d_his') . '_' . $tableName . '.php';
 
         unlink(base_path("database/migrations/$fileName"));
     })
@@ -79,8 +79,8 @@ it(description: 'can force generate exists model class with migration')
 
         expect(filePresent($fileName))->toBeTrue();
 
-        $tableName = Str::snake(Str::pluralStudly('User'));
-        $fileName = now()->format('Y_m_d_his') . '_create_' . $tableName . '_table.php';
+        $tableName = Str::snake('User');
+        $fileName = now()->format('Y_m_d_his') . '_' . $tableName . '.php';
 
         unlink(base_path("database/migrations/$fileName"));
     })

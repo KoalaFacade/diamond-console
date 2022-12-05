@@ -43,10 +43,10 @@ it(description: 'can generate new model class with migration')
 
         expect(filePresent($fileName))->toBeTrue();
 
-        $tableName = Str::snake(Str::pluralStudly('User'));
+        $tableName = Str::snake('User');
 
         unlink(base_path(
-            path: 'database/migrations/' . now()->format('Y_m_d_his') . '_create_' . $tableName . '_table.php'
+            path: 'database/migrations/' . now()->format('Y_m_d_his') . '_' . $tableName . '.php'
         ));
     })
     ->group(groups: 'commands');
@@ -63,9 +63,9 @@ it(description: 'can force generate exists model class with migration')
 
         expect(filePresent($fileName))->toBeTrue();
 
-        $tableName = Str::snake(Str::pluralStudly('User'));
+        $tableName = Str::snake('User');
 
-        $fileName = now()->format('Y_m_d_his') . '_create_' . $tableName . '_table.php';
+        $fileName = now()->format('Y_m_d_his') . '_' . $tableName . '.php';
 
         unlink(base_path("database/migrations/$fileName"));
     })
