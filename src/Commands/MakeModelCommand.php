@@ -46,7 +46,7 @@ class MakeModelCommand extends Command
             class: $this->resolveClassNameByFile(name: $fileName),
             factoryContract: $factoryContractClassName,
             factoryContractNamespace: $this->resolveNamespace(
-                identifier: 'Contracts\\Database\\Factories\\',
+                identifier: 'Contracts\\Database\\Factories',
                 domain: 'Shared',
             )
         );
