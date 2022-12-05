@@ -39,7 +39,7 @@ class MakeModelCommand extends Command
 
         $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 
-        $factoryContractClassName = $this->resolveClassNameByFile(name: $fileName) . 'FactoryContract';
+        $factoryContractClassName = $this->resolveClassNameByFile(name: $fileName) . 'Factory';
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,
