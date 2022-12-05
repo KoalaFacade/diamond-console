@@ -1,11 +1,11 @@
 <?php
 
-namespace {{ namespace }}
+namespace {{ namespace }};
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use KoalaFacade\DiamondConsole\Contracts\Factory as FactoryContract;
 use KoalaFacade\DiamondConsole\Foundation\CreateNewFactory;
-use {{ factory_contract_namespace }}{{ factory_contract }}
+use {{ factory_contract_namespace }}{{ factory_contract }};
 
 final class {{ class }} extends CreateNewFactory implements {{ factory_contract }}
 {
