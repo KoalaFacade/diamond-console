@@ -122,13 +122,13 @@ class MakeFactoryCommand extends Command
     protected function resolveFactoryContractNamespace(): string
     {
         return $this->resolveNamespace(
-            identifier: 'Contracts\\Database\\Factories\\',
+            identifier: 'Contracts\\Database\\Factories',
             domain: 'Shared',
         );
     }
 
     protected function resolveFactoryFileName(): string
     {
-        return $this->resolveNameArgument() . 'Contract.php';
+        return $this->resolveNameArgument() . '.php';
     }
 }

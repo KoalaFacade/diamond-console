@@ -10,7 +10,7 @@ it(
         $factoryName = 'TestFactory';
         $domainName = 'Test';
 
-        $factoryContractPath = basePath() . domainPath() . '/Shared/Contracts/Database/Factories/' . $factoryName . 'Contract.php';
+        $factoryContractPath = basePath() . domainPath() . '/Shared/Contracts/Database/Factories/' . $factoryName . '.php';
         $factoryConcretePath = basePath() . infrastructurePath() . '/' . $domainName . '/Database' . '/Factories/' . $factoryName . '.php';
 
         expect(value: File::exists(path: $factoryContractPath))->toBeFalse()
@@ -43,7 +43,7 @@ it(
         $factoryName = 'TestFactory';
         $domainName = 'Test';
 
-        $factoryContractPath = basePath() . domainPath() . '/Shared/Contracts/Database/Factories/' . $factoryName . 'Contract.php';
+        $factoryContractPath = basePath() . domainPath() . '/Shared/Contracts/Database/Factories/' . $factoryName . '.php';
         $factoryConcretePath = basePath() . infrastructurePath() . '/' . $domainName . '/Database' . '/Factories/' . $factoryName . '.php';
 
         expect(value: File::exists(path: $factoryContractPath))->toBeFalse()
