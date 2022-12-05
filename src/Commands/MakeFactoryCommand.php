@@ -19,9 +19,9 @@ class MakeFactoryCommand extends Command
 {
     use InteractsWithPath, HasArguments, HasOptions;
 
-    protected $signature = 'diamond:factory {name} {domain} {--force}';
+    protected $signature = 'infrastructure:make:factory {name} {domain} {--force}';
 
-    protected $description = 'Create model Factory';
+    protected $description = 'Create a model Factory';
 
     /**
      * @throws FileNotFoundException
@@ -122,13 +122,13 @@ class MakeFactoryCommand extends Command
     protected function resolveFactoryContractNamespace(): string
     {
         return $this->resolveNamespace(
-            identifier: 'Contracts\\Database\\Factories\\',
+            identifier: 'Contracts\\Database\\Factories',
             domain: 'Shared',
         );
     }
 
     protected function resolveFactoryFileName(): string
     {
-        return $this->resolveNameArgument() . 'Contract.php';
+        return $this->resolveNameArgument() . '.php';
     }
 }

@@ -15,7 +15,7 @@ it(description: 'can generate new action class')
             ->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:action StoreUserAction User');
+        Artisan::call(command: 'domain:make:action StoreUserAction User');
 
         expect(filePresent(fileName: $fileName))
             ->toBeTrue();
@@ -34,8 +34,8 @@ it(description: 'can force generate exists action class')
             ->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:action StoreUserAction User');
-        Artisan::call(command: 'diamond:action StoreUserAction User --force');
+        Artisan::call(command: 'domain:make:action StoreUserAction User');
+        Artisan::call(command: 'domain:make:action StoreUserAction User --force');
 
         expect(filePresent(fileName: $fileName))
             ->toBeTrue();
@@ -49,8 +49,8 @@ it(description: 'can force generate exists action class')
 it(description: 'file already exist')
     ->tap(function () {
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:action StoreUserAction User');
-        Artisan::call(command: 'diamond:action StoreUserAction User');
+        Artisan::call(command: 'domain:make:action StoreUserAction User');
+        Artisan::call(command: 'domain:make:action StoreUserAction User');
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);

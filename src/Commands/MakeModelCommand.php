@@ -19,9 +19,9 @@ class MakeModelCommand extends Command
 {
     use InteractsWithPath, HasArguments, HasOptions;
 
-    protected $signature = 'diamond:model {name} {domain} {--f|factory} {--m|migration} {--force}';
+    protected $signature = 'domain:make:model {name} {domain} {--f|factory} {--m|migration} {--force}';
 
-    protected $description = 'create new model';
+    protected $description = 'Create a new model';
 
     /**
      * @throws FileNotFoundException
@@ -39,14 +39,14 @@ class MakeModelCommand extends Command
 
         $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 
-        $factoryContractClassName = $this->resolveClassNameByFile(name: $fileName) . 'FactoryContract';
+        $factoryContractClassName = $this->resolveClassNameByFile(name: $fileName) . 'Factory';
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,
             class: $this->resolveClassNameByFile(name: $fileName),
             factoryContract: $factoryContractClassName,
             factoryContractNamespace: $this->resolveNamespace(
-                identifier: 'Contracts\\Database\\Factories\\',
+                identifier: 'Contracts\\Database\\Factories',
                 domain: 'Shared',
             )
         );
@@ -89,7 +89,7 @@ class MakeModelCommand extends Command
     {
         if ($this->resolveFactoryOption()) {
             Artisan::call(
-                command: 'diamond:factory',
+                command: 'infrastructure:make:factory',
                 parameters: [
                     'name' => $this->resolveClassNameByFile(name: $fileName) . 'Factory',
                     'domain' => $this->resolveDomainArgument(),
@@ -103,7 +103,7 @@ class MakeModelCommand extends Command
         if ($this->option(key: 'migration')) {
             $tableName = $this->resolveClassNameByFile(name: $fileName);
 
-            Artisan::call(command: 'diamond:migration Create' . Str::pluralStudly($tableName) . 'Table --create=' . $tableName);
+            Artisan::call(command: 'application:migration Create' . Str::pluralStudly($tableName) . 'Table --create=' . $tableName);
         }
     }
 }

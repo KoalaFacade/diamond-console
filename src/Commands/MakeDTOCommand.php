@@ -18,9 +18,9 @@ class MakeDTOCommand extends Command
 {
     use InteractsWithPath, HasArguments, HasOptions;
 
-    protected $signature = 'diamond:dto {name} {domain} {--force}';
+    protected $signature = 'domain:make:dto {name} {domain} {--force}';
 
-    protected $description = 'create new dto';
+    protected $description = 'Create a new dto';
 
     /**
      * @throws FileNotFoundException

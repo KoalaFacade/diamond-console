@@ -18,9 +18,9 @@ class MakeEnumCommand extends Command
 {
     use InteractsWithPath, HasArguments, HasOptions;
 
-    protected $signature = 'diamond:enum {name} {domain} {--force}';
+    protected $signature = 'domain:make:enum {name} {domain} {--force}';
 
-    protected $description = 'create new enum';
+    protected $description = 'Create a new enum';
 
     /**
      * @throws FileNotFoundException

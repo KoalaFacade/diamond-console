@@ -18,9 +18,9 @@ class MakeActionCommand extends Command
 {
     use InteractsWithPath, HasArguments, HasOptions;
 
-    protected $signature = 'diamond:action {name} {domain} {--force}';
+    protected $signature = 'domain:make:action {name} {domain} {--force}';
 
-    protected $description = 'create new action';
+    protected $description = 'Create a new action';
 
     /**
      * @throws FileNotFoundException

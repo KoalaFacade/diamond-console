@@ -14,7 +14,7 @@ it(description: 'can generate new DTO')
         expect(filePresent($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:dto PostData Post');
+        Artisan::call(command: 'domain:make:dto PostData Post');
 
         expect(filePresent($fileName))->toBeTrue();
 
@@ -30,8 +30,8 @@ it(description: 'can force generate exists DTO')
         expect(filePresent(fileName: $fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:dto PostData Post');
-        Artisan::call(command: 'diamond:dto PostData Post --force');
+        Artisan::call(command: 'domain:make:dto PostData Post');
+        Artisan::call(command: 'domain:make:dto PostData Post --force');
 
         expect(filePresent(fileName: $fileName))->toBeTrue();
 
@@ -44,8 +44,8 @@ it(description: 'can force generate exists DTO')
 it(description: 'file already exist')
     ->tap(function () {
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:dto PostData Post');
-        Artisan::call(command: 'diamond:dto PostData Post');
+        Artisan::call(command: 'domain:make:dto PostData Post');
+        Artisan::call(command: 'domain:make:dto PostData Post');
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);
