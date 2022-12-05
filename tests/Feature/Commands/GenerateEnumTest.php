@@ -22,8 +22,8 @@ it(description: 'can generate new enum')
 
         expect(value: Str::contains(haystack: $enumFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
     })
-    ->group(groups: 'commands')
-    ->skip(version_compare(PHP_VERSION, '8.1.0', '<='), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION);
+    ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
+    ->group(groups: 'commands');
 
 it(description: 'can force generate exists enum')
     ->tap(function () {
@@ -41,8 +41,8 @@ it(description: 'can force generate exists enum')
 
         expect(value: Str::contains(haystack: $enumFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
     })
-    ->group(groups: 'commands')
-    ->skip(version_compare(PHP_VERSION, '8.1.0', '<='), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION);
+    ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
+    ->group(groups: 'commands');
 
 it(description: 'file already exist')
     ->tap(function () {
@@ -50,6 +50,6 @@ it(description: 'file already exist')
         Artisan::call(command: 'diamond:enum PostStatus Post');
         Artisan::call(command: 'diamond:enum PostStatus Post');
     })
-    ->skip(version_compare(PHP_VERSION, '8.1.0', '<='), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
+    ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);
