@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate new enum')
+    ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
     ->tap(function () {
         $fileName = '/Post/Enums/PostStatus.php';
 
@@ -22,10 +23,10 @@ it(description: 'can generate new enum')
 
         expect(value: Str::contains(haystack: $enumFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
     })
-    ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
     ->group(groups: 'commands');
 
 it(description: 'can force generate exists enum')
+    ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
     ->tap(function () {
         $fileName = '/Post/Enums/PostStatus.php';
 
@@ -41,15 +42,14 @@ it(description: 'can force generate exists enum')
 
         expect(value: Str::contains(haystack: $enumFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
     })
-    ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
     ->group(groups: 'commands');
 
 it(description: 'file already exist')
+    ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
     ->tap(function () {
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'diamond:enum PostStatus Post');
         Artisan::call(command: 'diamond:enum PostStatus Post');
     })
-    ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);
