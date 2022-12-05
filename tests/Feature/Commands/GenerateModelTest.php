@@ -2,29 +2,30 @@
 
 namespace Tests\Feature\Commands;
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 it(description: 'can generate new model class')
     ->tap(function () {
-        $basePath = config(key: 'diamond.base_directory');
-        $domainPath = config(key: 'diamond.structures.domain');
+        $fileName = '/Shared/User/Models/User.php';
 
-        if (File::exists(base_path("$basePath/$domainPath/Shared/User/Models/User.php"))) {
-            unlink(base_path("$basePath/$domainPath/Shared/User/Models/User.php"));
+        if (File::exists(basePath() . domainPath() . '/Shared/User/Models/User.php')) {
+            unlink(basePath() . domainPath() . '/Shared/User/Models/User.php');
         }
 
-        $this->assertFalse(File::exists(base_path("$basePath/$domainPath/Shared/User/Models/User.php")));
+        expect(filePresent($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'diamond:model User User');
 
-        $this->assertTrue(File::exists(base_path("$basePath/$domainPath/Shared/User/Models/User.php")));
+        expect(filePresent($fileName))->toBeTrue();
 
-        $filesystem = new Filesystem();
-        $filesystem->deleteDirectory(base_path($basePath));
+        $modelFile = File::get(path: basePath() . domainPath() . $fileName);
+
+        expect(value: Str::contains(haystack: $modelFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+
+        unlink(basePath() . domainPath() . '/Shared/User/Models/User.php');
     })
     ->group(groups: 'commands');
 
@@ -39,31 +40,37 @@ it(description: 'can force generate exists model class')
         Artisan::call(command: 'diamond:model User User --force');
 
         expect(filePresent($fileName))->toBeTrue();
+
+        $modelFile = File::get(path: basePath() . domainPath() . $fileName);
+
+        expect(value: Str::contains(haystack: $modelFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+
+        unlink(basePath() . domainPath() . '/Shared/User/Models/User.php');
     })
     ->group(groups: 'commands');
 
 it(description: 'can generate new model class with migration')
     ->tap(function () {
-        $basePath = config(key: 'diamond.base_directory');
-        $domainPath = config(key: 'diamond.structures.domain');
+        $fileName = '/Shared/User/Models/User.php';
 
-        if (File::exists(base_path("$basePath/$domainPath/Shared/User/Models/User.php"))) {
-            unlink(base_path("$basePath/$domainPath/Shared/User/Models/User.php"));
+        if (File::exists(basePath() . domainPath() . '/Shared/User/Models/User.php')) {
+            unlink(basePath() . domainPath() . '/Shared/User/Models/User.php');
         }
 
-        $this->assertFalse(File::exists(base_path("$basePath/$domainPath/Shared/User/Models/User.php")));
+        expect(filePresent($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'diamond:model User User -m');
 
-        $this->assertTrue(File::exists(base_path("$basePath/$domainPath/Shared/User/Models/User.php")));
+        expect(filePresent($fileName))->toBeTrue();
 
-        $filesystem = new Filesystem();
-        $filesystem->deleteDirectory(base_path($basePath));
-        $tableName = Str::snake(Str::pluralStudly('User'));
-        $fileName = now()->format('Y_m_d_his') . '_create_' . $tableName . '_table.php';
+        $tableName = Str::snake('CreateUsersTable');
+        $migrationName = now()->format('Y_m_d_his') . '_' . $tableName . '.php';
+        $modelFile = File::get(path: basePath() . domainPath() . $fileName);
 
-        unlink(base_path("database/migrations/$fileName"));
+        expect(value: Str::contains(haystack: $modelFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+
+        unlink(base_path("database/migrations/$migrationName"));
     })
     ->group(groups: 'commands');
 
@@ -79,10 +86,13 @@ it(description: 'can force generate exists model class with migration')
 
         expect(filePresent($fileName))->toBeTrue();
 
-        $tableName = Str::snake(Str::pluralStudly('User'));
-        $fileName = now()->format('Y_m_d_his') . '_create_' . $tableName . '_table.php';
+        $tableName = Str::snake('CreateUsersTable');
+        $migrationName = now()->format('Y_m_d_his') . '_' . $tableName . '.php';
+        $modelFile = File::get(path: basePath() . domainPath() . $fileName);
 
-        unlink(base_path("database/migrations/$fileName"));
+        expect(value: Str::contains(haystack: $modelFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+
+        unlink(base_path("database/migrations/$migrationName"));
     })
     ->group(groups: 'commands');
 
