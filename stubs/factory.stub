@@ -3,9 +3,8 @@
 namespace {{ namespace }}
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use KoalaFacade\DiamondConsole\Contracts\Factory as FactoryContract;
 use KoalaFacade\DiamondConsole\Foundation\CreateNewFactory;
-use {{ factoryContractNamespace }}{{ factoryContract }}
+use {{ factoryContractNamespace }}\{{ factoryContract }}
 
 final class {{ class }} extends CreateNewFactory implements {{ factoryContract }}
 {
