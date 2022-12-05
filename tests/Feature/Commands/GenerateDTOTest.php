@@ -3,6 +3,8 @@
 namespace Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate new DTO')
@@ -15,18 +17,27 @@ it(description: 'can generate new DTO')
         Artisan::call(command: 'diamond:dto PostData Post');
 
         expect(filePresent($fileName))->toBeTrue();
+
+        $dtoFile = File::get(path: basePath() . domainPath() . $fileName);
+
+        expect(value: Str::contains(haystack: $dtoFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
     })
     ->group(groups: 'commands');
 
 it(description: 'can force generate exists DTO')
     ->tap(function () {
-        expect(filePresent(fileName: '/Post/DataTransferObjects/StoreUserAction.php'))->toBeFalse();
+        $fileName = '/Post/DataTransferObjects/PostData.php';
+        expect(filePresent(fileName: $fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'diamond:dto PostData Post');
         Artisan::call(command: 'diamond:dto PostData Post --force');
 
-        expect(filePresent(fileName: '/Post/DataTransferObjects/PostData.php'))->toBeTrue();
+        expect(filePresent(fileName: $fileName))->toBeTrue();
+
+        $dtoFile = File::get(path: basePath() . domainPath() . $fileName);
+
+        expect(value: Str::contains(haystack: $dtoFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
     })
     ->group(groups: 'commands');
 

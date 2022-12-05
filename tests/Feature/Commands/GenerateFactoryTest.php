@@ -27,6 +27,12 @@ it(
                 )
             )->toBeTrue();
 
+        $factoryContractFile = File::get(path: $factoryContractPath);
+        $factoryConcreteFile = File::get(path: $factoryConcretePath);
+
+        expect(value: Str::contains(haystack: $factoryContractFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        expect(value: Str::contains(haystack: $factoryConcreteFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+
         File::delete([$factoryContractPath, $factoryConcretePath]);
     }
 )->group('commands');
@@ -64,6 +70,12 @@ it(
                     needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Contract']
                 )
             )->toBeTrue();
+
+        $factoryContractFile = File::get(path: $factoryContractPath);
+        $factoryConcreteFile = File::get(path: $factoryConcretePath);
+
+        expect(value: Str::contains(haystack: $factoryContractFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        expect(value: Str::contains(haystack: $factoryConcreteFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
 
         File::delete([$factoryContractPath, $factoryConcretePath]);
     }

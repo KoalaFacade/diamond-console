@@ -18,6 +18,10 @@ it(description: 'can generate new create migration')
 
         $this->assertTrue(File::exists(base_path("database/migrations/$fileName")));
 
+        $migrationFile = File::get(path: base_path("database/migrations/$fileName"));
+
+        expect(value: Str::contains(haystack: $migrationFile, needles: ['{{ table_name }}']))->toBeFalse();
+
         unlink(base_path("database/migrations/$fileName"));
     })
     ->group(groups: 'commands');
@@ -33,6 +37,10 @@ it(description: 'can generate new table migration')
         Artisan::call(command: 'diamond:migration UpdateUsersTable --table=users');
 
         $this->assertTrue(File::exists(base_path("database/migrations/$fileName")));
+
+        $migrationFile = File::get(path: base_path("database/migrations/$fileName"));
+
+        expect(value: Str::contains(haystack: $migrationFile, needles: ['{{ table_name }}']))->toBeFalse();
 
         unlink(base_path("database/migrations/$fileName"));
     })
