@@ -15,13 +15,13 @@ and advanced.
 1. [Documentation](#documentation)
     - [Installation](#installation)
     - [Commands](#commands)
-        - [Action](#diamondaction-generateprofileaction-user)
-        - [Enum](#diamondenum-role-user)
-        - [Data Transfer Object](#diamonddto-roledata-user)
-        - [Migration](#diamondmigration-users)
-        - [Model](#diamondmodel-user-user)
-        - [Factory](#diamondfactory-rolefactory-user)
-        - [Mail](#diamondmail-approveduser-user)
+        - [Action](#domainmakeaction-generateprofileaction-user)
+        - [Enum](#domainmakeenum-role-user)
+        - [Data Transfer Object](#domainmakedto-roledata-user)
+        - [Migration](#applicationmigration-createusertable)
+        - [Model](#domainmakemodel-user-user)
+        - [Factory](#infrastructuremakefactory-rolefactory-user)
+        - [Mail](#infrastructuremakemail-approveduser-user)
 2. [Contribution](#contribution)
 
 ## Documentation
@@ -42,7 +42,7 @@ The command below will generate namespace in composer and base directory structu
 ### Commands
 
 ---
-#### `diamond:action GenerateProfileAction User`
+#### `domain:make:action GenerateProfileAction User`
 Command for generate an action inside your domain directory.
 
 **Arguments**
@@ -60,7 +60,7 @@ Command for generate an action inside your domain directory.
 
 ---
 
-#### `diamond:enum Role User`
+#### `domain:make:enum Role User`
 Command for generate an enum to your domain directory.
 
 **Arguments**
@@ -78,7 +78,7 @@ Command for generate an enum to your domain directory.
 
 ---
 
-#### `diamond:dto RoleData User`
+#### `domain:make:dto RoleData User`
 Command for generate a Data Transfer Object with plain PHP to your domain directory.
 
 **Arguments**
@@ -96,7 +96,7 @@ Command for generate a Data Transfer Object with plain PHP to your domain direct
 
 ---
 
-#### `diamond:migration users`
+#### `application:migration create_user_table`
 Command for generate a migration file
 
 **Arguments**
@@ -105,10 +105,16 @@ Command for generate a migration file
 |:------:|:-----------:|
 |  Name  | Table Name  |
 
+**Options**
+
+|   Name   |                      Description                       |
+|:--------:|:------------------------------------------------------:|
+| --table  |    to generate a migration with purpose edit table     |
+| --create | to generate a migration with purpose to create a table |
 
 ---
 
-#### `diamond:model User User`
+#### `domain:make:model User User`
 Command for generate a model inside Shared in Domain directory,
 all model will store shared folder since another domain probably consume
 the model at the same time.
@@ -131,7 +137,7 @@ the model at the same time.
 
 ---
 
-#### `diamond:factory RoleFactory User`
+#### `infrastructure:make:factory RoleFactory User`
 Command for generate a factory class, this command would generate two files :
 
 1. Factory concrete at Infrastructure/{DomainName}/Database/Factories
@@ -156,7 +162,7 @@ so you can do Dependency Injection at Service Provider for resolve this one.
 
 ---
 
-#### `diamond:mail ApprovedUser User`
+#### `infrastructure:make:mail ApprovedUser User`
 Command for generate a Mail class.
 this command will generate Mail class into Infrastructure side because this class purpose is
 store to external.
