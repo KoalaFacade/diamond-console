@@ -2,52 +2,55 @@
 
 namespace Tests\Feature\Commands;
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-it(
-    description: 'can generate new action class',
-    closure: function () {
-        $basePath = config(key: 'diamond.base_directory');
-        $domainPath = config(key: 'diamond.structures.domain');
+it(description: 'can generate new action class')
+    ->tap(function () {
+        $fileName = '/User/Actions/StoreUserAction.php';
 
-        if (File::exists(base_path("$basePath/$domainPath/User/Actions/StoreUserAction.php"))) {
-            unlink(base_path("$basePath/$domainPath/User/Actions/StoreUserAction.php"));
-        }
-
-        $this->assertFalse(File::exists(base_path("$basePath/$domainPath/User/Actions/StoreUserAction.php")));
+        expect(filePresent(fileName: $fileName))
+            ->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:action StoreUserAction User');
+        Artisan::call(command: 'domain:make:action StoreUserAction User');
 
-        $this->assertTrue(File::exists(base_path("$basePath/$domainPath/User/Actions/StoreUserAction.php")));
+        expect(filePresent(fileName: $fileName))
+            ->toBeTrue();
 
-        $filesystem = new Filesystem();
-        $filesystem->deleteDirectory(base_path($basePath));
-    }
-)->group('commands');
+        $actionFile = File::get(path: basePath() . domainPath() . $fileName);
 
-it(
-    description: 'can force generate exists action class',
-    closure: function () {
-        $basePath = config(key: 'diamond.base_directory');
-        $domainPath = config(key: 'diamond.structures.domain');
+        expect(value: Str::contains(haystack: $actionFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+    })
+    ->group('commands');
 
-        $this->assertFalse(File::exists(base_path("$basePath/$domainPath/User/Actions/StoreUserAction.php")));
+it(description: 'can force generate exists action class')
+    ->tap(function () {
+        $fileName = '/User/Actions/StoreUserAction.php';
+
+        expect(filePresent(fileName: $fileName))
+            ->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:action StoreUserAction User');
-        Artisan::call(command: 'diamond:action StoreUserAction User');
+        Artisan::call(command: 'domain:make:action StoreUserAction User');
+        Artisan::call(command: 'domain:make:action StoreUserAction User --force');
 
-        $this->assertTrue(Str::contains(Artisan::output(), needles: 'StoreUserAction.php already exists.'));
+        expect(filePresent(fileName: $fileName))
+            ->toBeTrue();
 
-        Artisan::call(command: 'diamond:action StoreUserAction User --force');
+        $actionFile = File::get(path: basePath() . domainPath() . $fileName);
 
-        $this->assertTrue(File::exists(base_path("$basePath/$domainPath/User/Actions/StoreUserAction.php")));
+        expect(value: Str::contains(haystack: $actionFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+    })
+    ->group(groups: 'commands');
 
-        $filesystem = new Filesystem();
-        $filesystem->deleteDirectory(base_path($basePath));
-    }
-)->group('commands');
+it(description: 'file already exist')
+    ->tap(function () {
+        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:make:action StoreUserAction User');
+        Artisan::call(command: 'domain:make:action StoreUserAction User');
+    })
+    ->group(groups: 'commands')
+    ->throws(exception: FileAlreadyExistException::class);

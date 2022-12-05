@@ -10,13 +10,13 @@ it(
         $factoryName = 'TestFactory';
         $domainName = 'Test';
 
-        $factoryContractPath = basePath() . domainPath() . '/Shared/Contracts/Database/Factories/' . $factoryName . 'Contract.php';
+        $factoryContractPath = basePath() . domainPath() . '/Shared/Contracts/Database/Factories/' . $factoryName . '.php';
         $factoryConcretePath = basePath() . infrastructurePath() . '/' . $domainName . '/Database' . '/Factories/' . $factoryName . '.php';
 
         expect(value: File::exists(path: $factoryContractPath))->toBeFalse()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeFalse();
 
-        Artisan::call(command: 'diamond:factory ' . $factoryName . ' ' . $domainName);
+        Artisan::call(command: 'infrastructure:make:factory ' . $factoryName . ' ' . $domainName);
 
         expect(value: File::exists(path: $factoryContractPath))->toBeTrue()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeTrue()
@@ -27,14 +27,11 @@ it(
                 )
             )->toBeTrue();
 
-        Artisan::call(command: 'diamond:factory ' . $factoryName . ' ' . $domainName);
+        $factoryContractFile = File::get(path: $factoryContractPath);
+        $factoryConcreteFile = File::get(path: $factoryConcretePath);
 
-        expect(value:
-            Str::contains(
-                haystack: Artisan::output(),
-                needles: 'is already exists at'
-            )
-        );
+        expect(value: Str::contains(haystack: $factoryContractFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        expect(value: Str::contains(haystack: $factoryConcreteFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
 
         File::delete([$factoryContractPath, $factoryConcretePath]);
     }
@@ -46,13 +43,13 @@ it(
         $factoryName = 'TestFactory';
         $domainName = 'Test';
 
-        $factoryContractPath = basePath() . domainPath() . '/Shared/Contracts/Database/Factories/' . $factoryName . 'Contract.php';
+        $factoryContractPath = basePath() . domainPath() . '/Shared/Contracts/Database/Factories/' . $factoryName . '.php';
         $factoryConcretePath = basePath() . infrastructurePath() . '/' . $domainName . '/Database' . '/Factories/' . $factoryName . '.php';
 
         expect(value: File::exists(path: $factoryContractPath))->toBeFalse()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeFalse();
 
-        Artisan::call(command: 'diamond:factory ' . $factoryName . ' ' . $domainName);
+        Artisan::call(command: 'infrastructure:make:factory ' . $factoryName . ' ' . $domainName);
 
         expect(value: File::exists(path: $factoryContractPath))->toBeTrue()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeTrue()
@@ -63,16 +60,7 @@ it(
                 )
             )->toBeTrue();
 
-        Artisan::call(command: 'diamond:factory ' . $factoryName . ' ' . $domainName);
-
-        expect(value:
-            Str::contains(
-                haystack: Artisan::output(),
-                needles: 'is already exists at'
-            )
-        );
-
-        Artisan::call(command: 'diamond:factory ' . $factoryName . ' ' . $domainName . ' --force');
+        Artisan::call(command: 'infrastructure:make:factory ' . $factoryName . ' ' . $domainName . ' --force');
 
         expect(value: File::exists(path: $factoryContractPath))->toBeTrue()
             ->and(value: File::exists(path: $factoryConcretePath))->toBeTrue()
@@ -82,6 +70,12 @@ it(
                     needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Contract']
                 )
             )->toBeTrue();
+
+        $factoryContractFile = File::get(path: $factoryContractPath);
+        $factoryConcreteFile = File::get(path: $factoryConcretePath);
+
+        expect(value: Str::contains(haystack: $factoryContractFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        expect(value: Str::contains(haystack: $factoryConcreteFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
 
         File::delete([$factoryContractPath, $factoryConcretePath]);
     }

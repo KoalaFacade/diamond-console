@@ -2,52 +2,54 @@
 
 namespace Tests\Feature\Commands;
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-it(
-    description: 'can generate new enum',
-    closure: function () {
-        $basePath = config(key: 'diamond.base_directory');
-        $domainPath = config(key: 'diamond.structures.domain');
+it(description: 'can generate new enum')
+    ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
+    ->tap(function () {
+        $fileName = '/Post/Enums/PostStatus.php';
 
-        if (File::exists(base_path("$basePath/$domainPath/Post/Enums/PostStatus.php"))) {
-            unlink(base_path("$basePath/$domainPath/Post/Enums/PostStatus.php"));
-        }
-
-        $this->assertFalse(File::exists(base_path("$basePath/$domainPath/Post/Enums/PostStatus.php")));
+        expect(filePresent($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:enum PostStatus Post');
+        Artisan::call(command: 'domain:make:enum PostStatus Post');
 
-        $this->assertTrue(File::exists(base_path("$basePath/$domainPath/Post/Enums/PostStatus.php")));
+        expect(filePresent($fileName))->toBeTrue();
 
-        $filesystem = new Filesystem();
-        $filesystem->deleteDirectory(base_path($basePath));
-    }
-)->group('commands')->skip(version_compare(PHP_VERSION, '8.1.0', '<='), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION);
+        $enumFile = File::get(path: basePath() . domainPath() . $fileName);
 
-it(
-    description: 'can force generate exists enum',
-    closure: function () {
-        $basePath = config(key: 'diamond.base_directory');
-        $domainPath = config(key: 'diamond.structures.domain');
+        expect(value: Str::contains(haystack: $enumFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+    })
+    ->group(groups: 'commands');
 
-        $this->assertFalse(File::exists(base_path("$basePath/$domainPath/Post/Enums/StoreUserAction.php")));
+it(description: 'can force generate exists enum')
+    ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
+    ->tap(function () {
+        $fileName = '/Post/Enums/PostStatus.php';
+
+        expect(filePresent($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'diamond:enum PostStatus Post');
-        Artisan::call(command: 'diamond:enum PostStatus Post');
+        Artisan::call(command: 'domain:make:enum PostStatus Post');
+        Artisan::call(command: 'domain:make:enum PostStatus Post --force');
 
-        $this->assertTrue(Str::contains(Artisan::output(), needles: 'PostStatus.php already exists.'));
+        expect(filePresent($fileName))->toBeTrue();
 
-        Artisan::call(command: 'diamond:enum PostStatus Post --force');
+        $enumFile = File::get(path: basePath() . domainPath() . $fileName);
 
-        $this->assertTrue(File::exists(base_path("$basePath/$domainPath/Post/Enums/PostStatus.php")));
+        expect(value: Str::contains(haystack: $enumFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+    })
+    ->group(groups: 'commands');
 
-        $filesystem = new Filesystem();
-        $filesystem->deleteDirectory(base_path($basePath));
-    }
-)->group('commands')->skip(version_compare(PHP_VERSION, '8.1.0', '<='), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION);
+it(description: 'file already exist')
+    ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
+    ->tap(function () {
+        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:make:enum PostStatus Post');
+        Artisan::call(command: 'domain:make:enum PostStatus Post');
+    })
+    ->group(groups: 'commands')
+    ->throws(exception: FileAlreadyExistException::class);

@@ -12,17 +12,19 @@ use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
+use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 class MakeEnumCommand extends Command
 {
     use InteractsWithPath, HasArguments, HasOptions;
 
-    protected $signature = 'diamond:enum {name} {domain} {--force}';
+    protected $signature = 'domain:make:enum {name} {domain} {--force}';
 
-    protected $description = 'create new enum';
+    protected $description = 'Create a new enum';
 
     /**
      * @throws FileNotFoundException
+     * @throws FileAlreadyExistException
      */
     public function handle(): void
     {
@@ -48,7 +50,7 @@ class MakeEnumCommand extends Command
             return;
         }
 
-        $filePresent = FilePresentAction::resolve()
+        FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
@@ -56,12 +58,6 @@ class MakeEnumCommand extends Command
                 ),
                 withForce: $this->resolveForceOption(),
             );
-
-        if ($filePresent) {
-            $this->warn(string: $fileName . ' already exists.');
-
-            return;
-        }
 
         CopyStubAction::resolve()
             ->execute(

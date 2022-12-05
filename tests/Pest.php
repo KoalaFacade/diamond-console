@@ -11,8 +11,15 @@
 |
 */
 
-uses(Tests\TestCase::class)->in(__DIR__ . '/Feature');
-uses(Tests\TestCase::class)->in(__DIR__ . '/Unit');
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\File;
+
+uses(Tests\TestCase::class)
+    ->beforeEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(basePath()))
+    ->in(__DIR__ . '/Feature');
+
+uses(Tests\TestCase::class)
+    ->in(__DIR__ . '/Unit');
 
 /*
 |--------------------------------------------------------------------------
@@ -42,15 +49,15 @@ expect()->extend('toBeOne', function () {
 
 function basePath(): string
 {
-    /** @var string $path */
+    /* @var string $path */
     $path = config(key: 'diamond.base_directory');
 
-    return base_path(path: $path);
+    return base_path($path);
 }
 
 function domainPath(): string
 {
-    /** @var string $path */
+    /* @var string $path */
     $path = config(key: 'diamond.structures.domain');
 
     return $path;
@@ -58,8 +65,15 @@ function domainPath(): string
 
 function infrastructurePath(): string
 {
-    /** @var string $path */
+    /* @var string $path */
     $path = config(key: 'diamond.structures.infrastructure');
 
     return $path;
+}
+
+function filePresent(string $fileName, null | string $prefix = null): bool
+{
+    return File::exists(
+        path: basePath() . $prefix ?? domainPath() . $fileName
+    );
 }

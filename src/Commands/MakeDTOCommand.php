@@ -12,17 +12,19 @@ use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
+use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-class MakeDtoCommand extends Command
+class MakeDTOCommand extends Command
 {
     use InteractsWithPath, HasArguments, HasOptions;
 
-    protected $signature = 'diamond:dto {name} {domain} {--force}';
+    protected $signature = 'domain:make:dto {name} {domain} {--force}';
 
-    protected $description = 'create new dto';
+    protected $description = 'Create a new dto';
 
     /**
      * @throws FileNotFoundException
+     * @throws FileAlreadyExistException
      */
     public function handle(): void
     {
@@ -40,7 +42,7 @@ class MakeDtoCommand extends Command
 
         $destinationPath = $this->resolveNamespaceTarget(namespace: (string) $placeholders->namespace);
 
-        $filePresent = FilePresentAction::resolve()
+        FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
@@ -48,12 +50,6 @@ class MakeDtoCommand extends Command
                 ),
                 withForce: $this->resolveForceOption(),
             );
-
-        if ($filePresent) {
-            $this->warn(string: $fileName . ' already exists.');
-
-            return;
-        }
 
         CopyStubAction::resolve()
             ->execute(
