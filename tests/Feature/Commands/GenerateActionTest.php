@@ -3,6 +3,8 @@
 namespace Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate new action class')
@@ -17,6 +19,10 @@ it(description: 'can generate new action class')
 
         expect(filePresent(fileName: $fileName))
             ->toBeTrue();
+
+        $actionFile = File::get(path: basePath() . domainPath() . $fileName);
+
+        expect(value: Str::contains(haystack: $actionFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
     })
     ->group('commands');
 
@@ -33,6 +39,10 @@ it(description: 'can force generate exists action class')
 
         expect(filePresent(fileName: $fileName))
             ->toBeTrue();
+
+        $actionFile = File::get(path: basePath() . domainPath() . $fileName);
+
+        expect(value: Str::contains(haystack: $actionFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
     })
     ->group(groups: 'commands');
 

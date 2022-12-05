@@ -3,6 +3,8 @@
 namespace Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate new mail class')
@@ -15,6 +17,10 @@ it(description: 'can generate new mail class')
         Artisan::call(command: 'diamond:mail UserApproved User');
 
         expect(filePresent($fileName, prefix: infrastructurePath()))->toBeTrue();
+
+        $mailFile = File::get(path: basePath() . infrastructurePath() . $fileName);
+
+        expect(value: Str::contains(haystack: $mailFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
     })
     ->group('commands');
 
@@ -29,6 +35,10 @@ it(description: 'can force generate exists mail class')
         Artisan::call(command: 'diamond:mail UserApproved User --force');
 
         expect(filePresent($fileName, prefix: infrastructurePath()))->toBeTrue();
+
+        $mailFile = File::get(path: basePath() . infrastructurePath() . $fileName);
+
+        expect(value: Str::contains(haystack: $mailFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
     })
     ->group(groups: 'commands');
 
