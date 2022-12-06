@@ -52,7 +52,7 @@ it(description: 'can generate seeder with force option')
     })
     ->group('command');
 
-it(description: 'cannot generate the seeder with non force option')
+it(description: 'cannot generate the Seeder, if the Seeder already exists')
     ->tap(function () {
         $nameArgument = 'UserSeeder';
         $domainArgument = 'User';
