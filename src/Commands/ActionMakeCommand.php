@@ -14,7 +14,7 @@ use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-class MakeActionCommand extends Command
+class ActionMakeCommand extends Command
 {
     use InteractsWithDDD, HasArguments, HasOptions;
 
