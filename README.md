@@ -31,7 +31,7 @@ and advanced.
 ### Installation
 Install Diamond Console with composer
 ```bash
- composer require --dev koalafacade/diamond-console
+ composer require koalafacade/diamond-console
 ```
 then after Diamond Console installed run command below to set up your project. 
 The command below will generate namespace in composer and base directory structures.
