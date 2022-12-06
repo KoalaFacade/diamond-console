@@ -14,13 +14,13 @@ use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-class MakeEnumCommand extends Command
+class ValueObjectMakeCommand extends Command
 {
     use InteractsWithDDD, HasArguments, HasOptions;
 
-    protected $signature = 'domain:make:enum {name} {domain} {--force}';
+    protected $signature = 'domain:make:value-object {name} {domain} {--force}';
 
-    protected $description = 'Create a new enum';
+    protected $description = 'Create a new ValueObject';
 
     /**
      * @throws FileNotFoundException
@@ -28,48 +28,42 @@ class MakeEnumCommand extends Command
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating enum file to your project');
+        $this->info(string: 'Generating value object file to your project');
 
         $fileName = $this->resolveNameArgument() . '.php';
 
         $namespace = $this->resolveNamespace(
             structures: $this->resolveDomainPath(),
-            suffix: 'Enums',
+            suffix: 'ValueObjects',
             prefix: $this->resolveDomainArgument()
         );
 
-        $destinationPath = $this->resolveNamespacePath(namespace: $namespace);
+        $namespacePath = $this->resolveNamespacePath(namespace: $namespace);
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,
-            class: $this->resolveNameFromPhp(name: $fileName),
+            class: $this->resolveNameArgument(),
         );
-
-        if (version_compare(PHP_VERSION, '8.1.0', '<=')) {
-            $this->error('The required PHP version is 8.1 while the version you have is ' . PHP_VERSION);
-
-            return;
-        }
 
         FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
-                    namespacePath: $destinationPath,
+                    namespacePath: $namespacePath,
                 ),
-                withForce: $this->resolveForceOption(),
+                withForce: $this->resolveForceOption()
             );
 
         CopyStubAction::resolve()
             ->execute(
                 data: new CopyStubData(
-                    stubPath: $this->resolveStubForPath(name: 'enum'),
-                    namespacePath: $destinationPath,
+                    stubPath: $this->resolveStubForPath(name: 'value-object'),
+                    namespacePath: $namespacePath,
                     fileName: $fileName,
                     placeholders: $placeholders,
                 )
             );
 
-        $this->info(string: 'Successfully generate enum file');
+        $this->info(string: 'Successfully generate ValueObject file');
     }
 }

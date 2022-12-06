@@ -9,13 +9,13 @@ use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate new ValueObject class')
     ->tap(function () {
-        $fileName = '/User/ValueObjects/RefferalCode.php';
+        $fileName = '/User/ValueObjects/ReferralCode.php';
 
         expect(fileExists(relativeFileName: $fileName))
             ->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'domain:make:valueobject RefferalCode User');
+        Artisan::call(command: 'domain:make:value-object ReferralCode User');
 
         expect(fileExists(relativeFileName: $fileName))
             ->toBeTrue();
@@ -28,14 +28,14 @@ it(description: 'can generate new ValueObject class')
 
 it(description: 'can force generate exists ValueObject class')
     ->tap(function () {
-        $fileName = '/User/ValueObjects/RefferalCode.php';
+        $fileName = '/User/ValueObjects/ReferralCode.php';
 
         expect(fileExists(relativeFileName: $fileName))
             ->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'domain:make:valueobject RefferalCode User');
-        Artisan::call(command: 'domain:make:valueobject RefferalCode User --force');
+        Artisan::call(command: 'domain:make:value-object ReferralCode User');
+        Artisan::call(command: 'domain:make:value-object ReferralCode User --force');
 
         expect(fileExists(relativeFileName: $fileName))
             ->toBeTrue();
@@ -49,8 +49,8 @@ it(description: 'can force generate exists ValueObject class')
 it(description: 'cannot generate the Value Object, if the Value Object already exists')
     ->tap(function () {
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'domain:make:valueobject RefferalCode User');
-        Artisan::call(command: 'domain:make:valueobject RefferalCode User');
+        Artisan::call(command: 'domain:make:value-object ReferralCode User');
+        Artisan::call(command: 'domain:make:value-object ReferralCode User');
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);

@@ -14,13 +14,13 @@ use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-class MakeValueObjectCommand extends Command
+class SeederMakeCommand extends Command
 {
     use InteractsWithDDD, HasArguments, HasOptions;
 
-    protected $signature = 'domain:make:valueobject {name} {domain} {--force}';
+    protected $signature = 'infrastructure:make:seeder {name} {domain} {--force}';
 
-    protected $description = 'Create a new ValueObject';
+    protected $description = 'Create seeder file';
 
     /**
      * @throws FileNotFoundException
@@ -28,42 +28,41 @@ class MakeValueObjectCommand extends Command
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating value object file to your project');
+        $this->info(string: 'Generating seeder to your project');
 
         $fileName = $this->resolveNameArgument() . '.php';
 
         $namespace = $this->resolveNamespace(
-            structures: $this->resolveDomainPath(),
-            suffix: 'ValueObjects',
-            prefix: $this->resolveDomainArgument()
+            structures: $this->resolveInfrastructurePath(),
+            suffix: 'Seeders',
+            prefix: $this->resolveDomainArgument() . '\\Database'
         );
 
-        $namespacePath = $this->resolveNamespacePath(namespace: $namespace);
+        $destinationPath = $this->resolveNamespacePath(namespace: $namespace);
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,
-            class: $this->resolveNameArgument(),
+            class: $this->resolveNameArgument()
         );
 
         FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
-                    namespacePath: $namespacePath,
+                    namespacePath: $destinationPath
                 ),
                 withForce: $this->resolveForceOption()
             );
 
-        CopyStubAction::resolve()
-            ->execute(
-                data: new CopyStubData(
-                    stubPath: $this->resolveStubForPath(name: 'value-object'),
-                    namespacePath: $namespacePath,
-                    fileName: $fileName,
-                    placeholders: $placeholders,
-                )
-            );
+        CopyStubAction::resolve()->execute(
+            data: new CopyStubData(
+                stubPath: $this->resolveStubForPath(name: 'seeder'),
+                namespacePath: $destinationPath,
+                fileName: $fileName,
+                placeholders: $placeholders
+            )
+        );
 
-        $this->info(string: 'Successfully generate ValueObject file');
+        $this->info(string: 'Success generate seeder file at ' . $destinationPath);
     }
 }

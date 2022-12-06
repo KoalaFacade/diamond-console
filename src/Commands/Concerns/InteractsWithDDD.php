@@ -32,7 +32,7 @@ trait InteractsWithDDD
         return $this->resolvePathForStructure(key: 'infrastructure');
     }
 
-    protected function resolveNamespace(string $structures, string $suffix, string $prefix): string
+    public function resolveNamespace(string $structures, string $suffix, string $prefix): string
     {
         return Str::of(string: '\\:prefix\\:suffix')
             ->start($structures)
@@ -40,7 +40,7 @@ trait InteractsWithDDD
             ->replace(search: ':suffix', replace: $suffix);
     }
 
-    protected function resolveNamespacePath(string $namespace): string
+    public function resolveNamespacePath(string $namespace): string
     {
         return base_path(
             path: $this->resolveBasePath() . Str::replace(

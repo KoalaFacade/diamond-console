@@ -14,13 +14,13 @@ use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-class MakeSeederCommand extends Command
+class EnumMakeCommand extends Command
 {
     use InteractsWithDDD, HasArguments, HasOptions;
 
-    protected $signature = 'infrastructure:make:seeder {name} {domain} {--force}';
+    protected $signature = 'domain:make:enum {name} {domain} {--force}';
 
-    protected $description = 'Create seeder file';
+    protected $description = 'Create a new enum';
 
     /**
      * @throws FileNotFoundException
@@ -28,41 +28,48 @@ class MakeSeederCommand extends Command
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating seeder to your project');
+        $this->info(string: 'Generating enum file to your project');
 
         $fileName = $this->resolveNameArgument() . '.php';
 
         $namespace = $this->resolveNamespace(
-            structures: $this->resolveInfrastructurePath(),
-            suffix: 'Seeders',
-            prefix: $this->resolveDomainArgument() . '\\Database'
+            structures: $this->resolveDomainPath(),
+            suffix: 'Enums',
+            prefix: $this->resolveDomainArgument()
         );
 
         $destinationPath = $this->resolveNamespacePath(namespace: $namespace);
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,
-            class: $this->resolveNameArgument()
+            class: $this->resolveNameFromPhp(name: $fileName),
         );
+
+        if (version_compare(PHP_VERSION, '8.1.0', '<=')) {
+            $this->error('The required PHP version is 8.1 while the version you have is ' . PHP_VERSION);
+
+            return;
+        }
 
         FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
-                    namespacePath: $destinationPath
+                    namespacePath: $destinationPath,
                 ),
-                withForce: $this->resolveForceOption()
+                withForce: $this->resolveForceOption(),
             );
 
-        CopyStubAction::resolve()->execute(
-            data: new CopyStubData(
-                stubPath: $this->resolveStubForPath(name: 'seeder'),
-                namespacePath: $destinationPath,
-                fileName: $fileName,
-                placeholders: $placeholders
-            )
-        );
+        CopyStubAction::resolve()
+            ->execute(
+                data: new CopyStubData(
+                    stubPath: $this->resolveStubForPath(name: 'enum'),
+                    namespacePath: $destinationPath,
+                    fileName: $fileName,
+                    placeholders: $placeholders,
+                )
+            );
 
-        $this->info(string: 'Success generate seeder file at ' . $destinationPath);
+        $this->info(string: 'Successfully generate enum file');
     }
 }

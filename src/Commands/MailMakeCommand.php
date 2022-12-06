@@ -15,7 +15,7 @@ use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-class MakeMailCommand extends Command
+class MailMakeCommand extends Command
 {
     use InteractsWithDDD, HasArguments, HasOptions;
 

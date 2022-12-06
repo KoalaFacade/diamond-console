@@ -13,7 +13,7 @@ use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 
-class MakeMigrationCommand extends Command
+class MigrationMakeCommand extends Command
 {
     use HasArguments, HasOptions, InteractsWithDDD;
 
