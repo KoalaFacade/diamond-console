@@ -63,6 +63,6 @@ trait InteractsWithDDD
 
     protected function resolveStubForPath(string $name): string
     {
-        return Str::replace(search: ':name', replace: $name, subject: __DIR__. '/../../../stubs/:name.stub');
+        return Str::replace(search: ':name', replace: $name, subject: __DIR__ . '/../../../stubs/:name.stub');
     }
 }

@@ -22,7 +22,6 @@ class MakeProviderCommand extends Command implements Console, Middleware
 
     protected $signature = 'infrastructure:make:provider {name} {domain} {--force}';
 
-
     protected $description = 'Create a new service provider class';
 
     /**
@@ -63,7 +62,7 @@ class MakeProviderCommand extends Command implements Console, Middleware
 
     public function getFileName(): string
     {
-        return $this->resolveNameArgument(). '.php';
+        return $this->resolveNameArgument() . '.php';
     }
 
     public function getStubPath(): string

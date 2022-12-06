@@ -17,7 +17,7 @@ it('can generate new provider file')
             ->toBeTrue()
             ->and(Str::contains(haystack: $relativeFileName, needles: [
                 '{{ class }}',
-                '{{ namespace }}'
+                '{{ namespace }}',
             ]))
             ->toBeFalse();
     });
