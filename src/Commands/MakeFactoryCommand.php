@@ -8,7 +8,7 @@ use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
@@ -16,7 +16,7 @@ use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 class MakeFactoryCommand extends Command
 {
-    use InteractsWithPath, HasArguments, HasOptions;
+    use InteractsWithDDD, HasArguments, HasOptions;
 
     protected $signature = 'infrastructure:make:factory {name} {domain} {--force}';
 
@@ -45,33 +45,33 @@ class MakeFactoryCommand extends Command
 
         $namespace = $this->resolveFactoryContractNamespace();
 
-        $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
+        $namespacePath = $this->resolveNamespacePath(namespace: $namespace);
 
         FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
-                    destinationPath: $destinationPath,
+                    namespacePath: $namespacePath,
                 ),
                 withForce: $this->resolveForceOption()
             );
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,
-            class: $this->resolveClassNameByFile(name: $fileName)
+            class: $this->resolveNameArgument()
         );
 
         CopyStubAction::resolve()
             ->execute(
                 data: new CopyStubData(
-                    stubPath: $this->resolvePathForStub(name: 'factory-contract'),
-                    destinationPath: $destinationPath,
+                    stubPath: $this->resolveStubForPath(name: 'factory-contract'),
+                    namespacePath: $namespacePath,
                     fileName: $fileName,
                     placeholders: $placeholders,
                 )
             );
 
-        $this->info(string: 'Succeed generate Factory Interface at ' . $destinationPath . '/' . $fileName);
+        $this->info(string: 'Succeed generate Factory Interface at ' . $namespacePath . '/' . $fileName);
     }
 
     /**
@@ -83,47 +83,48 @@ class MakeFactoryCommand extends Command
         $fileName = $this->resolveNameArgument() . '.php';
 
         $namespace = $this->resolveNamespace(
-            identifier: 'Factories',
-            domain: $this->resolveDomainArgument() . '\\Database',
-            layer: 'infrastructure'
+            structures: $this->resolveInfrastructurePath(),
+            suffix: 'Factories',
+            prefix: $this->resolveDomainArgument() . '\\Database'
         );
 
-        $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
+        $namespacePath = $this->resolveNamespacePath(namespace: $namespace);
 
         FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
-                    destinationPath: $destinationPath,
+                    namespacePath: $namespacePath,
                 ),
                 withForce: $this->resolveForceOption()
             );
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,
-            class: $this->resolveClassNameByFile(name: $fileName),
-            factoryContract:  $this->resolveClassNameByFile(name: $this->resolveFactoryFileName()),
+            class: $this->resolveNameArgument(),
+            factoryContract:  $this->resolveNameFromPhp(name: $this->resolveFactoryFileName()),
             factoryContractNamespace: $this->resolveFactoryContractNamespace()
         );
 
         CopyStubAction::resolve()
             ->execute(
                 new CopyStubData(
-                    stubPath: $this->resolvePathForStub(name: 'factory'),
-                    destinationPath: $destinationPath,
+                    stubPath: $this->resolveStubForPath(name: 'factory'),
+                    namespacePath: $namespacePath,
                     fileName: $fileName,
                     placeholders: $placeholders
                 )
             );
 
-        $this->info(string: 'Succeed generate Factory concrete at ' . $destinationPath . '/' . $fileName);
+        $this->info(string: 'Succeed generate Factory concrete at ' . $namespacePath . '/' . $fileName);
     }
 
     protected function resolveFactoryContractNamespace(): string
     {
         return $this->resolveNamespace(
-            identifier: 'Contracts\\Database\\Factories',
-            domain: 'Shared',
+            structures: $this->resolveDomainPath(),
+            suffix: 'Contracts\\Database\\Factories',
+            prefix: 'Shared',
         );
     }
 

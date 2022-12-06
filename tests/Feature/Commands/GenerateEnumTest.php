@@ -12,12 +12,12 @@ it(description: 'can generate new enum')
     ->tap(function () {
         $fileName = '/Post/Enums/PostStatus.php';
 
-        expect(filePresent($fileName))->toBeFalse();
+        expect(fileExists($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:enum PostStatus Post');
 
-        expect(filePresent($fileName))->toBeTrue();
+        expect(fileExists($fileName))->toBeTrue();
 
         $enumFile = File::get(path: basePath() . domainPath() . $fileName);
 
@@ -30,13 +30,13 @@ it(description: 'can force generate exists enum')
     ->tap(function () {
         $fileName = '/Post/Enums/PostStatus.php';
 
-        expect(filePresent($fileName))->toBeFalse();
+        expect(fileExists($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:enum PostStatus Post');
         Artisan::call(command: 'domain:make:enum PostStatus Post --force');
 
-        expect(filePresent($fileName))->toBeTrue();
+        expect(fileExists($fileName))->toBeTrue();
 
         $enumFile = File::get(path: basePath() . domainPath() . $fileName);
 

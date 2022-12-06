@@ -9,7 +9,7 @@ use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
@@ -17,7 +17,7 @@ use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 class MakeMailCommand extends Command
 {
-    use InteractsWithPath, HasArguments, HasOptions;
+    use InteractsWithDDD, HasArguments, HasOptions;
 
     protected $signature = 'infrastructure:make:mail {name} {domain} {--force}';
 
@@ -33,9 +33,9 @@ class MakeMailCommand extends Command
 
         $namespace = Str::of(string: 'Mail')
             ->start(prefix: $this->resolveDomainArgument() . '\\')
-            ->start(prefix: $this->resolvePathInfrastructure() . '\\');
+            ->start(prefix: $this->resolveInfrastructurePath() . '\\');
 
-        $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
+        $destinationPath = $this->resolveNamespacePath(namespace: $namespace);
 
         $placeholders = new PlaceholderData(
             namespace: $namespace->toString(),
@@ -49,7 +49,7 @@ class MakeMailCommand extends Command
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
-                    destinationPath: $destinationPath,
+                    namespacePath: $destinationPath,
                 ),
                 withForce: $this->resolveForceOption(),
             );
@@ -57,8 +57,8 @@ class MakeMailCommand extends Command
         CopyStubAction::resolve()
             ->execute(
                 data: new CopyStubData(
-                    stubPath: $this->resolvePathForStub(name: 'mail'),
-                    destinationPath: $destinationPath,
+                    stubPath: $this->resolveStubForPath(name: 'mail'),
+                    namespacePath: $destinationPath,
                     fileName: $fileName,
                     placeholders: $placeholders,
                 ),

@@ -16,7 +16,7 @@ class FilePresentAction extends Action
     {
         $filesystem = new Filesystem;
 
-        $path = $data->destinationPath . '/' . $data->fileName;
+        $path = $data->namespacePath . '/' . $data->fileName;
 
         if ($withForce) {
             return $filesystem->delete(paths: $path);

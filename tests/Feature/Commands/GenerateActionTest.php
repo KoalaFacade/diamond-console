@@ -11,13 +11,13 @@ it(description: 'can generate new action class')
     ->tap(function () {
         $fileName = '/User/Actions/StoreUserAction.php';
 
-        expect(filePresent(fileName: $fileName))
+        expect(fileExists(relativeFileName: $fileName))
             ->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:action StoreUserAction User');
 
-        expect(filePresent(fileName: $fileName))
+        expect(fileExists(relativeFileName: $fileName))
             ->toBeTrue();
 
         $actionFile = File::get(path: basePath() . domainPath() . $fileName);
@@ -30,14 +30,14 @@ it(description: 'can force generate exists action class')
     ->tap(function () {
         $fileName = '/User/Actions/StoreUserAction.php';
 
-        expect(filePresent(fileName: $fileName))
+        expect(fileExists(relativeFileName: $fileName))
             ->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:action StoreUserAction User');
         Artisan::call(command: 'domain:make:action StoreUserAction User --force');
 
-        expect(filePresent(fileName: $fileName))
+        expect(fileExists(relativeFileName: $fileName))
             ->toBeTrue();
 
         $actionFile = File::get(path: basePath() . domainPath() . $fileName);

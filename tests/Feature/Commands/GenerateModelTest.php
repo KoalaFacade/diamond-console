@@ -15,12 +15,12 @@ it(description: 'can generate new model class')
             unlink(basePath() . domainPath() . '/Shared/User/Models/User.php');
         }
 
-        expect(filePresent($fileName))->toBeFalse();
+        expect(fileExists($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:model User User');
 
-        expect(filePresent($fileName))->toBeTrue();
+        expect(fileExists($fileName))->toBeTrue();
 
         $modelFile = File::get(path: basePath() . domainPath() . $fileName);
 
@@ -34,13 +34,13 @@ it(description: 'can force generate exists model class')
     ->tap(function () {
         $fileName = '/Shared/User/Models/User.php';
 
-        expect(filePresent($fileName))->toBeFalse();
+        expect(fileExists($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:model User User');
         Artisan::call(command: 'domain:make:model User User --force');
 
-        expect(filePresent($fileName))->toBeTrue();
+        expect(fileExists($fileName))->toBeTrue();
 
         $modelFile = File::get(path: basePath() . domainPath() . $fileName);
 
@@ -58,12 +58,12 @@ it(description: 'can generate new model class with migration')
             unlink(basePath() . domainPath() . '/Shared/User/Models/User.php');
         }
 
-        expect(filePresent($fileName))->toBeFalse();
+        expect(fileExists($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:model User User -m');
 
-        expect(filePresent($fileName))->toBeTrue();
+        expect(fileExists($fileName))->toBeTrue();
 
         $tableName = Str::snake('CreateUsersTable');
         $migrationName = now()->format('Y_m_d_his') . '_' . $tableName . '.php';
@@ -79,13 +79,13 @@ it(description: 'can force generate exists model class with migration')
     ->tap(function () {
         $fileName = '/Shared/User/Models/User.php';
 
-        expect(filePresent($fileName))->toBeFalse();
+        expect(fileExists($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:model User User -m');
         Artisan::call(command: 'domain:make:model User User -m --force');
 
-        expect(filePresent($fileName))->toBeTrue();
+        expect(fileExists($fileName))->toBeTrue();
 
         $tableName = Str::snake('CreateUsersTable');
         $migrationName = now()->format('Y_m_d_his') . '_' . $tableName . '.php';
@@ -127,11 +127,11 @@ it(description: 'cannot generate the Model, if the Model already exists')
     ->tap(function () {
         $fileName = '/Shared/User/Models/User.php';
 
-        expect(filePresent($fileName))->toBeFalse();
+        expect(fileExists(relativeFileName: $fileName))->toBeFalse();
 
         Artisan::call(command: 'domain:make:model User User');
 
-        expect(filePresent($fileName))->toBeTrue();
+        expect(fileExists(relativeFileName: $fileName))->toBeTrue();
 
         Artisan::call(command: 'domain:make:model User User');
 

@@ -8,7 +8,7 @@ class FilePresentData extends DataTransferObject
 {
     public function __construct(
         public string $fileName,
-        public string $destinationPath,
+        public string $namespacePath,
     ) {
     }
 }

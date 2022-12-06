@@ -11,12 +11,12 @@ it(description: 'can generate new mail class')
     ->tap(function () {
         $fileName = '/User/Mail/UserApproved.php';
 
-        expect(filePresent($fileName, prefix: infrastructurePath()))->toBeFalse();
+        expect(fileExists($fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'infrastructure:make:mail UserApproved User');
 
-        expect(filePresent($fileName, prefix: infrastructurePath()))->toBeTrue();
+        expect(fileExists($fileName, prefix: infrastructurePath()))->toBeTrue();
 
         $mailFile = File::get(path: basePath() . infrastructurePath() . $fileName);
 
@@ -28,13 +28,13 @@ it(description: 'can force generate exists mail class')
     ->tap(function () {
         $fileName = '/User/Mail/UserApproved.php';
 
-        expect(filePresent($fileName, prefix: infrastructurePath()))->toBeFalse();
+        expect(fileExists($fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'infrastructure:make:mail UserApproved User');
         Artisan::call(command: 'infrastructure:make:mail UserApproved User --force');
 
-        expect(filePresent($fileName, prefix: infrastructurePath()))->toBeTrue();
+        expect(fileExists($fileName, prefix: infrastructurePath()))->toBeTrue();
 
         $mailFile = File::get(path: basePath() . infrastructurePath() . $fileName);
 

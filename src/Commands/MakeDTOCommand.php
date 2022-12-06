@@ -8,7 +8,7 @@ use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
@@ -16,7 +16,7 @@ use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 class MakeDTOCommand extends Command
 {
-    use InteractsWithPath, HasArguments, HasOptions;
+    use InteractsWithDDD, HasArguments, HasOptions;
 
     protected $signature = 'domain:make:dto {name} {domain} {--force}';
 
@@ -34,19 +34,20 @@ class MakeDTOCommand extends Command
 
         $placeholders = new PlaceholderData(
             namespace: $this->resolveNamespace(
-                identifier: 'DataTransferObjects',
-                domain: $this->resolveDomainArgument()
+                structures: $this->resolveDomainPath(),
+                suffix: 'DataTransferObjects',
+                prefix: $this->resolveDomainArgument()
             ),
-            class: $this->resolveClassNameByFile(name: $fileName),
+            class: $this->resolveNameFromPhp(name: $fileName),
         );
 
-        $destinationPath = $this->resolveNamespaceTarget(namespace: (string) $placeholders->namespace);
+        $destinationPath = $this->resolveNamespacePath(namespace: (string) $placeholders->namespace);
 
         FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
-                    destinationPath: $destinationPath,
+                    namespacePath: $destinationPath,
                 ),
                 withForce: $this->resolveForceOption(),
             );
@@ -54,8 +55,8 @@ class MakeDTOCommand extends Command
         CopyStubAction::resolve()
             ->execute(
                 data: new CopyStubData(
-                    stubPath: $this->resolvePathForStub(name: 'dto'),
-                    destinationPath: $destinationPath,
+                    stubPath: $this->resolveStubForPath(name: 'dto'),
+                    namespacePath: $destinationPath,
                     fileName: $fileName,
                     placeholders: $placeholders
                 )

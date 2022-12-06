@@ -8,7 +8,7 @@ use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
@@ -16,7 +16,7 @@ use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 class MakeActionCommand extends Command
 {
-    use InteractsWithPath, HasArguments, HasOptions;
+    use InteractsWithDDD, HasArguments, HasOptions;
 
     protected $signature = 'domain:make:action {name} {domain} {--force}';
 
@@ -33,22 +33,23 @@ class MakeActionCommand extends Command
         $fileName = $this->resolveNameArgument() . '.php';
 
         $namespace = $this->resolveNamespace(
-            identifier: 'Actions',
-            domain: $this->resolveDomainArgument()
+            structures: $this->resolveDomainPath(),
+            suffix: 'Actions',
+            prefix: $this->resolveDomainArgument()
         );
 
-        $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
+        $destinationPath = $this->resolveNamespacePath(namespace: $namespace);
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,
-            class: $this->resolveClassNameByFile(name: $fileName),
+            class: $this->resolveNameFromPhp(name: $fileName),
         );
 
         FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
-                    destinationPath: $destinationPath,
+                    namespacePath: $destinationPath,
                 ),
                 withForce: $this->resolveForceOption()
             );
@@ -56,8 +57,8 @@ class MakeActionCommand extends Command
         CopyStubAction::resolve()
             ->execute(
                 data: new CopyStubData(
-                    stubPath: $this->resolvePathForStub(name: 'action'),
-                    destinationPath: $destinationPath,
+                    stubPath: $this->resolveStubForPath(name: 'action'),
+                    namespacePath: $destinationPath,
                     fileName: $fileName,
                     placeholders: $placeholders,
                 )

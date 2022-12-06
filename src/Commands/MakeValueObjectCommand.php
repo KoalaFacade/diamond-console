@@ -8,7 +8,7 @@ use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
@@ -16,7 +16,7 @@ use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 class MakeValueObjectCommand extends Command
 {
-    use InteractsWithPath, HasArguments, HasOptions;
+    use InteractsWithDDD, HasArguments, HasOptions;
 
     protected $signature = 'domain:make:valueobject {name} {domain} {--force}';
 
@@ -33,22 +33,23 @@ class MakeValueObjectCommand extends Command
         $fileName = $this->resolveNameArgument() . '.php';
 
         $namespace = $this->resolveNamespace(
-            identifier: 'ValueObjects',
-            domain: $this->resolveDomainArgument()
+            structures: $this->resolveDomainPath(),
+            suffix: 'ValueObjects',
+            prefix: $this->resolveDomainArgument()
         );
 
-        $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
+        $namespacePath = $this->resolveNamespacePath(namespace: $namespace);
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,
-            class: $this->resolveClassNameByFile(name: $fileName),
+            class: $this->resolveNameArgument(),
         );
 
         FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
-                    destinationPath: $destinationPath,
+                    namespacePath: $namespacePath,
                 ),
                 withForce: $this->resolveForceOption()
             );
@@ -56,8 +57,8 @@ class MakeValueObjectCommand extends Command
         CopyStubAction::resolve()
             ->execute(
                 data: new CopyStubData(
-                    stubPath: $this->resolvePathForStub(name: 'value-object'),
-                    destinationPath: $destinationPath,
+                    stubPath: $this->resolveStubForPath(name: 'value-object'),
+                    namespacePath: $namespacePath,
                     fileName: $fileName,
                     placeholders: $placeholders,
                 )
