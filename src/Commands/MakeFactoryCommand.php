@@ -4,7 +4,6 @@ namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
