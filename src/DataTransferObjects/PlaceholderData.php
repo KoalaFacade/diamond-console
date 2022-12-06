@@ -6,14 +6,13 @@ use KoalaFacade\DiamondConsole\Foundation\DataTransferObject;
 
 class PlaceholderData extends DataTransferObject
 {
-    use DataTransferObject\HasArrayable;
-
     /**
      * @param  string | null  $namespace
      * @param  string | null  $class
      * @param  string | null  $subject
      * @param  string | null  $tableName
      * @param  string | null  $factoryContract
+     * @param  string|null  $factoryContractNamespace
      */
     public function __construct(
         public null | string $namespace = null,
