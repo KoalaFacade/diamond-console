@@ -22,6 +22,7 @@ and advanced.
         - [Model](#domainmakemodel-user-user)
         - [Factory](#infrastructuremakefactory-rolefactory-user)
         - [Mail](#infrastructuremakemail-approveduser-user)
+        - [Service Provider](#infrastructuremakeprovider-factoryserviceprovider-user)
 2. [Contribution](#contribution)
 
 ## Documentation
