@@ -182,6 +182,25 @@ store to external.
 
 ---
 
+#### `infrastructure:make:provider FactoryServiceProvider User`
+Command for generate a Service provider class.
+this command will generate Service provider class into Infrastructure to binds between Domain and Infrastructure.
+
+**Arguments**
+
+|  Name  |         Description         |
+|:------:|:---------------------------:|
+|  Name  | Service provider name class |
+| Domain |         Domain Name         |
+
+**Options**
+
+|  Name   |               Description               |
+|:-------:|:---------------------------------------:|
+| --force | Force create the Service provider class |
+
+---
+
 ### Contribution
 Thanks for consideration to contribute to Diamond Console of Domain Driven Design you can go through to
 [Contribute Area](https://github.com/KoalaFacade/diamond-console/blob/main/CONTRIBUTE.md)
