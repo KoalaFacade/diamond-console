@@ -20,9 +20,9 @@ it(description: 'can generate new ValueObject class')
         expect(filePresent(fileName: $fileName))
             ->toBeTrue();
 
-        $actionFile = File::get(path: basePath() . domainPath() . $fileName);
+        $valueObjectFile = File::get(path: basePath() . domainPath() . $fileName);
 
-        expect(value: Str::contains(haystack: $actionFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        expect(value: Str::contains(haystack: $valueObjectFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
     })
     ->group('commands');
 
@@ -40,9 +40,9 @@ it(description: 'can force generate exists ValueObject class')
         expect(filePresent(fileName: $fileName))
             ->toBeTrue();
 
-        $actionFile = File::get(path: basePath() . domainPath() . $fileName);
+        $valueObjectFile = File::get(path: basePath() . domainPath() . $fileName);
 
-        expect(value: Str::contains(haystack: $actionFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        expect(value: Str::contains(haystack: $valueObjectFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
     })
     ->group(groups: 'commands');
 
