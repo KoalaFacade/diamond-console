@@ -83,10 +83,11 @@ class MakeFactoryCommand extends Command
     {
         $fileName = $this->resolveNameArgument() . '.php';
 
-        $namespace = Str::of(string: 'Factories')
-            ->start(prefix: 'Database\\')
-            ->start(prefix: $this->resolveDomainArgument() . '\\')
-            ->start(prefix: $this->resolvePathInfrastructure() . '\\');
+        $namespace = $this->resolveNamespace(
+            identifier: 'Factories',
+            domain: $this->resolveDomainArgument() . '\\Database',
+            layer: 'infrastructure'
+        );
 
         $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
 

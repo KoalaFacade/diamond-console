@@ -41,7 +41,7 @@ it(description: 'can force generate exists DTO')
     })
     ->group(groups: 'commands');
 
-it(description: 'file already exist')
+it(description: 'cannot generate the DTO, if the DTO already exists')
     ->tap(function () {
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:dto PostData Post');

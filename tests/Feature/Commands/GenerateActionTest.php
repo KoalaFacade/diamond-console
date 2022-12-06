@@ -46,7 +46,7 @@ it(description: 'can force generate exists action class')
     })
     ->group(groups: 'commands');
 
-it(description: 'file already exist')
+it(description: 'cannot generate the action, if the action already exists')
     ->tap(function () {
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:action StoreUserAction User');

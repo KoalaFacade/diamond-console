@@ -44,7 +44,7 @@ it(description: 'can force generate exists enum')
     })
     ->group(groups: 'commands');
 
-it(description: 'file already exist')
+it(description: 'cannot generate the Enum, if the Enum already exists')
     ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
     ->tap(function () {
         Artisan::call(command: 'diamond:install');

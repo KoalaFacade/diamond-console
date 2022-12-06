@@ -42,7 +42,7 @@ it(description: 'can force generate exists mail class')
     })
     ->group(groups: 'commands');
 
-it(description: 'file already exist')
+it(description: 'cannot generate the Mail, if the Mail already exists')
     ->tap(function () {
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'infrastructure:make:mail UserApproved User');

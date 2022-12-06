@@ -5,6 +5,7 @@ namespace Tests\Feature\Commands;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate new model class')
     ->tap(function () {
@@ -121,3 +122,20 @@ it(description: 'can generate model with factory')
         File::delete(paths: [$factoryContractPath, $factoryConcretePath, $modelConcretePath]);
     })
     ->group(groups: 'commands');
+
+it(description: 'cannot generate the Model, if the Model already exists')
+    ->tap(function () {
+        $fileName = '/Shared/User/Models/User.php';
+
+        expect(filePresent($fileName))->toBeFalse();
+
+        Artisan::call(command: 'domain:make:model User User');
+
+        expect(filePresent($fileName))->toBeTrue();
+
+        Artisan::call(command: 'domain:make:model User User');
+
+        unlink(basePath() . domainPath() . '/Shared/User/Models/User.php');
+    })
+    ->group(groups: 'commands')
+    ->throws(exception: FileAlreadyExistException::class);

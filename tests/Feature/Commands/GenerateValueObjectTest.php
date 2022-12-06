@@ -46,7 +46,7 @@ it(description: 'can force generate exists ValueObject class')
     })
     ->group(groups: 'commands');
 
-it(description: 'file already exist')
+it(description: 'cannot generate the Value Object, if the Value Object already exists')
     ->tap(function () {
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:valueobject RefferalCode User');

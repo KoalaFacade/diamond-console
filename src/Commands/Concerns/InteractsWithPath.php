@@ -14,7 +14,7 @@ trait InteractsWithPath
         return $path;
     }
 
-    protected function resolvePathForDomain(): string
+    protected function resolvePathDomain(): string
     {
         return $this->resolvePathForStructure(identifier: 'domain');
     }
@@ -43,11 +43,16 @@ trait InteractsWithPath
         );
     }
 
-    protected function resolveNamespace(string $identifier, string $domain): string
+    protected function resolveNamespace(string $identifier, string $domain, string $layer = 'domain'): string
     {
+        $layerPath = match ($layer) {
+            'infrastructure' => $this->resolvePathInfrastructure(),
+            default => $this->resolvePathDomain()
+        };
+
         return Str::of(string: '')
             ->append(
-                $this->resolvePathForDomain() . '\\',
+                $layerPath . '\\',
                 $domain . '\\',
                 $identifier,
             );
