@@ -41,13 +41,16 @@ class ResolveCommandAction extends Action
                 withForce: $console->resolveForceOption(),
             );
 
-        CopyStubAction::resolve()
-            ->execute(
-                data: $this->evaluate($this->copyStubData) ?? $this->getDefaultCopyStubData()
-            );
+        $data = $this->evaluate($this->copyStubData);
+
+        if (! $data instanceof CopyStubData) {
+            $data = $this->getDefaultCopyStubData();
+        }
+
+        CopyStubAction::resolve()->execute(data: $data);
     }
 
-    public function getCopyStubDataUsing(Closure | null $callback)
+    public function getCopyStubDataUsing(Closure | null $callback): void
     {
         $this->copyStubData = $callback;
     }

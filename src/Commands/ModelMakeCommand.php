@@ -35,8 +35,15 @@ class ModelMakeCommand extends Command implements Console
         if ($this->resolveMigrationOption()) {
             Artisan::call(
                 command: Str::of('application:migration Create[name]Table --create=[create]')
-                    ->replace(search: '[name]', replace: Str::pluralStudly($this->resolveNameArgument()))
-                    ->replace(search: '[create]', replace: $this->resolveNameArgument())
+                    ->replace(
+                        search: '[name]',
+                        replace: Str::pluralStudly($this->resolveNameArgument())
+                    )
+                    ->replace(
+                        search: '[create]',
+                        replace: $this->resolveNameArgument()
+                    )
+                    ->toString()
             );
         }
 
