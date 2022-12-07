@@ -4,6 +4,7 @@ namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Factory\FactoryContractMakeAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
@@ -68,5 +69,10 @@ class FactoryMakeCommand extends Command implements Console
             prefix: $this->resolveDomainArgument() . '\\Database',
             suffix: 'Factories'
         );
+    }
+
+    public function getClassName(): string
+    {
+        return Str::finish(Str::ucfirst($this->resolveNameArgument()), cap: 'Factory');
     }
 }

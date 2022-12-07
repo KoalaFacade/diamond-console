@@ -11,7 +11,7 @@ it('can generate new provider file')
         expect(fileExists($relativeFileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'infrastructure:make:provider FactoryServiceProvider User');
+        Artisan::call(command: 'infrastructure:make:provider Factory User');
 
         expect(fileExists($relativeFileName, prefix: infrastructurePath()))
             ->toBeTrue()
@@ -27,8 +27,8 @@ it('can generate new provider file with force')
         $relativeFileName = '/User/Providers/FactoryServiceProvider.php';
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'infrastructure:make:provider FactoryServiceProvider User');
-        Artisan::call(command: 'infrastructure:make:provider FactoryServiceProvider User --force');
+        Artisan::call(command: 'infrastructure:make:provider Factory User');
+        Artisan::call(command: 'infrastructure:make:provider Factory User --force');
 
         expect(fileExists($relativeFileName, prefix: infrastructurePath()))->toBeTrue();
     });

@@ -3,6 +3,7 @@
 namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
@@ -48,5 +49,10 @@ class ProviderMakeCommand extends Command implements Console
             namespace: $this->getNamespace(),
             class: $this->getClassName(),
         );
+    }
+
+    public function getClassName(): string
+    {
+        return Str::finish(Str::ucfirst($this->resolveNameArgument()), cap: 'ServiceProvider');
     }
 }

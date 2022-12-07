@@ -20,7 +20,7 @@ class ModelMakeCommand extends Command implements Console
 
     protected $description = 'Create a new model';
 
-    protected function resolveNameConventionSuffix(): string
+    protected function resolveFactoryNameSuffix(): string
     {
         return Str::finish(Str::ucfirst($this->resolveNameArgument()), cap: 'Factory');
     }
@@ -51,7 +51,7 @@ class ModelMakeCommand extends Command implements Console
             Artisan::call(
                 command: 'infrastructure:make:factory',
                 parameters: [
-                    'name' => $this->resolveNameConventionSuffix(),
+                    'name' => $this->resolveFactoryNameSuffix(),
                     'domain' => $this->resolveDomainArgument(),
                 ]
             );
@@ -81,7 +81,7 @@ class ModelMakeCommand extends Command implements Console
         return new PlaceholderData(
             namespace: $this->getNamespace(),
             class: $this->getClassName(),
-            factoryContract: $this->resolveNameConventionSuffix(),
+            factoryContract: $this->resolveFactoryNameSuffix(),
             factoryContractNamespace: Source::resolveNamespace(
                 structures: Source::resolveDomainPath(),
                 prefix: 'Shared',
