@@ -8,19 +8,19 @@ use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-class MakeDTOCommand extends Command
+class ActionMakeCommand extends Command
 {
-    use InteractsWithPath, HasArguments, HasOptions;
+    use InteractsWithDDD, HasArguments, HasOptions;
 
-    protected $signature = 'domain:make:dto {name} {domain} {--force}';
+    protected $signature = 'domain:make:action {name} {domain} {--force}';
 
-    protected $description = 'Create a new dto';
+    protected $description = 'Create a new action';
 
     /**
      * @throws FileNotFoundException
@@ -28,39 +28,42 @@ class MakeDTOCommand extends Command
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating DTO file to your project');
+        $this->info(string: 'Generating action file to your project');
 
         $fileName = $this->resolveNameArgument() . '.php';
 
-        $placeholders = new PlaceholderData(
-            namespace: $this->resolveNamespace(
-                identifier: 'DataTransferObjects',
-                domain: $this->resolveDomainArgument()
-            ),
-            class: $this->resolveClassNameByFile(name: $fileName),
+        $namespace = $this->resolveNamespace(
+            structures: $this->resolveDomainPath(),
+            suffix: 'Actions',
+            prefix: $this->resolveDomainArgument()
         );
 
-        $destinationPath = $this->resolveNamespaceTarget(namespace: (string) $placeholders->namespace);
+        $destinationPath = $this->resolveNamespacePath(namespace: $namespace);
+
+        $placeholders = new PlaceholderData(
+            namespace: $namespace,
+            class: $this->resolveNameFromPhp(name: $fileName),
+        );
 
         FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
-                    destinationPath: $destinationPath,
+                    namespacePath: $destinationPath,
                 ),
-                withForce: $this->resolveForceOption(),
+                withForce: $this->resolveForceOption()
             );
 
         CopyStubAction::resolve()
             ->execute(
                 data: new CopyStubData(
-                    stubPath: $this->resolvePathForStub(name: 'dto'),
-                    destinationPath: $destinationPath,
+                    stubPath: $this->resolveStubForPath(name: 'action'),
+                    namespacePath: $destinationPath,
                     fileName: $fileName,
-                    placeholders: $placeholders
+                    placeholders: $placeholders,
                 )
             );
 
-        $this->info(string: 'Successfully generate DTO file');
+        $this->info(string: 'Successfully generate action file');
     }
 }

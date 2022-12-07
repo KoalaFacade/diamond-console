@@ -11,12 +11,12 @@ it(description: 'can generate new DTO')
     ->tap(function () {
         $fileName = '/Post/DataTransferObjects/PostData.php';
 
-        expect(filePresent($fileName))->toBeFalse();
+        expect(fileExists($fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:dto PostData Post');
 
-        expect(filePresent($fileName))->toBeTrue();
+        expect(fileExists($fileName))->toBeTrue();
 
         $dtoFile = File::get(path: basePath() . domainPath() . $fileName);
 
@@ -27,13 +27,13 @@ it(description: 'can generate new DTO')
 it(description: 'can force generate exists DTO')
     ->tap(function () {
         $fileName = '/Post/DataTransferObjects/PostData.php';
-        expect(filePresent(fileName: $fileName))->toBeFalse();
+        expect(fileExists(relativeFileName: $fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:dto PostData Post');
         Artisan::call(command: 'domain:make:dto PostData Post --force');
 
-        expect(filePresent(fileName: $fileName))->toBeTrue();
+        expect(fileExists(relativeFileName: $fileName))->toBeTrue();
 
         $dtoFile = File::get(path: basePath() . domainPath() . $fileName);
 

@@ -22,6 +22,7 @@ and advanced.
         - [Model](#domainmakemodel-user-user)
         - [Factory](#infrastructuremakefactory-rolefactory-user)
         - [Mail](#infrastructuremakemail-approveduser-user)
+        - [Service Provider](#infrastructuremakeprovider-factoryserviceprovider-user)
 2. [Contribution](#contribution)
 
 ## Documentation
@@ -179,6 +180,25 @@ store to external.
 |  Name   |         Description         |
 |:-------:|:---------------------------:|
 | --force | Force create the Mail class |
+
+---
+
+#### `infrastructure:make:provider FactoryServiceProvider User`
+Command for generate a Service provider class.
+this command will generate Service provider class into Infrastructure to binds between Domain and Infrastructure.
+
+**Arguments**
+
+|  Name  |         Description         |
+|:------:|:---------------------------:|
+|  Name  | Service provider name class |
+| Domain |         Domain Name         |
+
+**Options**
+
+|  Name   |               Description               |
+|:-------:|:---------------------------------------:|
+| --force | Force create the Service provider class |
 
 ---
 

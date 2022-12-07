@@ -31,8 +31,8 @@ it(
         $factoryContractFile = File::get(path: $factoryContractPath);
         $factoryConcreteFile = File::get(path: $factoryConcretePath);
 
-        expect(value: Str::contains(haystack: $factoryContractFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
-        expect(value: Str::contains(haystack: $factoryConcreteFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        expect(value: Str::contains(haystack: $factoryContractFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse()
+            ->and(value: Str::contains(haystack: $factoryConcreteFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
 
         File::delete([$factoryContractPath, $factoryConcretePath]);
     }

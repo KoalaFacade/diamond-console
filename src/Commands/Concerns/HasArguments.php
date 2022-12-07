@@ -17,7 +17,7 @@ trait HasArguments
         return $argument;
     }
 
-    protected function resolveNameArgument(): string
+    public function resolveNameArgument(): string
     {
         /** @var string $argument */
         $argument = $this->argument(key: 'name');

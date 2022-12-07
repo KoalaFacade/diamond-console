@@ -13,6 +13,7 @@
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 uses(Tests\TestCase::class)
     ->beforeEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(basePath()))
@@ -71,9 +72,9 @@ function infrastructurePath(): string
     return $path;
 }
 
-function filePresent(string $fileName, null | string $prefix = null): bool
+function fileExists(string $relativeFileName, null | string $prefix = null): bool
 {
     return File::exists(
-        path: basePath() . $prefix ?? domainPath() . $fileName
+        path: basePath() . $prefix ?? domainPath() . Str::start($relativeFileName, prefix: '/')
     );
 }

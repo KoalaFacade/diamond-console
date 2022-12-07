@@ -8,19 +8,19 @@ use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-class MakeSeederCommand extends Command
+class ValueObjectMakeCommand extends Command
 {
-    use InteractsWithPath, HasArguments, HasOptions;
+    use InteractsWithDDD, HasArguments, HasOptions;
 
-    protected $signature = 'infrastructure:make:seeder {name} {domain} {--force}';
+    protected $signature = 'domain:make:value-object {name} {domain} {--force}';
 
-    protected $description = 'Create seeder file';
+    protected $description = 'Create a new ValueObject';
 
     /**
      * @throws FileNotFoundException
@@ -28,41 +28,42 @@ class MakeSeederCommand extends Command
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating seeder to your project');
+        $this->info(string: 'Generating value object file to your project');
 
         $fileName = $this->resolveNameArgument() . '.php';
 
         $namespace = $this->resolveNamespace(
-            identifier: 'Seeders',
-            domain: $this->resolveDomainArgument() . '\\Database',
-            layer: 'infrastructure'
+            structures: $this->resolveDomainPath(),
+            suffix: 'ValueObjects',
+            prefix: $this->resolveDomainArgument()
         );
 
-        $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
+        $namespacePath = $this->resolveNamespacePath(namespace: $namespace);
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,
-            class: $this->resolveClassNameByFile(name: $fileName)
+            class: $this->resolveNameArgument(),
         );
 
         FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
-                    destinationPath: $destinationPath
+                    namespacePath: $namespacePath,
                 ),
                 withForce: $this->resolveForceOption()
             );
 
-        CopyStubAction::resolve()->execute(
-            data: new CopyStubData(
-                stubPath: $this->resolvePathForStub(name: 'seeder'),
-                destinationPath: $destinationPath,
-                fileName: $fileName,
-                placeholders: $placeholders
-            )
-        );
+        CopyStubAction::resolve()
+            ->execute(
+                data: new CopyStubData(
+                    stubPath: $this->resolveStubForPath(name: 'value-object'),
+                    namespacePath: $namespacePath,
+                    fileName: $fileName,
+                    placeholders: $placeholders,
+                )
+            );
 
-        $this->info(string: 'Success generate seeder file at ' . $destinationPath);
+        $this->info(string: 'Successfully generate ValueObject file');
     }
 }

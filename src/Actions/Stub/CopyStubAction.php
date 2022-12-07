@@ -19,18 +19,18 @@ class CopyStubAction extends Action
      */
     public function execute(CopyStubData $data): void
     {
-        $filePath = $data->destinationPath . '/' . $data->fileName;
+        $absolutePath = $data->namespacePath . '/' . $data->fileName;
 
         $filesystem = new Filesystem;
 
-        $filesystem->ensureDirectoryExists(path: $data->destinationPath);
+        $filesystem->ensureDirectoryExists(path: $data->namespacePath);
 
         $filesystem->copy(
             path: $data->stubPath,
-            target: $filePath,
+            target: $absolutePath,
         );
 
         ReplacePlaceholderAction::resolve()
-            ->execute($filePath, $data->placeholders);
+            ->execute($absolutePath, $data->placeholders);
     }
 }

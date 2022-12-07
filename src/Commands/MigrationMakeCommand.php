@@ -9,13 +9,13 @@ use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 
-class MakeMigrationCommand extends Command
+class MigrationMakeCommand extends Command
 {
-    use HasArguments, HasOptions, InteractsWithPath;
+    use HasArguments, HasOptions, InteractsWithDDD;
 
     protected $signature = 'application:migration {name} {--create=} {--table=} {--force}';
 
@@ -38,7 +38,7 @@ class MakeMigrationCommand extends Command
             $stub .= '-table';
         }
 
-        $stubPath = $this->resolvePathForStub(name: $stub);
+        $stubPath = $this->resolveStubForPath(name: $stub);
 
         $migrationName = Str::snake($this->resolveNameArgument());
 
@@ -52,7 +52,7 @@ class MakeMigrationCommand extends Command
             ->execute(
                 data: new CopyStubData(
                     stubPath: $stubPath,
-                    destinationPath: $destinationPath,
+                    namespacePath: $destinationPath,
                     fileName: $fileName,
                     placeholders: $placeholders
                 )

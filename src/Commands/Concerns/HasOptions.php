@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
  */
 trait HasOptions
 {
-    protected function resolveForceOption(): bool
+    public function resolveForceOption(): bool
     {
         return (bool) $this->option(key: 'force');
     }

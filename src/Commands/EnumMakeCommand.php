@@ -4,24 +4,23 @@ namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-class MakeMailCommand extends Command
+class EnumMakeCommand extends Command
 {
-    use InteractsWithPath, HasArguments, HasOptions;
+    use InteractsWithDDD, HasArguments, HasOptions;
 
-    protected $signature = 'infrastructure:make:mail {name} {domain} {--force}';
+    protected $signature = 'domain:make:enum {name} {domain} {--force}';
 
-    protected $description = 'Create a new mail';
+    protected $description = 'Create a new enum';
 
     /**
      * @throws FileNotFoundException
@@ -29,27 +28,34 @@ class MakeMailCommand extends Command
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating file to our project');
-
-        $namespace = Str::of(string: 'Mail')
-            ->start(prefix: $this->resolveDomainArgument() . '\\')
-            ->start(prefix: $this->resolvePathInfrastructure() . '\\');
-
-        $destinationPath = $this->resolveNamespaceTarget(namespace: $namespace);
-
-        $placeholders = new PlaceholderData(
-            namespace: $namespace->toString(),
-            class: $this->resolveNameArgument(),
-            subject: Str::ucfirst($this->resolveNameArgument()),
-        );
+        $this->info(string: 'Generating enum file to your project');
 
         $fileName = $this->resolveNameArgument() . '.php';
+
+        $namespace = $this->resolveNamespace(
+            structures: $this->resolveDomainPath(),
+            suffix: 'Enums',
+            prefix: $this->resolveDomainArgument()
+        );
+
+        $destinationPath = $this->resolveNamespacePath(namespace: $namespace);
+
+        $placeholders = new PlaceholderData(
+            namespace: $namespace,
+            class: $this->resolveNameFromPhp(name: $fileName),
+        );
+
+        if (version_compare(PHP_VERSION, '8.1.0', '<=')) {
+            $this->error('The required PHP version is 8.1 while the version you have is ' . PHP_VERSION);
+
+            return;
+        }
 
         FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
-                    destinationPath: $destinationPath,
+                    namespacePath: $destinationPath,
                 ),
                 withForce: $this->resolveForceOption(),
             );
@@ -57,13 +63,13 @@ class MakeMailCommand extends Command
         CopyStubAction::resolve()
             ->execute(
                 data: new CopyStubData(
-                    stubPath: $this->resolvePathForStub(name: 'mail'),
-                    destinationPath: $destinationPath,
+                    stubPath: $this->resolveStubForPath(name: 'enum'),
+                    namespacePath: $destinationPath,
                     fileName: $fileName,
                     placeholders: $placeholders,
-                ),
+                )
             );
 
-        $this->info(string: 'Successfully generate base file');
+        $this->info(string: 'Successfully generate enum file');
     }
 }

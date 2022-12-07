@@ -6,13 +6,11 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use KoalaFacade\DiamondConsole\Actions\Composer\ResolveComposerAutoLoaderAction;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithPath;
+use KoalaFacade\DiamondConsole\Support\Component;
 use Throwable;
 
 class InstallCommand extends Command
 {
-    use InteractsWithPath;
-
     protected $signature = 'diamond:install';
 
     protected $description = 'Install the Domain Driven Structure in your project';
@@ -51,7 +49,7 @@ class InstallCommand extends Command
      */
     protected function resolveBaseDirectoryPath(): string
     {
-        return base_path(path: $this->resolveBasePath());
+        return base_path(path: Component::resolveBasePath());
     }
 
     /**
