@@ -8,13 +8,13 @@ final class CopyStubData extends DataTransferObject
 {
     /**
      * @param  string  $stubPath
-     * @param  string  $namespacePath
+     * @param  string  $targetPath
      * @param  string  $fileName
      * @param  PlaceholderData  $placeholders
      */
     public function __construct(
         public string $stubPath,
-        public string $namespacePath,
+        public string $targetPath,
         public string $fileName,
         public PlaceholderData $placeholders,
     ) {

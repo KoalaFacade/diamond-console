@@ -75,6 +75,6 @@ function infrastructurePath(): string
 function fileExists(string $relativeFileName, null | string $prefix = null): bool
 {
     return File::exists(
-        path: basePath() . $prefix ?? domainPath() . Str::start($relativeFileName, prefix: '/')
+        path: basePath() . ($prefix ?? domainPath()) . Str::start($relativeFileName, prefix: '/')
     );
 }

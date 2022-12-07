@@ -3,55 +3,52 @@
 namespace KoalaFacade\DiamondConsole\Actions\Factory;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use KoalaFacade\DiamondConsole\Actions\Command\ResolveCommandAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
 use KoalaFacade\DiamondConsole\Commands\FactoryMakeCommand;
 use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 use KoalaFacade\DiamondConsole\Foundation\Action;
-use KoalaFacade\DiamondConsole\Support\Component;
+use KoalaFacade\DiamondConsole\Support\Source;
 
 class FactoryContractMakeAction extends Action implements Console
 {
     use InteractsWithConsole;
 
-    public FactoryMakeCommand $command;
+    public FactoryMakeCommand $console;
 
     /**
-     * @param  FactoryMakeCommand  $command
+     * @param  FactoryMakeCommand  $console
      */
-    public function setCommand(FactoryMakeCommand $command): void
+    public function setConsole(FactoryMakeCommand $console): void
     {
-        $this->command = $command;
+        $this->console = $console;
     }
 
     /**
      * @throws FileNotFoundException
      * @throws FileAlreadyExistException
      */
-    public function execute(FactoryMakeCommand $command): static
+    public function execute(FactoryMakeCommand $console): static
     {
-        $this->setCommand(command: $command);
+        $this->setConsole(console: $console);
 
-        ResolveCommandAction::resolve()->execute(command: $this);
-
-        $this->command->info(string: 'Succeed generate Factory Interface at ' . $this->command->getNamespacePath() . '/' . $this->command->getFileName());
+        $this->handle();
 
         return $this;
     }
 
     public function getStubPath(): string
     {
-        return Component::resolveStubForPath(name: 'factory-contract');
+        return Source::resolveStubForPath(name: 'factory-contract');
     }
 
     public function getNamespace(): string
     {
-        return Component::resolveNamespace(
-            structures: Component::resolveDomainPath(),
-            suffix: 'Contracts\\Database\\Factories',
+        return Source::resolveNamespace(
+            structures: Source::resolveDomainPath(),
             prefix: 'Shared',
+            suffix: 'Contracts\\Database\\Factories',
         );
     }
 
@@ -65,11 +62,18 @@ class FactoryContractMakeAction extends Action implements Console
 
     public function resolveForceOption(): bool
     {
-        return $this->command->resolveForceOption();
+        return $this->console->resolveForceOption();
     }
 
     public function resolveNameArgument(): string
     {
-        return $this->command->resolveNameArgument();
+        return $this->console->resolveNameArgument();
+    }
+
+    public function afterCreate(): void
+    {
+        $this->console->info(
+            string: 'Succeed generate Factory Interface at ' . $this->getFullPath()
+        );
     }
 }

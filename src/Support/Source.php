@@ -4,7 +4,7 @@ namespace KoalaFacade\DiamondConsole\Support;
 
 use Illuminate\Support\Str;
 
-class Component
+class Source
 {
     public static function resolvePathForStructure(string $key): string
     {
@@ -32,7 +32,7 @@ class Component
         return static::resolvePathForStructure(key: 'infrastructure');
     }
 
-    public static function resolveNamespace(string $structures, string $suffix, string $prefix): string
+    public static function resolveNamespace(string $structures, string $prefix, string $suffix): string
     {
         return Str::of(string: '\\:prefix\\:suffix')
             ->start($structures)

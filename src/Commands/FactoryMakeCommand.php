@@ -4,7 +4,7 @@ namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use KoalaFacade\DiamondConsole\Actions\Command\ResolveCommandAction;
+use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Factory\FactoryContractMakeAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
@@ -12,7 +12,7 @@ use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
 use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
-use KoalaFacade\DiamondConsole\Support\Component;
+use KoalaFacade\DiamondConsole\Support\Source;
 
 class FactoryMakeCommand extends Command implements Console
 {
@@ -28,20 +28,21 @@ class FactoryMakeCommand extends Command implements Console
      * @throws FileNotFoundException
      * @throws FileAlreadyExistException
      */
-    public function handle(): void
+    public function beforeCreate(): void
     {
         $this->info(string: 'Generating factory & interface file to your project');
 
-        $this->resolveFactoryContractMake(
-            console: FactoryContractMakeAction::resolve()->execute(command: $this)
+        $this->resolveFactoryContractConsole(
+            console: FactoryContractMakeAction::resolve()->execute(console: $this)
         );
-
-        ResolveCommandAction::resolve()->execute(command: $this);
-
-        $this->info(string: 'Succeed generate Factory concrete at ' . $this->getNamespacePath() . '/' . $this->getFileName());
     }
 
-    public function resolveFactoryContractMake(Console $console): void
+    public function afterCreate(): void
+    {
+        $this->info(string: 'Succeed generate Factory concrete at ' . $this->getFullPath());
+    }
+
+    public function resolveFactoryContractConsole(Console $console): void
     {
         $this->factoryContractMakeAction = $console;
     }
@@ -58,15 +59,20 @@ class FactoryMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return Component::resolveStubForPath(name: 'factory');
+        return Source::resolveStubForPath(name: 'factory');
     }
 
     public function getNamespace(): string
     {
-        return Component::resolveNamespace(
-            structures: Component::resolveInfrastructurePath(),
-            suffix: 'Factories',
-            prefix: $this->resolveDomainArgument() . '\\Database'
+        return Source::resolveNamespace(
+            structures: Source::resolveInfrastructurePath(),
+            prefix: $this->resolveDomainArgument() . '\\Database',
+            suffix: 'Factories'
         );
+    }
+
+    public function getClassName(): string
+    {
+        return Str::finish(Str::ucfirst($this->resolveNameArgument()), cap: 'Factory');
     }
 }

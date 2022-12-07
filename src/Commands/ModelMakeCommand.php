@@ -3,110 +3,95 @@
 namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
-use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
-use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
-use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
-use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
+use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
-use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
+use KoalaFacade\DiamondConsole\Support\Source;
 
-class ModelMakeCommand extends Command
+class ModelMakeCommand extends Command implements Console
 {
-    use InteractsWithDDD, HasArguments, HasOptions;
+    use HasArguments, HasOptions, InteractsWithConsole;
 
     protected $signature = 'domain:make:model {name} {domain} {--f|factory} {--m|migration} {--force}';
 
     protected $description = 'Create a new model';
 
-    /**
-     * @throws FileNotFoundException|FileAlreadyExistException
-     */
-    public function handle(): void
+    protected function resolveFactoryNameSuffix(): string
     {
-        $this->info(string: 'Generating model file to your project');
-
-        $fileName = $this->resolveNameArgument() . '.php';
-
-        $namespace = $this->resolveNamespace(
-            structures: $this->resolveDomainPath(),
-            suffix: 'Models',
-            prefix: 'Shared\\' . $this->resolveDomainArgument(),
-        );
-
-        $destinationPath = $this->resolveNamespacePath(namespace: $namespace);
-
-        $factoryContractClassName = $this->resolveNameFromPhp(name: $fileName) . 'Factory';
-
-        $placeholders = new PlaceholderData(
-            namespace: $namespace,
-            class: $this->resolveNameFromPhp(name: $fileName),
-            factoryContract: $factoryContractClassName,
-            factoryContractNamespace: $this->resolveNamespace(
-                structures: $this->resolveDomainPath(),
-                suffix: 'Contracts\\Database\\Factories',
-                prefix: 'Shared',
-            )
-        );
-
-        $filePresent = FilePresentAction::resolve()
-            ->execute(
-                data: new FilePresentData(
-                    fileName: $fileName,
-                    namespacePath: $destinationPath,
-                ),
-                withForce: $this->resolveForceOption()
-            );
-
-        if ($filePresent && ! $this->resolveForceOption()) {
-            $this->warn(string: $fileName . ' already exists.');
-
-            return;
-        }
-
-        CopyStubAction::resolve()
-            ->execute(
-                data: new CopyStubData(
-                    stubPath: $this->resolveFactoryOption()
-                        ? $this->resolveStubForPath(name: 'model-factory')
-                        : $this->resolveStubForPath(name: 'model'),
-                    namespacePath: $destinationPath,
-                    fileName: $fileName,
-                    placeholders: $placeholders,
-                )
-            );
-
-        $this->resolveMigration(fileName: $fileName);
-
-        $this->resolveFactory(fileName: $fileName);
-
-        $this->info(string: 'Successfully generate model file');
+        return Str::finish(Str::ucfirst($this->resolveNameArgument()), cap: 'Factory');
     }
 
-    protected function resolveFactory(string $fileName): void
+    public function beforeCreate(): void
     {
+        $this->info(string: 'Generating model file to your project');
+    }
+
+    public function afterCreate(): void
+    {
+        if ($this->resolveMigrationOption()) {
+            Artisan::call(
+                command: Str::of('application:migration Create[name]Table --create=[create]')
+                    ->replace(
+                        search: '[name]',
+                        replace: Str::pluralStudly($this->resolveNameArgument())
+                    )
+                    ->replace(
+                        search: '[create]',
+                        replace: $this->resolveNameArgument()
+                    )
+                    ->toString()
+            );
+        }
+
         if ($this->resolveFactoryOption()) {
             Artisan::call(
                 command: 'infrastructure:make:factory',
                 parameters: [
-                    'name' => $this->resolveNameFromPhp(name: $fileName) . 'Factory',
+                    'name' => $this->resolveFactoryNameSuffix(),
                     'domain' => $this->resolveDomainArgument(),
                 ]
             );
         }
+
+        $this->info(string: 'Successfully generate model file');
     }
 
-    protected function resolveMigration(string $fileName): void
+    public function getNamespace(): string
     {
-        if ($this->option(key: 'migration')) {
-            $tableName = $this->resolveNameFromPhp(name: $fileName);
+        return Source::resolveNamespace(
+            structures: Source::resolveDomainPath(),
+            prefix: 'Shared\\' . $this->resolveDomainArgument(),
+            suffix: 'Models',
+        );
+    }
 
-            Artisan::call(command: 'application:migration Create' . Str::pluralStudly($tableName) . 'Table --create=' . $tableName);
-        }
+    public function getStubPath(): string
+    {
+        return $this->resolveFactoryOption()
+            ? Source::resolveStubForPath(name: 'model-factory')
+            : Source::resolveStubForPath(name: 'model');
+    }
+
+    public function resolvePlaceholders(): PlaceholderData
+    {
+        return new PlaceholderData(
+            namespace: $this->getNamespace(),
+            class: $this->getClassName(),
+            factoryContract: $this->resolveFactoryNameSuffix(),
+            factoryContractNamespace: Source::resolveNamespace(
+                structures: Source::resolveDomainPath(),
+                prefix: 'Shared',
+                suffix: 'Contracts\\Database\\Factories',
+            )
+        );
+    }
+
+    protected function resolveMigrationOption(): bool
+    {
+        return (bool) $this->option(key: 'migration');
     }
 }

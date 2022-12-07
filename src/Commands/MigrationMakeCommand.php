@@ -9,13 +9,13 @@ use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
+use KoalaFacade\DiamondConsole\Support\Source;
 
 class MigrationMakeCommand extends Command
 {
-    use HasArguments, HasOptions, InteractsWithDDD;
+    use HasArguments, HasOptions;
 
     protected $signature = 'application:migration {name} {--create=} {--table=} {--force}';
 
@@ -26,9 +26,7 @@ class MigrationMakeCommand extends Command
      */
     public function handle(): void
     {
-        $this->info(string: 'Generating migration file to your project');
-
-        $destinationPath = base_path(path: 'database/migrations');
+        $targetPath = base_path(path: 'database/migrations');
 
         $stub = 'migration';
 
@@ -38,7 +36,7 @@ class MigrationMakeCommand extends Command
             $stub .= '-table';
         }
 
-        $stubPath = $this->resolveStubForPath(name: $stub);
+        $stubPath = Source::resolveStubForPath(name: $stub);
 
         $migrationName = Str::snake($this->resolveNameArgument());
 
@@ -52,7 +50,7 @@ class MigrationMakeCommand extends Command
             ->execute(
                 data: new CopyStubData(
                     stubPath: $stubPath,
-                    namespacePath: $destinationPath,
+                    targetPath: $targetPath,
                     fileName: $fileName,
                     placeholders: $placeholders
                 )

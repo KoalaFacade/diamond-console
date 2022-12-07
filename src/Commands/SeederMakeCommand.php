@@ -3,66 +3,50 @@
 namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
-use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
-use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
-use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
+use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
-use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
+use KoalaFacade\DiamondConsole\Support\Source;
 
-class SeederMakeCommand extends Command
+class SeederMakeCommand extends Command implements Console
 {
-    use InteractsWithDDD, HasArguments, HasOptions;
+    use HasArguments, HasOptions, InteractsWithConsole;
 
     protected $signature = 'infrastructure:make:seeder {name} {domain} {--force}';
 
     protected $description = 'Create seeder file';
 
-    /**
-     * @throws FileNotFoundException
-     * @throws FileAlreadyExistException
-     */
-    public function handle(): void
+    public function beforeCreate(): void
     {
         $this->info(string: 'Generating seeder to your project');
+    }
 
-        $fileName = $this->resolveNameArgument() . '.php';
+    public function afterCreate(): void
+    {
+        $this->info(string: 'Success generate seeder file at ' . $this->getFullPath());
+    }
 
-        $namespace = $this->resolveNamespace(
-            structures: $this->resolveInfrastructurePath(),
-            suffix: 'Seeders',
-            prefix: $this->resolveDomainArgument() . '\\Database'
-        );
+    public function getStubPath(): string
+    {
+        return Source::resolveStubForPath(name: 'seeder');
+    }
 
-        $destinationPath = $this->resolveNamespacePath(namespace: $namespace);
-
-        $placeholders = new PlaceholderData(
-            namespace: $namespace,
+    public function resolvePlaceholders(): PlaceholderData
+    {
+        return new PlaceholderData(
+            namespace: $this->getNamespace(),
             class: $this->resolveNameArgument()
         );
+    }
 
-        FilePresentAction::resolve()
-            ->execute(
-                data: new FilePresentData(
-                    fileName: $fileName,
-                    namespacePath: $destinationPath
-                ),
-                withForce: $this->resolveForceOption()
-            );
-
-        CopyStubAction::resolve()->execute(
-            data: new CopyStubData(
-                stubPath: $this->resolveStubForPath(name: 'seeder'),
-                namespacePath: $destinationPath,
-                fileName: $fileName,
-                placeholders: $placeholders
-            )
+    public function getNamespace(): string
+    {
+        return Source::resolveNamespace(
+            structures: Source::resolveInfrastructurePath(),
+            prefix: $this->resolveDomainArgument() . '\\Database',
+            suffix: 'Seeders'
         );
-
-        $this->info(string: 'Success generate seeder file at ' . $destinationPath);
     }
 }
