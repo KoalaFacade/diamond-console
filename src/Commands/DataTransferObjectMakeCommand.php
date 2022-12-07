@@ -20,7 +20,7 @@ class DataTransferObjectMakeCommand extends Command
 
     protected $signature = 'domain:make:dto {name} {domain} {--force}';
 
-    protected $description = 'Create a new dto';
+    protected $description = 'Create a new Data Transfer Object';
 
     /**
      * @throws FileNotFoundException

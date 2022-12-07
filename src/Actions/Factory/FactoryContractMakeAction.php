@@ -10,7 +10,7 @@ use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 use KoalaFacade\DiamondConsole\Foundation\Action;
-use KoalaFacade\DiamondConsole\Support\DiamondConsole;
+use KoalaFacade\DiamondConsole\Support\Component;
 
 class FactoryContractMakeAction extends Action implements Console
 {
@@ -43,13 +43,13 @@ class FactoryContractMakeAction extends Action implements Console
 
     public function getStubPath(): string
     {
-        return DiamondConsole::resolveStubForPath(name: 'factory-contract');
+        return Component::resolveStubForPath(name: 'factory-contract');
     }
 
     public function getNamespace(): string
     {
-        return DiamondConsole::resolveNamespace(
-            structures: DiamondConsole::resolveDomainPath(),
+        return Component::resolveNamespace(
+            structures: Component::resolveDomainPath(),
             suffix: 'Contracts\\Database\\Factories',
             prefix: 'Shared',
         );

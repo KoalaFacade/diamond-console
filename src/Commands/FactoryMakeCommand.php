@@ -12,7 +12,7 @@ use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
 use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
-use KoalaFacade\DiamondConsole\Support\DiamondConsole;
+use KoalaFacade\DiamondConsole\Support\Component;
 
 class FactoryMakeCommand extends Command implements Console
 {
@@ -58,13 +58,13 @@ class FactoryMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return DiamondConsole::resolveStubForPath(name: 'factory');
+        return Component::resolveStubForPath(name: 'factory');
     }
 
     public function getNamespace(): string
     {
-        return DiamondConsole::resolveNamespace(
-            structures: DiamondConsole::resolveInfrastructurePath(),
+        return Component::resolveNamespace(
+            structures: Component::resolveInfrastructurePath(),
             suffix: 'Factories',
             prefix: $this->resolveDomainArgument() . '\\Database'
         );

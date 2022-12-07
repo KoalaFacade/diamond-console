@@ -4,7 +4,7 @@ namespace KoalaFacade\DiamondConsole\Support;
 
 use Illuminate\Support\Str;
 
-class DiamondConsole
+class Component
 {
     public static function resolvePathForStructure(string $key): string
     {
@@ -51,7 +51,7 @@ class DiamondConsole
         );
     }
 
-    public static function resolveNameFromPhp(string $name): string
+    public static function resolveNameFromPHP(string $name): string
     {
         return static::resolveNameFromFile(name: $name, suffix: 'php');
     }
