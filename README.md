@@ -17,7 +17,7 @@ and advanced.
     - [Commands](#commands)
         - [Action](#domainmakeaction-generateprofileaction-user)
         - [Enum](#domainmakeenum-role-user)
-        - [Data Transfer Object](#domainmakedto-roledata-user)
+        - [Data Transfer Object](#domainmakedata-transfer-object-roledata-user)
         - [Migration](#applicationmigration-createusertable)
         - [Model](#domainmakemodel-user-user)
         - [Factory](#infrastructuremakefactory-rolefactory-user)
@@ -79,7 +79,7 @@ Command for generate an enum to your domain directory.
 
 ---
 
-#### `domain:make:dto RoleData User`
+#### `domain:make:data-transfer-object RoleData User`
 Command for generate a Data Transfer Object with plain PHP to your domain directory.
 
 **Arguments**
