@@ -3,73 +3,56 @@
 namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
-use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
-use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
-use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
+use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
-use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
+use KoalaFacade\DiamondConsole\Support\Source;
 
-class EnumMakeCommand extends Command
+class EnumMakeCommand extends Command implements Console
 {
-    use InteractsWithDDD, HasArguments, HasOptions;
+    use HasArguments, HasOptions, InteractsWithConsole;
 
     protected $signature = 'domain:make:enum {name} {domain} {--force}';
 
     protected $description = 'Create a new enum';
 
-    /**
-     * @throws FileNotFoundException
-     * @throws FileAlreadyExistException
-     */
-    public function handle(): void
+    public function afterCreate(): void
+    {
+        $this->info(string: 'Successfully generate enum file');
+    }
+
+    public function beforeCreate(): void
     {
         $this->info(string: 'Generating enum file to your project');
 
-        $fileName = $this->resolveNameArgument() . '.php';
-
-        $namespace = $this->resolveNamespace(
-            structures: $this->resolveDomainPath(),
-            suffix: 'Enums',
-            prefix: $this->resolveDomainArgument()
-        );
-
-        $destinationPath = $this->resolveNamespacePath(namespace: $namespace);
-
-        $placeholders = new PlaceholderData(
-            namespace: $namespace,
-            class: $this->resolveNameFromPhp(name: $fileName),
-        );
-
-        if (version_compare(PHP_VERSION, '8.1.0', '<=')) {
-            $this->error('The required PHP version is 8.1 while the version you have is ' . PHP_VERSION);
-
-            return;
+        if (version_compare(version1: PHP_VERSION, version2: '8.1.0', operator: '<=')) {
+            throw new \RuntimeException(
+                message: 'The required PHP version is 8.1 while the version you have is ' . PHP_VERSION
+            );
         }
+    }
 
-        FilePresentAction::resolve()
-            ->execute(
-                data: new FilePresentData(
-                    fileName: $fileName,
-                    namespacePath: $destinationPath,
-                ),
-                withForce: $this->resolveForceOption(),
-            );
+    public function getNamespace(): string
+    {
+        return Source::resolveNamespace(
+            structures: Source::resolveDomainPath(),
+            prefix: $this->resolveDomainArgument(),
+            suffix: 'Enums'
+        );
+    }
 
-        CopyStubAction::resolve()
-            ->execute(
-                data: new CopyStubData(
-                    stubPath: $this->resolveStubForPath(name: 'enum'),
-                    namespacePath: $destinationPath,
-                    fileName: $fileName,
-                    placeholders: $placeholders,
-                )
-            );
+    public function getStubPath(): string
+    {
+        return Source::resolveStubForPath(name: 'enum');
+    }
 
-        $this->info(string: 'Successfully generate enum file');
+    public function resolvePlaceholders(): PlaceholderData
+    {
+        return new PlaceholderData(
+            namespace: $this->getNamespace(),
+            class: $this->getClassName(),
+        );
     }
 }

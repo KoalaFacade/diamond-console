@@ -10,22 +10,24 @@ use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
+use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
+use KoalaFacade\DiamondConsole\Support\Source;
 
 class ModelMakeCommand extends Command
 {
-    use InteractsWithDDD, HasArguments, HasOptions;
+    use HasArguments, HasOptions, InteractsWithConsole;
 
     protected $signature = 'domain:make:model {name} {domain} {--f|factory} {--m|migration} {--force}';
 
     protected $description = 'Create a new model';
 
     /**
-     * @throws FileNotFoundException|FileAlreadyExistException
+     * @throws FileNotFoundException | FileAlreadyExistException
      */
     public function handle(): void
     {
@@ -33,28 +35,28 @@ class ModelMakeCommand extends Command
 
         $fileName = $this->resolveNameArgument() . '.php';
 
-        $namespace = $this->resolveNamespace(
-            structures: $this->resolveDomainPath(),
-            suffix: 'Models',
+        $namespace = Source::resolveNamespace(
+            structures: Source::resolveDomainPath(),
             prefix: 'Shared\\' . $this->resolveDomainArgument(),
+            suffix: 'Models',
         );
 
-        $destinationPath = $this->resolveNamespacePath(namespace: $namespace);
+        $destinationPath = Source::resolveNamespacePath(namespace: $namespace);
 
-        $factoryContractClassName = $this->resolveNameFromPhp(name: $fileName) . 'Factory';
+        $factoryContractClassName = Source::resolveNameFromPhp(name: $fileName) . 'Factory';
 
         $placeholders = new PlaceholderData(
             namespace: $namespace,
-            class: $this->resolveNameFromPhp(name: $fileName),
+            class: Source::resolveNameFromPhp(name: $fileName),
             factoryContract: $factoryContractClassName,
-            factoryContractNamespace: $this->resolveNamespace(
-                structures: $this->resolveDomainPath(),
-                suffix: 'Contracts\\Database\\Factories',
+            factoryContractNamespace: Source::resolveNamespace(
+                structures: Source::resolveDomainPath(),
                 prefix: 'Shared',
+                suffix: 'Contracts\\Database\\Factories',
             )
         );
 
-        $filePresent = FilePresentAction::resolve()
+        FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
                     fileName: $fileName,
@@ -63,19 +65,13 @@ class ModelMakeCommand extends Command
                 withForce: $this->resolveForceOption()
             );
 
-        if ($filePresent && ! $this->resolveForceOption()) {
-            $this->warn(string: $fileName . ' already exists.');
-
-            return;
-        }
-
         CopyStubAction::resolve()
             ->execute(
                 data: new CopyStubData(
                     stubPath: $this->resolveFactoryOption()
-                        ? $this->resolveStubForPath(name: 'model-factory')
-                        : $this->resolveStubForPath(name: 'model'),
-                    namespacePath: $destinationPath,
+                        ? Source::resolveStubForPath(name: 'model-factory')
+                        : Source::resolveStubForPath(name: 'model'),
+                    targetPath: $destinationPath,
                     fileName: $fileName,
                     placeholders: $placeholders,
                 )
@@ -94,7 +90,7 @@ class ModelMakeCommand extends Command
             Artisan::call(
                 command: 'infrastructure:make:factory',
                 parameters: [
-                    'name' => $this->resolveNameFromPhp(name: $fileName) . 'Factory',
+                    'name' => Str::finish(Source::resolveNameFromPhp(name: $fileName), cap: 'Factory'),
                     'domain' => $this->resolveDomainArgument(),
                 ]
             );
@@ -104,7 +100,7 @@ class ModelMakeCommand extends Command
     protected function resolveMigration(string $fileName): void
     {
         if ($this->option(key: 'migration')) {
-            $tableName = $this->resolveNameFromPhp(name: $fileName);
+            $tableName = Source::resolveNameFromPhp(name: $fileName);
 
             Artisan::call(command: 'application:migration Create' . Str::pluralStudly($tableName) . 'Table --create=' . $tableName);
         }

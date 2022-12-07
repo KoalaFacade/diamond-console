@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use KoalaFacade\DiamondConsole\Actions\Composer\ResolveComposerAutoLoaderAction;
-use KoalaFacade\DiamondConsole\Support\Component;
+use KoalaFacade\DiamondConsole\Support\Source;
 use Throwable;
 
 class InstallCommand extends Command
@@ -49,7 +49,7 @@ class InstallCommand extends Command
      */
     protected function resolveBaseDirectoryPath(): string
     {
-        return base_path(path: Component::resolveBasePath());
+        return base_path(path: Source::resolveBasePath());
     }
 
     /**

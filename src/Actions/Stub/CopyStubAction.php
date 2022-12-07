@@ -19,11 +19,11 @@ class CopyStubAction extends Action
      */
     public function execute(CopyStubData $data): void
     {
-        $absolutePath = $data->namespacePath . '/' . $data->fileName;
+        $absolutePath = $data->targetPath . '/' . $data->fileName;
 
         $filesystem = new Filesystem;
 
-        $filesystem->ensureDirectoryExists(path: $data->namespacePath);
+        $filesystem->ensureDirectoryExists(path: $data->targetPath);
 
         $filesystem->copy(
             path: $data->stubPath,

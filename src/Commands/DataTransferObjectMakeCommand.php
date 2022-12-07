@@ -3,65 +3,50 @@
 namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
-use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
-use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
-use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
+use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
-use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
+use KoalaFacade\DiamondConsole\Support\Source;
 
-class DataTransferObjectMakeCommand extends Command
+class DataTransferObjectMakeCommand extends Command implements Console
 {
-    use InteractsWithDDD, HasArguments, HasOptions;
+    use HasArguments, HasOptions, InteractsWithConsole;
 
-    protected $signature = 'domain:make:dto {name} {domain} {--force}';
+    protected $signature = 'domain:make:data-transfer-object {name} {domain} {--force}';
 
     protected $description = 'Create a new Data Transfer Object';
 
-    /**
-     * @throws FileNotFoundException
-     * @throws FileAlreadyExistException
-     */
-    public function handle(): void
+    public function getNamespace(): string
     {
-        $this->info(string: 'Generating DTO file to your project');
-
-        $fileName = $this->resolveNameArgument() . '.php';
-
-        $placeholders = new PlaceholderData(
-            namespace: $this->resolveNamespace(
-                structures: $this->resolveDomainPath(),
-                suffix: 'DataTransferObjects',
-                prefix: $this->resolveDomainArgument()
-            ),
-            class: $this->resolveNameFromPhp(name: $fileName),
+        return Source::resolveNamespace(
+            structures: Source::resolveDomainPath(),
+            prefix: $this->resolveDomainArgument(),
+            suffix: 'DataTransferObjects'
         );
+    }
 
-        $destinationPath = $this->resolveNamespacePath(namespace: (string) $placeholders->namespace);
+    public function getStubPath(): string
+    {
+        return Source::resolveStubForPath(name: 'data-transfer-object');
+    }
 
-        FilePresentAction::resolve()
-            ->execute(
-                data: new FilePresentData(
-                    fileName: $fileName,
-                    namespacePath: $destinationPath,
-                ),
-                withForce: $this->resolveForceOption(),
-            );
+    public function resolvePlaceholders(): PlaceholderData
+    {
+        return new PlaceholderData(
+            namespace: $this->getNamespace(),
+            class: $this->getClassName(),
+        );
+    }
 
-        CopyStubAction::resolve()
-            ->execute(
-                data: new CopyStubData(
-                    stubPath: $this->resolveStubForPath(name: 'dto'),
-                    namespacePath: $destinationPath,
-                    fileName: $fileName,
-                    placeholders: $placeholders
-                )
-            );
+    public function beforeCreate(): void
+    {
+        $this->info(string: 'Generating data transfer object file to your project');
+    }
 
-        $this->info(string: 'Successfully generate DTO file');
+    public function afterCreate(): void
+    {
+        $this->info(string: 'Successfully generate data transfer object file');
     }
 }
