@@ -2,7 +2,7 @@
 
 <p align="center">
     <a href="https://github.com/KoalaFacade/diamond-console/actions/workflows/run-test.yml"><img src="https://img.shields.io/github/workflow/status/KoalaFacade/diamond-console/run-tests?label=Test&style=for-the-badge" alt="Test Passing"/></a>
-    <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-8.x-red?style=for-the-badge&logo=Laravel" alt="Laravel" /></a> 
+    <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-8.x-red?style=for-the-badge&logo=Laravel" alt="Laravel" /></a>
     <a href="https://php.net"><img src="https://img.shields.io/badge/PHP-8.x-7A86B8?style=for-the-badge&logo=php" alt="PHP Badge"/></a>
 </p>
 
@@ -23,6 +23,8 @@ and advanced.
         - [Factory](#infrastructuremakefactory-rolefactory-user)
         - [Mail](#infrastructuremakemail-approveduser-user)
         - [Service Provider](#infrastructuremakeprovider-factoryserviceprovider-user)
+        - [Seeder](#infrastructuremakeseeder-userseeder-user)
+        - [Value Object](#domainmakevalue-object-referralcode-user)
 2. [Contribution](#contribution)
 
 ## Documentation
@@ -39,12 +41,11 @@ The command below will generate namespace in composer and base directory structu
 ```bash
  php artisan diamond:install
 ```
-
+---
 ### Commands
 
----
 #### `domain:make:action GenerateProfileAction User`
-Command for generate an action inside your domain directory.
+Command for generate an Action inside your Domain directory.
 
 **Arguments**
 
@@ -55,14 +56,14 @@ Command for generate an action inside your domain directory.
 
 **Options**
 
-|  Name   |       Description       |
-|:-------:|:-----------------------:|
-| --force | Force create the action |
+|  Name   |          Description          |
+|:-------:|:-----------------------------:|
+| --force | Force create the Action class |
 
 ---
 
 #### `domain:make:enum Role User`
-Command for generate an enum to your domain directory.
+Command for generate an Enum to your Domain directory.
 
 **Arguments**
 
@@ -73,9 +74,9 @@ Command for generate an enum to your domain directory.
 
 **Options**
 
-|  Name   |      Description      |
-|:-------:|:---------------------:|
-| --force | Force create the enum |
+|  Name   |         Description         |
+|:-------:|:---------------------------:|
+| --force | Force create the Enum class |
 
 ---
 
@@ -84,21 +85,21 @@ Command for generate a Data Transfer Object with plain PHP to your domain direct
 
 **Arguments**
 
-|  Name  |           Description            |
-|:------:|:--------------------------------:|
-|  Name  | Data Transfer Object class  name |
-| Domain |           Domain Name            |
+|  Name  |           Description           |
+|:------:|:-------------------------------:|
+|  Name  | Data Transfer Object class name |
+| Domain |           Domain Name           |
 
 **Options**
 
-|  Name   |              Description              |
-|:-------:|:-------------------------------------:|
-| --force | Force create the Data Transfer Object |
+|  Name   |                 Description                 |
+|:-------:|:-------------------------------------------:|
+| --force | Force create the Data Transfer Object class |
 
 ---
 
 #### `application:migration create_user_table`
-Command for generate a migration file
+Command for generate a Migration file
 
 **Arguments**
 
@@ -108,44 +109,44 @@ Command for generate a migration file
 
 **Options**
 
-|   Name   |                      Description                       |
-|:--------:|:------------------------------------------------------:|
-| --table  |    to generate a migration with purpose edit table     |
-| --create | to generate a migration with purpose to create a table |
+|        Name        |                      Description                       |
+|:------------------:|:------------------------------------------------------:|
+| --table=tableName  |    To generate a Migration with purpose edit table     |
+| --create=tableName | To generate a Migration with purpose to create a table |
 
 ---
 
 #### `domain:make:model User User`
-Command for generate a model inside Shared in Domain directory,
-all model will store shared folder since another domain probably consume
-the model at the same time.
+Command for generate a Model inside Shared in Domain directory,
+all Model will store shared folder since another Domain probably consume
+the Model at the same time.
 
 **Arguments**
 
-|  Name  | Description |
-|:------:|:-----------:|
-|  Name  | Model  name |
-| Domain | Domain Name |
+|  Name  |    Description   |
+|:------:|:----------------:|
+|  Name  | Model class name |
+| Domain |   Domain Name    |
 
 **Options**
 
 |       Name        |                                                       Description                                                        |
 |:-----------------:|:------------------------------------------------------------------------------------------------------------------------:|
-| -m or --migration |                                         Create migration file when model created                                         |
-|  -f or --factory  | Create factory class when model created this option will generate two files, <br/> Factory contract and Factory concrete |
-|      --force      |                                                  Force create the enum                                                   |
+| -m or --migration |                                         Create Migration file when model created                                         |
+|  -f or --factory  | Create Factory class when Model created this option will generate two files, <br/> Factory contract and Factory concrete |
+|      --force      |                                                  Force create the Model class                                                   |
 
 
 ---
 
 #### `infrastructure:make:factory RoleFactory User`
-Command for generate a factory class, this command would generate two files :
+Command for generate a Factory class, this command would generate two files :
 
 1. Factory concrete at Infrastructure/{DomainName}/Database/Factories
 2. Factory Contract at Domain/Shared/Contracts/Database/Factories
 
 The bottom of reason why we did this, cause Factories is an Infrastructure 
-component then Domain can't consume any stuff inside infrastructure, 
+component then Domain can't consume any stuff inside Infrastructure, 
 so you can do Dependency Injection at Service Provider for resolve this one.
 
 **Arguments**
@@ -157,9 +158,9 @@ so you can do Dependency Injection at Service Provider for resolve this one.
 
 **Options**
 
-|  Name   |       Description        |
-|:-------:|:------------------------:|
-| --force | Force create the factory |
+|  Name   |          Description           |
+|:-------:|:------------------------------:|
+| --force | Force create the Factory class |
 
 ---
 
@@ -184,21 +185,58 @@ store to external.
 ---
 
 #### `infrastructure:make:provider FactoryServiceProvider User`
-Command for generate a Service provider class.
-this command will generate Service provider class into Infrastructure to binds between Domain and Infrastructure.
+Command for generate a Service Provider class.
+this command will generate Service Provider class into Infrastructure to binds between Domain and Infrastructure.
 
 **Arguments**
 
 |  Name  |         Description         |
 |:------:|:---------------------------:|
-|  Name  | Service provider name class |
+|  Name  | Service Provider name class |
 | Domain |         Domain Name         |
 
 **Options**
 
 |  Name   |               Description               |
 |:-------:|:---------------------------------------:|
-| --force | Force create the Service provider class |
+| --force | Force create the Service Provider class |
+
+---
+#### `infrastructure:make:seeder UserSeeder User`
+Command for generate a Seeder class.
+this command will generate Seeder class into Infrastructure because this class purpose is to insert a test data into table.
+
+**Arguments**
+
+|  Name  |         Description         |
+|:------:|:---------------------------:|
+|  Name  |      Seeder name class      |
+| Domain |         Domain Name         |
+
+**Options**
+
+|  Name   |               Description               |
+|:-------:|:---------------------------------------:|
+| --force |      Force create the Seeder class      |
+
+---
+
+#### `domain:make:value-object ReferralCode User`
+Command for generate a Value Object class.
+this command will generate Value Object class into Domain.
+
+**Arguments**
+
+|  Name  |         Description         |
+|:------:|:---------------------------:|
+|  Name  |   Value Object name class   |
+| Domain |         Domain Name         |
+
+**Options**
+
+|  Name   |               Description               |
+|:-------:|:---------------------------------------:|
+| --force |   Force create the Value Object class   |
 
 ---
 
