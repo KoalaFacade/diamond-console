@@ -3,9 +3,7 @@
 namespace {{ namespace }};
 
 use KoalaFacade\DiamondConsole\Foundation\DataTransferObject;
-use KoalaFacade\DiamondConsole\Foundation\DataTransferObject\HasArrayable;
 
 class {{ class }} extends DataTransferObject
 {
-    use HasArrayable;
 }
