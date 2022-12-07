@@ -3,15 +3,16 @@
 namespace KoalaFacade\DiamondConsole\Commands\Concerns;
 
 use KoalaFacade\DiamondConsole\Contracts\Console;
+use KoalaFacade\DiamondConsole\Support\DiamondConsole;
 
 /**
  * @mixin Console
  */
-trait InteractsWithApplication
+trait InteractsWithConsole
 {
     public function getNamespacePath(): string
     {
-        return $this->resolveNamespacePath(namespace: $this->getNamespace());
+        return DiamondConsole::resolveNamespacePath(namespace: $this->getNamespace());
     }
 
     public function getFileName(): string

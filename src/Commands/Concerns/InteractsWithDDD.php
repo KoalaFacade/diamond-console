@@ -4,6 +4,9 @@ namespace KoalaFacade\DiamondConsole\Commands\Concerns;
 
 use Illuminate\Support\Str;
 
+/**
+ * @deprecated
+ */
 trait InteractsWithDDD
 {
     protected function resolvePathForStructure(string $key): string

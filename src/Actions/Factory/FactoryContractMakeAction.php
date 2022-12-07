@@ -4,17 +4,17 @@ namespace KoalaFacade\DiamondConsole\Actions\Factory;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use KoalaFacade\DiamondConsole\Actions\Command\ResolveCommandAction;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithApplication;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
 use KoalaFacade\DiamondConsole\Commands\FactoryMakeCommand;
-use KoalaFacade\DiamondConsole\Contracts\Application;
+use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 use KoalaFacade\DiamondConsole\Foundation\Action;
+use KoalaFacade\DiamondConsole\Support\DiamondConsole;
 
-class FactoryContractMakeAction extends Action implements Application
+class FactoryContractMakeAction extends Action implements Console
 {
-    use InteractsWithDDD, InteractsWithApplication;
+    use InteractsWithConsole;
 
     public FactoryMakeCommand $command;
 
@@ -43,13 +43,13 @@ class FactoryContractMakeAction extends Action implements Application
 
     public function getStubPath(): string
     {
-        return $this->resolveStubForPath(name: 'factory-contract');
+        return DiamondConsole::resolveStubForPath(name: 'factory-contract');
     }
 
     public function getNamespace(): string
     {
-        return $this->resolveNamespace(
-            structures: $this->resolveDomainPath(),
+        return DiamondConsole::resolveNamespace(
+            structures: DiamondConsole::resolveDomainPath(),
             suffix: 'Contracts\\Database\\Factories',
             prefix: 'Shared',
         );

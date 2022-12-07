@@ -8,16 +8,15 @@ use KoalaFacade\DiamondConsole\Actions\Command\ResolveCommandAction;
 use KoalaFacade\DiamondConsole\Actions\Factory\FactoryContractMakeAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithApplication;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
-use KoalaFacade\DiamondConsole\Contracts\Application;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
 use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
+use KoalaFacade\DiamondConsole\Support\DiamondConsole;
 
-class FactoryMakeCommand extends Command implements Application
+class FactoryMakeCommand extends Command implements Console
 {
-    use InteractsWithDDD, InteractsWithApplication, HasOptions, HasArguments;
+    use InteractsWithConsole, HasOptions, HasArguments;
 
     protected $signature = 'infrastructure:make:factory {name} {domain} {--force}';
 
@@ -59,13 +58,13 @@ class FactoryMakeCommand extends Command implements Application
 
     public function getStubPath(): string
     {
-        return $this->resolveStubForPath(name: 'factory');
+        return DiamondConsole::resolveStubForPath(name: 'factory');
     }
 
     public function getNamespace(): string
     {
-        return $this->resolveNamespace(
-            structures: $this->resolveInfrastructurePath(),
+        return DiamondConsole::resolveNamespace(
+            structures: DiamondConsole::resolveInfrastructurePath(),
             suffix: 'Factories',
             prefix: $this->resolveDomainArgument() . '\\Database'
         );

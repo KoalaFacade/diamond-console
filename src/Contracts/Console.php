@@ -2,7 +2,7 @@
 
 namespace KoalaFacade\DiamondConsole\Contracts;
 
-interface Console
+interface Console extends Options, Placeholders, Arguments
 {
     public function getNamespacePath(): string;
 

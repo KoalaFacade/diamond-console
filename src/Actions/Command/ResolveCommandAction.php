@@ -5,7 +5,7 @@ namespace KoalaFacade\DiamondConsole\Actions\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use KoalaFacade\DiamondConsole\Actions\Filesystem\FilePresentAction;
 use KoalaFacade\DiamondConsole\Actions\Stub\CopyStubAction;
-use KoalaFacade\DiamondConsole\Contracts\Application;
+use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
@@ -14,13 +14,13 @@ use KoalaFacade\DiamondConsole\Foundation\Action;
 class ResolveCommandAction extends Action
 {
     /**
-     * @param  Application  $command
+     * @param  Console  $command
      * @return void
      *
      * @throws FileAlreadyExistException
      * @throws FileNotFoundException
      */
-    public function execute(Application $command): void
+    public function execute(Console $command): void
     {
         FilePresentAction::resolve()
             ->execute(

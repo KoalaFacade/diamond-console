@@ -7,15 +7,15 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use KoalaFacade\DiamondConsole\Actions\Command\ResolveCommandAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithApplication;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithDDD;
-use KoalaFacade\DiamondConsole\Contracts\Application;
+use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-class ProviderMakeCommand extends Command implements Application
+class ProviderMakeCommand extends Command implements Console
 {
-    use HasArguments, HasOptions, InteractsWithDDD, InteractsWithApplication;
+    use HasArguments, HasOptions, InteractsWithDDD, InteractsWithConsole;
 
     protected $signature = 'infrastructure:make:provider {name} {domain} {--force}';
 
