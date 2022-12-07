@@ -2,9 +2,7 @@
 
 namespace KoalaFacade\DiamondConsole\Support;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Illuminate\Support\Stringable;
 
 class Source
 {
