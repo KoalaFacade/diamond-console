@@ -18,7 +18,7 @@ and advanced.
         - [Action](#domainmakeaction-generateprofileaction-user)
         - [Enum](#domainmakeenum-role-user)
         - [Data Transfer Object](#domainmakedto-roledata-user)
-        - [Migration](#applicationmigration-createusertable)
+        - [Migration](#applicationmigration-create_user_table)
         - [Model](#domainmakemodel-user-user)
         - [Factory](#infrastructuremakefactory-rolefactory-user)
         - [Mail](#infrastructuremakemail-approveduser-user)
