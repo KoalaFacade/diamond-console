@@ -4,6 +4,9 @@ namespace {{ namespace }};
 
 use KoalaFacade\DiamondConsole\Foundation\DataTransferObject;
 
-class {{ class }} extends DataTransferObject
+readonly class {{ class }} extends DataTransferObject
 {
+    final public function __construct(
+        //
+    ) {}
 }

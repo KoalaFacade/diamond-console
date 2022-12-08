@@ -12,7 +12,7 @@ use League\Flysystem\UnableToWriteFile;
 use stdClass;
 use Throwable;
 
-class ResolveComposerAutoLoaderAction extends Action
+readonly class ResolveComposerAutoLoaderAction extends Action
 {
     public function __construct(protected Filesystem $fileSystem)
     {

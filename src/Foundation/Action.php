@@ -2,19 +2,20 @@
 
 namespace KoalaFacade\DiamondConsole\Foundation;
 
-abstract class Action
+readonly abstract class Action
 {
     /**
      * Resolve an action class
      *
+     * @param  array<array-key, mixed>  $parameters
      * @return static
      */
-    public static function resolve(): static
+    public static function resolve(array $parameters = []): static
     {
         /**
          * @var static $static
          */
-        $static = resolve(name: static::class);
+        $static = resolve(name: static::class, parameters: $parameters);
 
         return $static;
     }

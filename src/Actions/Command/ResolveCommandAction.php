@@ -11,48 +11,33 @@ use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 use KoalaFacade\DiamondConsole\Foundation\Action;
-use KoalaFacade\DiamondConsole\Foundation\EvaluatesClosures;
 
-class ResolveCommandAction extends Action
+readonly class ResolveCommandAction extends Action
 {
-    use EvaluatesClosures;
-
-    protected Closure | null $copyStubData = null;
-
-    protected Console $console;
+    public function __construct(
+        protected Console $console,
+        protected Closure | null $copyStubData = null,
+    ) {
+    }
 
     /**
-     * @param  Console  $console
      * @return void
      *
      * @throws FileAlreadyExistException
      * @throws FileNotFoundException
      */
-    public function execute(Console $console): void
+    public function execute(): void
     {
-        $this->setConsole($console);
-
         FilePresentAction::resolve()
             ->execute(
                 data: new FilePresentData(
-                    fileName: $console->getFileName(),
-                    namespacePath: $console->getNamespacePath(),
+                    fileName: $this->console->getFileName(),
+                    namespacePath: $this->console->getNamespacePath(),
                 ),
-                withForce: $console->resolveForceOption(),
+                withForce: $this->console->resolveForceOption(),
             );
 
-        $data = $this->evaluate($this->copyStubData);
-
-        if (! $data instanceof CopyStubData) {
-            $data = $this->getDefaultCopyStubData();
-        }
-
-        CopyStubAction::resolve()->execute(data: $data);
-    }
-
-    public function getCopyStubDataUsing(Closure | null $callback): void
-    {
-        $this->copyStubData = $callback;
+        CopyStubAction::resolve()->execute(data: $this->getDefaultCopyStubData());
     }
 
     protected function getDefaultCopyStubData(): CopyStubData
@@ -63,10 +48,5 @@ class ResolveCommandAction extends Action
             fileName: $this->console->getFileName(),
             placeholders: $this->console->resolvePlaceholders()
         );
-    }
-
-    protected function setConsole(Console $console): void
-    {
-        $this->console = $console;
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Filesystem\Filesystem;
 use KoalaFacade\DiamondConsole\DataTransferObjects\CopyStubData;
 use KoalaFacade\DiamondConsole\Foundation\Action;
 
-class CopyStubAction extends Action
+readonly class CopyStubAction extends Action
 {
     /**
      * Copy Stub to Diamond Infrastructure
