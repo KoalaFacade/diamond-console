@@ -41,7 +41,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "~8.2"
+        "php": "~8.2",
         "illuminate/support": "^9.41",
         "illuminate/console": "^9.41",
         "illuminate/filesystem": "^9.41",
