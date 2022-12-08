@@ -13,7 +13,7 @@ use KoalaFacade\DiamondConsole\Foundation\Action;
  * @template TKey of array-key
  * @template TValue
  */
-class ReplacePlaceholderAction extends Action
+readonly class ReplacePlaceholderAction extends Action
 {
     /**
      * Replace Placeholder Stub data
@@ -28,9 +28,7 @@ class ReplacePlaceholderAction extends Action
     {
         $filesystem = new Filesystem;
 
-        $resolved = $placeholders
-            ->resolveArrayKeyUsing(fn (string $key) => Str::camel($key))
-            ->toArray();
+        $resolved = $placeholders->toArray();
 
         $stub = $filesystem->get(path: $filePath);
 

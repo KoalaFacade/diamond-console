@@ -2,19 +2,12 @@
 
 namespace KoalaFacade\DiamondConsole\DataTransferObjects;
 
+use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Foundation\DataTransferObject;
 
-class PlaceholderData extends DataTransferObject
+readonly class PlaceholderData extends DataTransferObject
 {
-    /**
-     * @param  string | null  $namespace
-     * @param  string | null  $class
-     * @param  string | null  $subject
-     * @param  string | null  $tableName
-     * @param  string | null  $factoryContract
-     * @param  string|null  $factoryContractNamespace
-     */
-    public function __construct(
+    final public function __construct(
         public null | string $namespace = null,
         public null | string $class = null,
         public null | string $subject = null,
@@ -22,5 +15,10 @@ class PlaceholderData extends DataTransferObject
         public null | string $factoryContract = null,
         public null | string $factoryContractNamespace = null,
     ) {
+    }
+
+    protected function resolveArrayKey(string $key): string
+    {
+        return Str::camel($key);
     }
 }

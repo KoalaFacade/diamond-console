@@ -12,7 +12,7 @@ class DiamondConsoleServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->registerPublishables();
+        $this->registerPublishers();
 
         $this->commands(commands: $this->diamondCommands());
     }
@@ -22,11 +22,11 @@ class DiamondConsoleServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(path: __DIR__ . '/../config/diamond.php', key: 'diamond');
     }
 
-    protected function registerPublishables(): void
+    protected function registerPublishers(): void
     {
         $this->publishes([
             __DIR__ . '/../config/diamond.php' => config_path(path: 'diamond.php'),
-        ], 'config');
+        ], groups: 'config');
     }
 
     /**

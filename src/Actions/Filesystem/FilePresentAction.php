@@ -7,7 +7,7 @@ use KoalaFacade\DiamondConsole\DataTransferObjects\Filesystem\FilePresentData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 use KoalaFacade\DiamondConsole\Foundation\Action;
 
-class FilePresentAction extends Action
+readonly class FilePresentAction extends Action
 {
     /**
      * @throws FileAlreadyExistException

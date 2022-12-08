@@ -2,30 +2,33 @@
 
 namespace KoalaFacade\DiamondConsole\Foundation;
 
-use Closure;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Foundation\DataTransferObject\HasResolvable;
 
-abstract class DataTransferObject
+abstract readonly class DataTransferObject
 {
-    use HasResolvable, EvaluatesClosures;
+    use HasResolvable;
 
     /**
-     * Prevent properties to included on update
+     * Prevent properties to included on create
      *
-     * @var array<string>
+     * @return array<empty>
      */
-    protected array $excludedPropertiesOnCreate = [];
+    protected function toExcludedPropertiesOnCreate(): array
+    {
+        return [];
+    }
 
     /**
-     * Prevent properties to included on update
+     * Prevent properties to included on create
      *
-     * @var array<string>
+     * @return array<empty>
      */
-    protected array $excludedPropertiesOnUpdate = [];
-
-    protected Closure | null $resolveArrayKeyUsing = null;
+    protected function toExcludedPropertiesOnUpdate(): array
+    {
+        return [];
+    }
 
     /**
      * The method that will resolve the inheritance properties
@@ -44,14 +47,7 @@ abstract class DataTransferObject
         return Collection::wrap((array) $this)
             ->except(keys: $excludedPropertyKeys)
             ->mapWithKeys(
-                function ($value, $key): array {
-                    $evaluate = $this->evaluate(
-                        value: $this->resolveArrayKeyUsing,
-                        parameters: ['key' => $key]
-                    );
-
-                    return [$evaluate ?? Str::snake($key) => $value];
-                }
+                fn ($value, $key): array => [$this->resolveArrayKey($key) => $value]
             )
             ->toArray();
     }
@@ -59,33 +55,11 @@ abstract class DataTransferObject
     /**
      * Resolve result array-key of toArray method from behaviour
      *
-     * @param  Closure | null  $callback
-     * @return static
+     * @param  string  $key
+     * @return string
      */
-    public function resolveArrayKeyUsing(Closure | null $callback): static
+    protected function resolveArrayKey(string $key): string
     {
-        $this->resolveArrayKeyUsing = $callback;
-
-        return $this;
-    }
-
-    /**
-     * Lookup the properties those excluded in create
-     *
-     * @return array<string>
-     */
-    public function toExcludedPropertiesOnCreate(): array
-    {
-        return $this->excludedPropertiesOnCreate;
-    }
-
-    /**
-     * Lookup the properties those excluded in create
-     *
-     * @return array<string>
-     */
-    public function toExcludedPropertiesOnUpdate(): array
-    {
-        return $this->excludedPropertiesOnUpdate;
+        return Str::snake($key);
     }
 }

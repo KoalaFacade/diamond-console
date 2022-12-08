@@ -2,37 +2,30 @@
 
 namespace KoalaFacade\DiamondConsole\Actions\Factory;
 
+use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
-use KoalaFacade\DiamondConsole\Commands\FactoryMakeCommand;
 use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 use KoalaFacade\DiamondConsole\Foundation\Action;
 use KoalaFacade\DiamondConsole\Support\Source;
 
-class FactoryContractMakeAction extends Action implements Console
+readonly class FactoryContractMakeAction extends Action implements Console
 {
     use InteractsWithConsole;
 
-    public FactoryMakeCommand $console;
-
-    /**
-     * @param  FactoryMakeCommand  $console
-     */
-    public function setConsole(FactoryMakeCommand $console): void
-    {
-        $this->console = $console;
+    public function __construct(
+        protected Console & Command $console
+    ) {
     }
 
     /**
      * @throws FileNotFoundException
      * @throws FileAlreadyExistException
      */
-    public function execute(FactoryMakeCommand $console): static
+    public function execute(): static
     {
-        $this->setConsole(console: $console);
-
         $this->handle();
 
         return $this;

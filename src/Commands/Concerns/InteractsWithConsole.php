@@ -21,7 +21,7 @@ trait InteractsWithConsole
     {
         $this->beforeCreate();
 
-        ResolveCommandAction::resolve()->execute(console: $this);
+        ResolveCommandAction::resolve(parameters: ['console' => $this])->execute();
 
         $this->afterCreate();
     }

@@ -33,7 +33,7 @@ class FactoryMakeCommand extends Command implements Console
         $this->info(string: 'Generating factory & interface file to your project');
 
         $this->resolveFactoryContractConsole(
-            console: FactoryContractMakeAction::resolve()->execute(console: $this)
+            console: FactoryContractMakeAction::resolve(parameters: ['console' => $this])->execute()
         );
     }
 
