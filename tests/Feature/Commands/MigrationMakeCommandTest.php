@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
-it(description: 'can generate new create migration')
+it(description: 'can generate new create Migration')
     ->tap(function () {
         $tableName = Str::snake('CreateUsersTable');
 
@@ -20,13 +20,18 @@ it(description: 'can generate new create migration')
 
         $migrationFile = File::get(path: base_path("database/migrations/$fileName"));
 
-        expect(value: Str::contains(haystack: $migrationFile, needles: ['{{ table_name }}']))->toBeFalse();
+        expect(
+            value: Str::contains(
+                haystack: $migrationFile,
+                needles: ['{{ table_name }}']
+            )
+        )->toBeFalse();
 
-        unlink(base_path("database/migrations/$fileName"));
+        fileDelete(paths: base_path("database/migrations/$fileName"));
     })
     ->group(groups: 'commands');
 
-it(description: 'can generate new table migration')
+it(description: 'can generate new table Migration')
     ->tap(function () {
         $tableName = Str::snake('UpdateUsersTable');
 
@@ -40,13 +45,18 @@ it(description: 'can generate new table migration')
 
         $migrationFile = File::get(path: base_path("database/migrations/$fileName"));
 
-        expect(value: Str::contains(haystack: $migrationFile, needles: ['{{ table_name }}']))->toBeFalse();
+        expect(
+            value: Str::contains(
+                haystack: $migrationFile,
+                needles: ['{{ table_name }}']
+            )
+        )->toBeFalse();
 
-        unlink(base_path("database/migrations/$fileName"));
+        fileDelete(paths: base_path("database/migrations/$fileName"));
     })
     ->group(groups: 'commands');
 
-it(description: 'can generate new migration')
+it(description: 'can generate new Migration')
     ->tap(function () {
         $tableName = Str::snake('UserPost');
 
@@ -58,6 +68,6 @@ it(description: 'can generate new migration')
 
         $this->assertTrue(File::exists(base_path("database/migrations/$fileName")));
 
-        unlink(base_path("database/migrations/$fileName"));
+        fileDelete(paths: base_path("database/migrations/$fileName"));
     })
     ->group(groups: 'commands');

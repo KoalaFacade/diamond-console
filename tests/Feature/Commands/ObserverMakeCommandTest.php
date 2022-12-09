@@ -1,73 +1,65 @@
 <?php
 
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-it(description: 'can generate observer')
+it(description: 'can generate Observer')
     ->tap(function () {
-        $nameArgument = 'UserObserver';
-        $domainArgument = 'User';
+        $fileName = '/User/Database/Observers/UserObserver.php';
 
-        $generatedFilePath = basePath() . infrastructurePath() . '/' . $domainArgument . '/Database/Observers/' . $nameArgument . '.php';
-
-        expect(value: File::exists(path: $generatedFilePath))->toBeFalse();
+        expect(value:fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'infrastructure:make:observer UserObserver User');
 
-        expect(File::exists(path: $generatedFilePath))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: File::get(path: $generatedFilePath),
+                    haystack: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()),
                     needles: ['{{ namespace }}', '{{ class }}']
                 )
             )->toBeFalse();
 
-        File::delete(paths: [$generatedFilePath]);
+        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command');
 
-it(description: 'can generate observer with force option')
+it(description: 'can generate Observer with force option')
     ->tap(function () {
-        $nameArgument = 'UserObserver';
-        $domainArgument = 'User';
+        $fileName = '/User/Database/Observers/UserObserver.php';
 
-        $generatedFilePath = basePath() . infrastructurePath() . '/' . $domainArgument . '/Database/Observers/' . $nameArgument . '.php';
-
-        expect(value: File::exists(path: $generatedFilePath))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'infrastructure:make:observer UserObserver User');
         Artisan::call(command: 'infrastructure:make:observer UserObserver User --force');
 
-        expect(File::exists(path: $generatedFilePath))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: File::get(path: $generatedFilePath),
+                    haystack: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()),
                     needles: ['{{ namespace }}', '{{ class }}']
                 )
             )->toBeFalse();
 
-        File::delete(paths: [$generatedFilePath]);
+        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command');
 
-it(description: 'cannot generate the observer, if the observer already exists')
+it(description: 'cannot generate the Observer, if the Observer already exists')
     ->tap(function () {
-        $nameArgument = 'UserObserver';
-        $domainArgument = 'User';
+        $fileName = '/User/Database/Observers/UserObserver.php';
 
-        $generatedFilePath = basePath() . infrastructurePath() . '/' . $domainArgument . '/Database/Observers/' . $nameArgument . '.php';
-
-        expect(value: File::exists(path: $generatedFilePath))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'infrastructure:make:observer UserObserver User');
 
-        expect(File::exists(path: $generatedFilePath))->toBeTrue();
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue();
 
         Artisan::call(command: 'infrastructure:make:observer UserObserver User ');
 
-        File::delete(paths: [$generatedFilePath]);
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
+
+        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command')
     ->throws(exception: FileAlreadyExistException::class);
