@@ -45,7 +45,6 @@ it(description: 'can generate new DTO with separator')
                 )
             )
             ->toBeFalse();
-
     })
     ->group(groups: 'commands');
 
