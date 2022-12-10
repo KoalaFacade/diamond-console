@@ -27,6 +27,7 @@ and advanced.
         - [Seeder](#infrastructuremakeseeder-userseeder-user)
         - [Value Object](#domainmakevalue-object-referralcode-user)
         - [Observer](#infrastructuremakeobserver-userobserver-user)
+        - [Event](#infrastructuremakeevent-postevent-post)
 2. [Contribution](#contribution)
 
 ## Documentation
@@ -243,7 +244,7 @@ this command will generate Value Object class into Domain.
 ---
 
 #### `infrastructure:make:observer UserObserver User`
-Command for generate a Model Observer class to your project.
+Command for generate a Observer class to your project.
 
 **Arguments**
 
@@ -256,7 +257,25 @@ Command for generate a Model Observer class to your project.
 
 |  Name   |           Description           |
 |:-------:|:-------------------------------:|
-| --force | Force create the observer class |
+| --force | Force create the Observer class |
+
+---
+
+#### `infrastructure:make:event PostEvent Post`
+Command for generate a Event class to your project.
+
+**Arguments**
+
+|  Name  |     Description     |
+|:------:|:-------------------:|
+|  Name  | Event name class |
+| Domain |     Domain Name     |
+
+**Options**
+
+|  Name   |           Description           |
+|:-------:|:-------------------------------:|
+| --force | Force create the Event class |
 
 ---
 
