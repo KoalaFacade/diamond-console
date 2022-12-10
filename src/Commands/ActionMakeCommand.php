@@ -33,6 +33,7 @@ class ActionMakeCommand extends Command implements Console
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
+                structures: Source::resolveDomainPath(),
                 domainArgument: $this->resolveDomainArgument(),
                 nameArgument: $this->resolveNameArgument(),
                 endsWith: 'Actions',

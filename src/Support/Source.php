@@ -41,7 +41,7 @@ class Source
             subject: static::resolveNamespaceDir(
                 data: $data,
                 namespace: Str::of(string: '/')
-                    ->start(prefix: Source::resolveDomainPath())
+                    ->start(prefix: $data->structures)
                     ->append(values: Str::finish($data->domainArgument, cap: '/'))
                     ->finish(cap: $data->endsWith)
             )

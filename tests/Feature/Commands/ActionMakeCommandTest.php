@@ -26,7 +26,7 @@ it(description: 'can generate new action class')
     })
     ->group('commands');
 
-it(description: 'can generate new action class with nested separator')
+it(description: 'can generate new action class with separator')
     ->tap(function () {
         $fileName = '/User/Actions/Foo/Bar/StoreFooAction.php';
 
