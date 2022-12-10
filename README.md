@@ -3,8 +3,8 @@
 <p align="center">
     <a href="https://packagist.org/packages/koalafacade/diamond-console"><img src="https://img.shields.io/packagist/v/KoalaFacade/diamond-console?color=F28D1A&style=for-the-badge" alt="Test Passing"/></a>
     <a href="https://github.com/KoalaFacade/diamond-console/actions/workflows/run-test.yml"><img src="https://img.shields.io/github/workflow/status/KoalaFacade/diamond-console/run-tests?label=Test&style=for-the-badge" alt="Test Passing"/></a>
-    <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-8.x-red?style=for-the-badge&logo=Laravel" alt="Laravel" /></a>
-    <a href="https://php.net"><img src="https://img.shields.io/badge/PHP-8.x-7A86B8?style=for-the-badge&logo=php" alt="PHP Badge"/></a>
+    <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-^9.x-red?style=for-the-badge&logo=Laravel" alt="Laravel" /></a>
+    <a href="https://php.net"><img src="https://img.shields.io/badge/PHP-8.2-7A86B8?style=for-the-badge&logo=php" alt="PHP Badge"/></a>
 </p>
 
 > Artisan command package to handle your Domain Driven Design project that suitable with Laravel base structures, made for comer of Domain Driven Design
@@ -26,6 +26,7 @@ and advanced.
         - [Service Provider](#infrastructuremakeprovider-factoryserviceprovider-user)
         - [Seeder](#infrastructuremakeseeder-userseeder-user)
         - [Value Object](#domainmakevalue-object-referralcode-user)
+        - [Observer](#infrastructuremakeobserver-userobserver-user)
 2. [Contribution](#contribution)
 
 ## Documentation
@@ -238,6 +239,24 @@ this command will generate Value Object class into Domain.
 |  Name   |               Description               |
 |:-------:|:---------------------------------------:|
 | --force |   Force create the Value Object class   |
+
+---
+
+#### `infrastructure:make:observer UserObserver User`
+Command for generate a Model Observer class to your project.
+
+**Arguments**
+
+|  Name  |     Description     |
+|:------:|:-------------------:|
+|  Name  | Observer name class |
+| Domain |     Domain Name     |
+
+**Options**
+
+|  Name   |           Description           |
+|:-------:|:-------------------------------:|
+| --force | Force create the observer class |
 
 ---
 
