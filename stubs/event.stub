@@ -27,9 +27,9 @@ class {{ class }}
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|PrivateChannel|array
+     * @return Channel | PrivateChannel | array<mixed>
      */
-    public function broadcastOn(): Channel|PrivateChannel|array
+    public function broadcastOn(): Channel | PrivateChannel | array
     {
         return new PrivateChannel(name: 'channel-name');
     }
