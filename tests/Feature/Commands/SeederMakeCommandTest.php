@@ -28,6 +28,29 @@ it(description: 'can generate seeder')
     })
     ->group('command');
 
+it(description: 'can generate seeder with separator')
+    ->tap(function () {
+        $nameArgument = 'Foo/BarSeeder';
+        $domainArgument = 'User';
+
+        $generatedFilePath = basePath() . infrastructurePath() . '/' . $domainArgument . '/Database/Seeders/' . $nameArgument . '.php';
+
+        expect(value: File::exists(path: $generatedFilePath))->toBeFalse();
+
+        Artisan::call(command: 'infrastructure:make:seeder Foo/BarSeeder User');
+
+        expect(File::exists(path: $generatedFilePath))->toBeTrue()
+            ->and(
+                value: Str::contains(
+                    haystack: File::get(path: $generatedFilePath),
+                    needles: ['{{ namespace }}', '{{ class }}']
+                )
+            )->toBeFalse();
+
+        File::delete(paths: [$generatedFilePath]);
+    })
+    ->group('command');
+
 it(description: 'can generate seeder with force option')
     ->tap(function () {
         $nameArgument = 'UserSeeder';
