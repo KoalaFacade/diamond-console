@@ -26,6 +26,25 @@ it(description: 'can generate new ValueObject class')
     })
     ->group('commands');
 
+it(description: 'can generate new ValueObject class with separator')
+    ->tap(function () {
+        $fileName = '/User/ValueObjects/Foo/Bar.php';
+
+        expect(fileExists(relativeFileName: $fileName))
+            ->toBeFalse();
+
+        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:make:value-object Foo/Bar User');
+
+        expect(fileExists(relativeFileName: $fileName))
+            ->toBeTrue();
+
+        $valueObjectFile = File::get(path: basePath() . domainPath() . $fileName);
+
+        expect(value: Str::contains(haystack: $valueObjectFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+    })
+    ->group('commands');
+
 it(description: 'can force generate exists ValueObject class')
     ->tap(function () {
         $fileName = '/User/ValueObjects/ReferralCode.php';
