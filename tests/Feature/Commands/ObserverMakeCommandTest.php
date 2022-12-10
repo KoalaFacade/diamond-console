@@ -19,8 +19,6 @@ it(description: 'can generate Observer')
                     needles: ['{{ namespace }}', '{{ class }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command');
 
@@ -39,8 +37,6 @@ it(description: 'can generate Observer with separator')
                     needles: ['{{ namespace }}', '{{ class }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command');
 
@@ -60,8 +56,6 @@ it(description: 'can generate Observer with force option')
                     needles: ['{{ namespace }}', '{{ class }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command');
 
@@ -78,8 +72,6 @@ it(description: 'cannot generate the Observer, if the Observer already exists')
         Artisan::call(command: 'infrastructure:make:observer UserObserver User ');
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command')
     ->throws(exception: FileAlreadyExistException::class);

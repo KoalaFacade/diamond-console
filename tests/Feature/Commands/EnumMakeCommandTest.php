@@ -23,8 +23,6 @@ it(description: 'can generate new Enum')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands');
 
@@ -45,8 +43,6 @@ it(description: 'can generate new Enum with separator')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands');
 
@@ -68,8 +64,6 @@ it(description: 'can force generate exists Enum')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands');
 
@@ -88,8 +82,6 @@ it(description: 'cannot generate the Enum, if the Enum already exists')
         Artisan::call(command: 'domain:make:enum PostStatus Post');
 
         expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);

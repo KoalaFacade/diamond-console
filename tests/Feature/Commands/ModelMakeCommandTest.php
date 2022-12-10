@@ -23,8 +23,6 @@ it(description: 'can generate new Model class')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands');
 
@@ -44,8 +42,6 @@ it(description: 'can generate new Model class with separator')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands');
 
@@ -68,8 +64,6 @@ it(description: 'can force generate exists Model class')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands');
 
@@ -104,9 +98,6 @@ it(description: 'can generate new Model class with Migration')
                     needles: ['{{ table_name }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
-        fileDelete(paths: base_path("database/migrations/$migrationName"));
     })
     ->group(groups: 'commands');
 
@@ -140,9 +131,6 @@ it(description: 'can force generate exists Model class with Migration')
                     needles: ['{{ table_name }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
-        fileDelete(paths: base_path("database/migrations/$migrationName"));
     })
     ->group(groups: 'commands');
 
@@ -178,14 +166,6 @@ it(description: 'can generate Model with factory')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileModel));
-        fileDelete(
-            paths: [
-                fileGet(relativeFileName: $fileContract),
-                fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
-            ]
-        );
     })
     ->group(groups: 'commands');
 
@@ -202,8 +182,6 @@ it(description: 'cannot generate the Model, if the Model already exists')
         Artisan::call(command: 'domain:make:model User User');
 
         expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);

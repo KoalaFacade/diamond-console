@@ -22,8 +22,6 @@ it(description: 'can generate new DTO')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands');
 
@@ -65,8 +63,6 @@ it(description: 'can force generate exists DTO')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands');
 
@@ -84,8 +80,6 @@ it(description: 'cannot generate the DTO, if the DTO already exists')
         Artisan::call(command: 'domain:make:data-transfer-object PostData Post');
 
         expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);

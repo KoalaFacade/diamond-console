@@ -22,8 +22,6 @@ it(description: 'can generate new Event class')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('commands');
 
@@ -43,8 +41,6 @@ it(description: 'can generate new Event class with separator')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('commands');
 
@@ -65,8 +61,6 @@ it(description: 'can force generate exists Event class')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group(groups: 'commands');
 
@@ -84,8 +78,6 @@ it(description: 'cannot generate the Event, if the Event already exists')
         Artisan::call(command: 'infrastructure:make:event PostEvent Post');
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);

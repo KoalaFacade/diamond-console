@@ -26,8 +26,6 @@ it(description: 'can generate new create Migration')
                 needles: ['{{ table_name }}']
             )
         )->toBeFalse();
-
-        fileDelete(paths: base_path("database/migrations/$fileName"));
     })
     ->group(groups: 'commands');
 
@@ -51,8 +49,6 @@ it(description: 'can generate new table Migration')
                 needles: ['{{ table_name }}']
             )
         )->toBeFalse();
-
-        fileDelete(paths: base_path("database/migrations/$fileName"));
     })
     ->group(groups: 'commands');
 
@@ -67,7 +63,5 @@ it(description: 'can generate new Migration')
         Artisan::call(command: 'application:migration UserPost');
 
         $this->assertTrue(File::exists(base_path("database/migrations/$fileName")));
-
-        fileDelete(paths: base_path("database/migrations/$fileName"));
     })
     ->group(groups: 'commands');
