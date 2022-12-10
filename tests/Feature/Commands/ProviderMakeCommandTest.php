@@ -20,8 +20,6 @@ it('can generate new Service Provider file')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group(groups: 'commands');
 
@@ -42,8 +40,6 @@ it('can generate new Service Provider file with force')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group(groups: 'commands');
 
@@ -61,8 +57,6 @@ it(description: 'cannot generate the Service Provider, if the Service Provider a
         Artisan::call(command: 'infrastructure:make:provider FactoryServiceProvider User');
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);

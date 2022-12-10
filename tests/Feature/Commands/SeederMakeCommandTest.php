@@ -19,8 +19,6 @@ it(description: 'can generate Seeder')
                     needles: ['{{ namespace }}', '{{ class }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command');
 
@@ -39,8 +37,6 @@ it(description: 'can generate Seeder with separator')
                     needles: ['{{ namespace }}', '{{ class }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command');
 
@@ -60,8 +56,6 @@ it(description: 'can generate Seeder with force option')
                     needles: ['{{ namespace }}', '{{ class }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command');
 
@@ -78,8 +72,6 @@ it(description: 'cannot generate the Seeder, if the Seeder already exists')
         Artisan::call(command: 'infrastructure:make:seeder UserSeeder User ');
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command')
     ->throws(exception: FileAlreadyExistException::class);

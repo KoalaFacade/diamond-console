@@ -85,8 +85,3 @@ function fileGet(string $relativeFileName, null | string $prefix = null): string
         path: basePath() . ($prefix ?? domainPath()) . Str::start($relativeFileName, prefix: '/')
     );
 }
-
-function fileDelete(string | array $paths): bool
-{
-    return File::delete(paths: $paths);
-}

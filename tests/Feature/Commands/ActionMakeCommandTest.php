@@ -22,8 +22,6 @@ it(description: 'can generate new Action class')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group('commands');
 
@@ -43,8 +41,6 @@ it(description: 'can generate new Action class with separator')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group('commands');
 
@@ -65,8 +61,6 @@ it(description: 'can force generate exists Action class')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands');
 
@@ -84,8 +78,6 @@ it(description: 'cannot generate the Action, if the Action already exists')
         Artisan::call(command: 'domain:make:action StoreUserAction User');
 
         expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
-
-        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);

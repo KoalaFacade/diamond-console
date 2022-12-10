@@ -6,14 +6,14 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-it(description: 'can generate new Mail class')
+it(description: 'can generate new Event class')
     ->tap(function () {
-        $fileName = '/User/Mails/UserApproved.php';
+        $fileName = '/Post/Events/PostEvent.php';
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'infrastructure:make:mail UserApproved User');
+        Artisan::call(command: 'infrastructure:make:event PostEvent Post');
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue()
             ->and(
@@ -25,14 +25,14 @@ it(description: 'can generate new Mail class')
     })
     ->group('commands');
 
-it(description: 'can generate new Mail class with separator')
+it(description: 'can generate new Event class with separator')
     ->tap(function () {
-        $fileName = '/User/Mails/Foo/Bar.php';
+        $fileName = '/Post/Events/Foo/Bar.php';
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'infrastructure:make:mail Foo/Bar User');
+        Artisan::call(command: 'infrastructure:make:event Foo/Bar Post');
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue()
             ->and(
@@ -44,15 +44,15 @@ it(description: 'can generate new Mail class with separator')
     })
     ->group('commands');
 
-it(description: 'can force generate exists Mail class')
+it(description: 'can force generate exists Event class')
     ->tap(function () {
-        $fileName = '/User/Mails/UserApproved.php';
+        $fileName = '/Post/Events/PostEvent.php';
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'infrastructure:make:mail UserApproved User');
-        Artisan::call(command: 'infrastructure:make:mail UserApproved User --force');
+        Artisan::call(command: 'infrastructure:make:event PostEvent Post');
+        Artisan::call(command: 'infrastructure:make:event PostEvent Post --force');
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue()
             ->and(
@@ -64,18 +64,18 @@ it(description: 'can force generate exists Mail class')
     })
     ->group(groups: 'commands');
 
-it(description: 'cannot generate the Mail, if the Mail already exists')
+it(description: 'cannot generate the Event, if the Event already exists')
     ->tap(function () {
-        $fileName = '/User/Mails/UserApproved.php';
+        $fileName = '/Post/Events/PostEvent.php';
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'infrastructure:make:mail UserApproved User');
+        Artisan::call(command: 'infrastructure:make:event PostEvent Post');
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue();
 
-        Artisan::call(command: 'infrastructure:make:mail UserApproved User');
+        Artisan::call(command: 'infrastructure:make:event PostEvent Post');
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
     })
