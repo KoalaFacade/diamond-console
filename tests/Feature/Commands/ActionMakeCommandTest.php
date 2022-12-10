@@ -3,73 +3,89 @@
 namespace Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-it(description: 'can generate new action class')
+it(description: 'can generate new Action class')
     ->tap(function () {
         $fileName = '/User/Actions/StoreUserAction.php';
 
-        expect(fileExists(relativeFileName: $fileName))
-            ->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:action StoreUserAction User');
 
-        expect(fileExists(relativeFileName: $fileName))
-            ->toBeTrue();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileName),
+                    needles: ['{{ class }}', '{{ namespace }}']
+                )
+            )->toBeFalse();
 
-        $actionFile = File::get(path: basePath() . domainPath() . $fileName);
-
-        expect(value: Str::contains(haystack: $actionFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group('commands');
 
-it(description: 'can generate new action class with separator')
+it(description: 'can generate new Action class with separator')
     ->tap(function () {
-        $fileName = '/User/Actions/Foo/Bar/StoreFooAction.php';
+        $fileName = '/User/Actions/Foo/BarAction.php';
 
-        expect(fileExists(relativeFileName: $fileName))
-            ->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'domain:make:action Foo/Bar/StoreFooAction User');
+        Artisan::call(command: 'domain:make:action Foo/BarAction User');
 
-        expect(fileExists(relativeFileName: $fileName))
-            ->toBeTrue();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileName),
+                    needles: ['{{ class }}', '{{ namespace }}']
+                )
+            )->toBeFalse();
 
-        $actionFile = File::get(path: basePath() . domainPath() . $fileName);
-
-        expect(value: Str::contains(haystack: $actionFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group('commands');
 
-it(description: 'can force generate exists action class')
+it(description: 'can force generate exists Action class')
     ->tap(function () {
         $fileName = '/User/Actions/StoreUserAction.php';
 
-        expect(fileExists(relativeFileName: $fileName))
-            ->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:action StoreUserAction User');
         Artisan::call(command: 'domain:make:action StoreUserAction User --force');
 
-        expect(fileExists(relativeFileName: $fileName))
-            ->toBeTrue();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileName),
+                    needles: ['{{ class }}', '{{ namespace }}']
+                )
+            )->toBeFalse();
 
-        $actionFile = File::get(path: basePath() . domainPath() . $fileName);
-
-        expect(value: Str::contains(haystack: $actionFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands');
 
-it(description: 'cannot generate the action, if the action already exists')
+it(description: 'cannot generate the Action, if the Action already exists')
     ->tap(function () {
+        $fileName = '/User/Actions/StoreUserAction.php';
+
+        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
+
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:action StoreUserAction User');
+
+        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue();
+
         Artisan::call(command: 'domain:make:action StoreUserAction User');
+
+        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
+
+        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);

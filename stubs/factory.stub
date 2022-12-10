@@ -1,12 +1,11 @@
 <?php
 
-namespace {{ namespace }}
+namespace {{ namespace }};
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use KoalaFacade\DiamondConsole\Foundation\CreateNewFactory;
-use {{ factoryContractNamespace }}\{{ factoryContract }}
+use {{ factoryContractNamespace }}\{{ factoryContract }} as Factory;
 
-final class {{ class }} extends CreateNewFactory implements {{ factoryContract }}
+final class {{ class }} extends CreateNewFactory implements Factory
 {
     /**
      * Define the model's default state.

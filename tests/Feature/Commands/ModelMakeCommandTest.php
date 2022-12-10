@@ -7,122 +7,185 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-it(description: 'can generate new model class')
+it(description: 'can generate new Model class')
     ->tap(function () {
         $fileName = '/Shared/User/Models/User.php';
 
-        if (File::exists(basePath() . domainPath() . '/Shared/User/Models/User.php')) {
-            unlink(basePath() . domainPath() . '/Shared/User/Models/User.php');
-        }
-
-        expect(fileExists($fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:model User User');
 
-        expect(fileExists($fileName))->toBeTrue();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileName),
+                    needles: ['{{ class }}', '{{ namespace }}']
+                )
+            )->toBeFalse();
 
-        $modelFile = File::get(path: basePath() . domainPath() . $fileName);
-
-        expect(value: Str::contains(haystack: $modelFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands');
 
-it(description: 'can generate new model class with separator')
+it(description: 'can generate new Model class with separator')
     ->tap(function () {
-        $fileName = '/Shared/User/Models/Foo/Bar.php';
+        $fileName = '/Shared/User/Models/Foo/bar.php';
 
-        expect(fileExists($fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
-        Artisan::call(command: 'domain:make:model Foo/Bar User');
+        Artisan::call(command: 'domain:make:model Foo/bar User');
 
-        expect(fileExists($fileName))->toBeTrue();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileName),
+                    needles: ['{{ class }}', '{{ namespace }}']
+                )
+            )->toBeFalse();
 
-        $modelFile = File::get(path: basePath() . domainPath() . $fileName);
-
-        expect(value: Str::contains(haystack: $modelFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands');
 
-it(description: 'can force generate exists model class')
+it(description: 'can force generate exists Model class')
     ->tap(function () {
         $fileName = '/Shared/User/Models/User.php';
 
-        expect(fileExists($fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:model User User');
         Artisan::call(command: 'domain:make:model User User --force');
 
-        expect(fileExists($fileName))->toBeTrue();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue();
 
-        $modelFile = File::get(path: basePath() . domainPath() . $fileName);
+        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileName),
+                    needles: ['{{ class }}', '{{ namespace }}']
+                )
+            )->toBeFalse();
 
-        expect(value: Str::contains(haystack: $modelFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands');
 
-it(description: 'can generate new model class with migration')
+it(description: 'can generate new Model class with Migration')
     ->tap(function () {
         $fileName = '/Shared/User/Models/User.php';
 
-        expect(fileExists($fileName))->toBeFalse();
+        if (File::exists(basePath() . domainPath() . $fileName)) {
+            unlink(basePath() . domainPath() . $fileName);
+        }
+
+        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:model User User -m');
 
-        expect(fileExists($fileName))->toBeTrue();
-
         $tableName = Str::snake('CreateUsersTable');
         $migrationName = now()->format('Y_m_d_his') . '_' . $tableName . '.php';
-        $modelFile = File::get(path: basePath() . domainPath() . $fileName);
 
-        expect(value: Str::contains(haystack: $modelFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+            ->and(File::exists(path: base_path('database/migrations/' . $migrationName)))->toBeTrue();
+
+        expect(
+            value: Str::contains(
+                haystack: fileGet(relativeFileName: $fileName),
+                needles: ['{{ class }}', '{{ namespace }}']
+            )
+        )->toBeFalse()
+            ->and(
+                value: Str::contains(
+                    haystack: File::get(base_path('database/migrations/' . $migrationName)),
+                    needles: ['{{ table_name }}']
+                )
+            )->toBeFalse();
+
+        fileDelete(paths: fileGet(relativeFileName: $fileName));
+        fileDelete(paths: base_path("database/migrations/$migrationName"));
     })
     ->group(groups: 'commands');
 
-it(description: 'can force generate exists model class with migration')
+it(description: 'can force generate exists Model class with Migration')
     ->tap(function () {
         $fileName = '/Shared/User/Models/User.php';
 
-        expect(fileExists($fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
 
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'domain:make:model User User -m');
         Artisan::call(command: 'domain:make:model User User -m --force');
 
-        expect(fileExists($fileName))->toBeTrue();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue();
 
         $tableName = Str::snake('CreateUsersTable');
         $migrationName = now()->format('Y_m_d_his') . '_' . $tableName . '.php';
-        $modelFile = File::get(path: basePath() . domainPath() . $fileName);
 
-        expect(value: Str::contains(haystack: $modelFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+            ->and(File::exists(path: base_path('database/migrations/' . $migrationName)))->toBeTrue();
+
+        expect(
+            value: Str::contains(
+                haystack: fileGet(relativeFileName: $fileName),
+                needles: ['{{ class }}', '{{ namespace }}']
+            )
+        )->toBeFalse()
+            ->and(
+                value: Str::contains(
+                    haystack: File::get(base_path('database/migrations/' . $migrationName)),
+                    needles: ['{{ table_name }}']
+                )
+            )->toBeFalse();
+
+        fileDelete(paths: fileGet(relativeFileName: $fileName));
+        fileDelete(paths: base_path("database/migrations/$migrationName"));
     })
     ->group(groups: 'commands');
 
-it(description: 'can generate model with factory')
+it(description: 'can generate Model with factory')
     ->tap(function () {
-        $factoryName = 'RoleFactory';
-        $domainName = 'Role';
-        $modelName = 'Role';
+        $fileContract = '/Shared/Contracts/Database/Factories/UserFactory.php';
+        $fileConcrete = '/User/Database/Factories/UserFactory.php';
+        $fileModel = '/Shared/User/Models/User.php';
 
-        $factoryContractPath = basePath() . domainPath() . '/Shared/Contracts/Database/Factories/' . $factoryName . '.php';
-        $factoryConcretePath = basePath() . infrastructurePath() . '/' . $domainName . '/Database' . '/Factories/' . $factoryName . '.php';
-        $modelConcretePath = basePath() . domainPath() . '/Shared/' . $domainName . '/Models/' . $modelName . '.php';
+        expect(value: fileExists(relativeFileName: $fileContract))->toBeFalse();
 
-        expect(value: File::exists(path: $factoryContractPath))->toBeFalse();
+        Artisan::call(command: 'domain:make:model User User --factory --force');
 
-        Artisan::call(command: 'domain:make:model ' . $modelName . ' ' . $domainName . ' --factory --force');
+        expect(value: fileExists(relativeFileName: $fileContract))->toBeTrue()
+            ->and(value: fileExists(relativeFileName: $fileConcrete, prefix: infrastructurePath()))->toBeTrue()
+            ->and(value: fileExists(relativeFileName: $fileModel))->toBeTrue();
 
-        expect(value: File::exists(path: $factoryContractPath))->toBeTrue()
-            ->and(value: File::exists(path: $factoryConcretePath))->toBeTrue()
-            ->and(value: File::exists(path: $modelConcretePath))->toBeTrue();
+        expect(
+            value: Str::contains(
+                haystack: fileGet(relativeFileName: $fileModel),
+                needles: ['{{ class }}', '{{ namespace }}', '{{ factoryContract }}', '{{ factoryContractNamespace }}']
+            )
+        )->toBeFalse()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
+                    needles: ['{{ factoryContract }}', '{{ factoryContractNamespace }}']
+                )
+            )->toBeFalse()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileContract),
+                    needles: ['{{ class }}', '{{ namespace }}']
+                )
+            )->toBeFalse();
 
-        $modelConcretePath = File::get(path: $modelConcretePath);
-
-        expect(value: Str::contains(haystack: $modelConcretePath, needles: ['{{ factory_contract }}', '{{ factory_contract_namespace }}']))->toBeFalse();
+        fileDelete(paths: fileGet(relativeFileName: $fileModel));
+        fileDelete(
+            paths: [
+                fileGet(relativeFileName: $fileContract),
+                fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
+            ]
+        );
     })
     ->group(groups: 'commands');
 
@@ -130,13 +193,17 @@ it(description: 'cannot generate the Model, if the Model already exists')
     ->tap(function () {
         $fileName = '/Shared/User/Models/User.php';
 
-        expect(fileExists(relativeFileName: $fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
 
         Artisan::call(command: 'domain:make:model User User');
 
-        expect(fileExists(relativeFileName: $fileName))->toBeTrue();
+        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue();
 
         Artisan::call(command: 'domain:make:model User User');
+
+        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
+
+        fileDelete(paths: fileGet(relativeFileName: $fileName));
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);

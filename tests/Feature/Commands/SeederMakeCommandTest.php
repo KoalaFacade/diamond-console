@@ -1,96 +1,85 @@
 <?php
 
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-it(description: 'can generate seeder')
+it(description: 'can generate Seeder')
     ->tap(function () {
-        $nameArgument = 'UserSeeder';
-        $domainArgument = 'User';
+        $fileName = '/User/Database/Seeders/UserSeeder.php';
 
-        $generatedFilePath = basePath() . infrastructurePath() . '/' . $domainArgument . '/Database/Seeders/' . $nameArgument . '.php';
-
-        expect(value: File::exists(path: $generatedFilePath))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'infrastructure:make:seeder UserSeeder User');
 
-        expect(File::exists(path: $generatedFilePath))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: File::get(path: $generatedFilePath),
+                    haystack: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()),
                     needles: ['{{ namespace }}', '{{ class }}']
                 )
             )->toBeFalse();
 
-        File::delete(paths: [$generatedFilePath]);
+        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command');
 
-it(description: 'can generate seeder with separator')
+it(description: 'can generate Seeder with separator')
     ->tap(function () {
-        $nameArgument = 'Foo/BarSeeder';
-        $domainArgument = 'User';
+        $fileName = '/User/Database/Seeders/Foo/BarSeeder.php';
 
-        $generatedFilePath = basePath() . infrastructurePath() . '/' . $domainArgument . '/Database/Seeders/' . $nameArgument . '.php';
-
-        expect(value: File::exists(path: $generatedFilePath))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'infrastructure:make:seeder Foo/BarSeeder User');
 
-        expect(File::exists(path: $generatedFilePath))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: File::get(path: $generatedFilePath),
+                    haystack: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()),
                     needles: ['{{ namespace }}', '{{ class }}']
                 )
             )->toBeFalse();
 
-        File::delete(paths: [$generatedFilePath]);
+        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command');
 
-it(description: 'can generate seeder with force option')
+it(description: 'can generate Seeder with force option')
     ->tap(function () {
-        $nameArgument = 'UserSeeder';
-        $domainArgument = 'User';
+        $fileName = '/User/Database/Seeders/UserSeeder.php';
 
-        $generatedFilePath = basePath() . infrastructurePath() . '/' . $domainArgument . '/Database/Seeders/' . $nameArgument . '.php';
-
-        expect(value: File::exists(path: $generatedFilePath))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'infrastructure:make:seeder UserSeeder User');
         Artisan::call(command: 'infrastructure:make:seeder UserSeeder User --force');
 
-        expect(File::exists(path: $generatedFilePath))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: File::get(path: $generatedFilePath),
+                    haystack: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()),
                     needles: ['{{ namespace }}', '{{ class }}']
                 )
             )->toBeFalse();
 
-        File::delete(paths: [$generatedFilePath]);
+        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command');
 
 it(description: 'cannot generate the Seeder, if the Seeder already exists')
     ->tap(function () {
-        $nameArgument = 'UserSeeder';
-        $domainArgument = 'User';
+        $fileName = '/User/Database/Seeders/UserSeeder.php';
 
-        $generatedFilePath = basePath() . infrastructurePath() . '/' . $domainArgument . '/Database/Seeders/' . $nameArgument . '.php';
-
-        expect(value: File::exists(path: $generatedFilePath))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'infrastructure:make:seeder UserSeeder User');
 
-        expect(File::exists(path: $generatedFilePath))->toBeTrue();
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue();
 
         Artisan::call(command: 'infrastructure:make:seeder UserSeeder User ');
 
-        File::delete(paths: [$generatedFilePath]);
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue();
+
+        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
     })
     ->group('command')
     ->throws(exception: FileAlreadyExistException::class);
