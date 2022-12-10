@@ -26,6 +26,25 @@ it(description: 'can generate new action class')
     })
     ->group('commands');
 
+it(description: 'can generate new action class with nested separator')
+    ->tap(function () {
+        $fileName = '/User/Actions/Foo/Bar/StoreFooAction.php';
+
+        expect(fileExists(relativeFileName: $fileName))
+            ->toBeFalse();
+
+        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:make:action Foo/Bar/StoreFooAction User');
+
+        expect(fileExists(relativeFileName: $fileName))
+            ->toBeTrue();
+
+        $actionFile = File::get(path: basePath() . domainPath() . $fileName);
+
+        expect(value: Str::contains(haystack: $actionFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+    })
+    ->group('commands');
+
 it(description: 'can force generate exists action class')
     ->tap(function () {
         $fileName = '/User/Actions/StoreUserAction.php';
