@@ -25,6 +25,24 @@ it(description: 'can generate new enum')
     })
     ->group(groups: 'commands');
 
+it(description: 'can generate new enum with separator')
+    ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
+    ->tap(function () {
+        $fileName = '/Post/Enums/Foo/Bar.php';
+
+        expect(fileExists($fileName))->toBeFalse();
+
+        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:make:enum Foo/Bar Post');
+
+        expect(fileExists($fileName))->toBeTrue();
+
+        $enumFile = File::get(path: basePath() . domainPath() . $fileName);
+
+        expect(value: Str::contains(haystack: $enumFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+    })
+    ->group(groups: 'commands');
+
 it(description: 'can force generate exists enum')
     ->skip(version_compare(PHP_VERSION, '8.1.0', '<'), 'code contains php 8.1 feature cause this test run in ' . PHP_VERSION)
     ->tap(function () {
