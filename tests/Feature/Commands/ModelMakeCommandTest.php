@@ -25,8 +25,23 @@ it(description: 'can generate new model class')
         $modelFile = File::get(path: basePath() . domainPath() . $fileName);
 
         expect(value: Str::contains(haystack: $modelFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+    })
+    ->group(groups: 'commands');
 
-        unlink(basePath() . domainPath() . '/Shared/User/Models/User.php');
+it(description: 'can generate new model class with separator')
+    ->tap(function () {
+        $fileName = '/Shared/User/Models/Foo/Bar.php';
+
+        expect(fileExists($fileName))->toBeFalse();
+
+        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:make:model Foo/Bar User');
+
+        expect(fileExists($fileName))->toBeTrue();
+
+        $modelFile = File::get(path: basePath() . domainPath() . $fileName);
+
+        expect(value: Str::contains(haystack: $modelFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
     })
     ->group(groups: 'commands');
 
@@ -45,18 +60,12 @@ it(description: 'can force generate exists model class')
         $modelFile = File::get(path: basePath() . domainPath() . $fileName);
 
         expect(value: Str::contains(haystack: $modelFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
-
-        unlink(basePath() . domainPath() . '/Shared/User/Models/User.php');
     })
     ->group(groups: 'commands');
 
 it(description: 'can generate new model class with migration')
     ->tap(function () {
         $fileName = '/Shared/User/Models/User.php';
-
-        if (File::exists(basePath() . domainPath() . '/Shared/User/Models/User.php')) {
-            unlink(basePath() . domainPath() . '/Shared/User/Models/User.php');
-        }
 
         expect(fileExists($fileName))->toBeFalse();
 
@@ -70,8 +79,6 @@ it(description: 'can generate new model class with migration')
         $modelFile = File::get(path: basePath() . domainPath() . $fileName);
 
         expect(value: Str::contains(haystack: $modelFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
-
-        unlink(base_path("database/migrations/$migrationName"));
     })
     ->group(groups: 'commands');
 
@@ -92,8 +99,6 @@ it(description: 'can force generate exists model class with migration')
         $modelFile = File::get(path: basePath() . domainPath() . $fileName);
 
         expect(value: Str::contains(haystack: $modelFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
-
-        unlink(base_path("database/migrations/$migrationName"));
     })
     ->group(groups: 'commands');
 
@@ -118,8 +123,6 @@ it(description: 'can generate model with factory')
         $modelConcretePath = File::get(path: $modelConcretePath);
 
         expect(value: Str::contains(haystack: $modelConcretePath, needles: ['{{ factory_contract }}', '{{ factory_contract_namespace }}']))->toBeFalse();
-
-        File::delete(paths: [$factoryContractPath, $factoryConcretePath, $modelConcretePath]);
     })
     ->group(groups: 'commands');
 
@@ -134,8 +137,6 @@ it(description: 'cannot generate the Model, if the Model already exists')
         expect(fileExists(relativeFileName: $fileName))->toBeTrue();
 
         Artisan::call(command: 'domain:make:model User User');
-
-        unlink(basePath() . domainPath() . '/Shared/User/Models/User.php');
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);

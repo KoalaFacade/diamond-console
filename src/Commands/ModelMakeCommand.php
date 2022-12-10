@@ -9,6 +9,7 @@ use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
 use KoalaFacade\DiamondConsole\Contracts\Console;
+use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Support\Source;
 
@@ -63,9 +64,12 @@ class ModelMakeCommand extends Command implements Console
     public function getNamespace(): string
     {
         return Source::resolveNamespace(
-            structures: Source::resolveDomainPath(),
-            prefix: 'Shared\\' . $this->resolveDomainArgument(),
-            suffix: 'Models',
+            data: new NamespaceData(
+                structures: Source::resolveDomainPath(),
+                domainArgument: 'Shared\\' . $this->resolveDomainArgument(),
+                nameArgument: $this->resolveNameArgument(),
+                endsWith: 'Models',
+            )
         );
     }
 
@@ -83,9 +87,12 @@ class ModelMakeCommand extends Command implements Console
             class: $this->getClassName(),
             factoryContract: $this->resolveFactoryNameSuffix(),
             factoryContractNamespace: Source::resolveNamespace(
-                structures: Source::resolveDomainPath(),
-                prefix: 'Shared',
-                suffix: 'Contracts\\Database\\Factories',
+                data: new NamespaceData(
+                    structures: Source::resolveDomainPath(),
+                    domainArgument: 'Shared',
+                    nameArgument: $this->resolveNameArgument(),
+                    endsWith: 'Contracts\\Database\\Factories',
+                )
             )
         );
     }
