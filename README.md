@@ -254,9 +254,9 @@ Command for generate a Model Observer class to your project.
 
 **Options**
 
-|  Name   |          Description          |
-|:-------:|:-----------------------------:|
-| --force | Force create the domain class |
+|  Name   |           Description           |
+|:-------:|:-------------------------------:|
+| --force | Force create the observer class |
 
 ---
 
