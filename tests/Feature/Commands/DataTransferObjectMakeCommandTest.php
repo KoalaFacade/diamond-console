@@ -24,6 +24,23 @@ it(description: 'can generate new DTO')
     })
     ->group(groups: 'commands');
 
+it(description: 'can generate new DTO with separator')
+    ->tap(function () {
+        $fileName = '/Post/DataTransferObjects/Content/ContentData.php';
+
+        expect(fileExists($fileName))->toBeFalse();
+
+        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:make:data-transfer-object Content/ContentData Post');
+
+        expect(fileExists($fileName))->toBeTrue();
+
+        $dtoFile = File::get(path: basePath() . domainPath() . $fileName);
+
+        expect(value: Str::contains(haystack: $dtoFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+    })
+    ->group(groups: 'commands');
+
 it(description: 'can force generate exists DTO')
     ->tap(function () {
         $fileName = '/Post/DataTransferObjects/PostData.php';
