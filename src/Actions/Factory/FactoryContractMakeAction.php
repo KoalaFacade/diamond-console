@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
 use KoalaFacade\DiamondConsole\Contracts\Console;
+use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 use KoalaFacade\DiamondConsole\Foundation\Action;
@@ -39,9 +40,12 @@ readonly class FactoryContractMakeAction extends Action implements Console
     public function getNamespace(): string
     {
         return Source::resolveNamespace(
-            structures: Source::resolveDomainPath(),
-            prefix: 'Shared',
-            suffix: 'Contracts\\Database\\Factories',
+            data: new NamespaceData(
+                structures: Source::resolveDomainPath(),
+                domainArgument: 'Shared',
+                nameArgument: $this->resolveNameArgument(),
+                endsWith: 'Contracts\\Database\\Factories',
+            )
         );
     }
 
