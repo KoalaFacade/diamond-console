@@ -8,6 +8,7 @@ use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
 use KoalaFacade\DiamondConsole\Contracts\Console;
+use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Support\Source;
 
@@ -32,9 +33,12 @@ class ProviderMakeCommand extends Command implements Console
     public function getNamespace(): string
     {
         return Source::resolveNamespace(
-            structures: Source::resolveInfrastructurePath(),
-            prefix: $this->resolveDomainArgument(),
-            suffix: 'Providers',
+            data: new NamespaceData(
+                structures: Source::resolveInfrastructurePath(),
+                domainArgument: $this->resolveDomainArgument(),
+                nameArgument: $this->resolveNameArgument(),
+                endsWith: 'Providers',
+            )
         );
     }
 
@@ -53,6 +57,9 @@ class ProviderMakeCommand extends Command implements Console
 
     public function getClassName(): string
     {
-        return Str::finish(Str::ucfirst($this->resolveNameArgument()), cap: 'ServiceProvider');
+        return Str::of($this->resolveNameArgument())
+            ->ucfirst()
+            ->finish(cap: 'ServiceProvider')
+            ->classBasename();
     }
 }
