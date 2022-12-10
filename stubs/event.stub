@@ -27,7 +27,7 @@ class {{ class }}
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|\Illuminate\Broadcasting\PrivateChannel|array
+     * @return Channel|PrivateChannel|array
      */
     public function broadcastOn(): Channel|PrivateChannel|array
     {
