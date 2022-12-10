@@ -9,7 +9,7 @@ use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate new mail class')
     ->tap(function () {
-        $fileName = '/User/Mail/UserApproved.php';
+        $fileName = '/User/Mails/UserApproved.php';
 
         expect(fileExists($fileName, prefix: infrastructurePath()))->toBeFalse();
 
@@ -24,9 +24,26 @@ it(description: 'can generate new mail class')
     })
     ->group('commands');
 
+it(description: 'can generate new mail class with separator')
+    ->tap(function () {
+        $fileName = '/User/Mails/Foo/Bar.php';
+
+        expect(fileExists($fileName, prefix: infrastructurePath()))->toBeFalse();
+
+        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'infrastructure:make:mail Foo/Bar User');
+
+        expect(fileExists($fileName, prefix: infrastructurePath()))->toBeTrue();
+
+        $mailFile = File::get(path: basePath() . infrastructurePath() . $fileName);
+
+        expect(value: Str::contains(haystack: $mailFile, needles: ['{{ class }}', '{{ namespace }}']))->toBeFalse();
+    })
+    ->group('commands');
+
 it(description: 'can force generate exists mail class')
     ->tap(function () {
-        $fileName = '/User/Mail/UserApproved.php';
+        $fileName = '/User/Mails/UserApproved.php';
 
         expect(fileExists($fileName, prefix: infrastructurePath()))->toBeFalse();
 
