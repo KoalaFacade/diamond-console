@@ -26,7 +26,7 @@ and advanced.
         - [Service Provider](#infrastructuremakeprovider-factoryserviceprovider-user)
         - [Seeder](#infrastructuremakeseeder-userseeder-user)
         - [Value Object](#domainmakevalue-object-referralcode-user)
-        - [Observe](#infrastructuremakeobserve-userobserve-user)
+        - [Observer](#infrastructuremakeobserver-userobserve-user)
 2. [Contribution](#contribution)
 
 ## Documentation
@@ -242,7 +242,7 @@ this command will generate Value Object class into Domain.
 
 ---
 
-#### `infrastructure:make:observe UserObserve User`
+#### `infrastructure:make:observer UserObserver User`
 Command for generate a Model Observe class to your project.
 
 **Arguments**
