@@ -78,3 +78,15 @@ function fileExists(string $relativeFileName, null | string $prefix = null): boo
         path: basePath() . ($prefix ?? domainPath()) . Str::start($relativeFileName, prefix: '/')
     );
 }
+
+function fileGet(string $relativeFileName, null | string $prefix = null): string
+{
+    return File::get(
+        path: basePath() . ($prefix ?? domainPath()) . Str::start($relativeFileName, prefix: '/')
+    );
+}
+
+function fileDelete(string | array $paths): bool
+{
+    return File::delete(paths: $paths);
+}
