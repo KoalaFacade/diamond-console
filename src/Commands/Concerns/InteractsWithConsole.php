@@ -3,6 +3,7 @@
 namespace KoalaFacade\DiamondConsole\Commands\Concerns;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Command\ResolveCommandAction;
 use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
@@ -28,7 +29,9 @@ trait InteractsWithConsole
 
     public function getNamespacePath(): string
     {
-        return Source::resolveNamespacePath(namespace: $this->getNamespace());
+        return Source::resolveNamespacePath(
+            namespace: $this->getNamespace(),
+        );
     }
 
     public function getFileName(): string
@@ -38,7 +41,7 @@ trait InteractsWithConsole
 
     public function getClassName(): string
     {
-        return $this->resolveNameArgument();
+        return Str::of($this->resolveNameArgument())->classBasename()->trim();
     }
 
     public function getFullPath(): string

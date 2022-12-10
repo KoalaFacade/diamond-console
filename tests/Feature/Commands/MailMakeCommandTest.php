@@ -8,7 +8,7 @@ use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate new Mail class')
     ->tap(function () {
-        $fileName = '/User/Mail/UserApproved.php';
+        $fileName = '/User/Mails/UserApproved.php';
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
@@ -27,9 +27,30 @@ it(description: 'can generate new Mail class')
     })
     ->group('commands');
 
+it(description: 'can generate new Mail class with separator')
+    ->tap(function () {
+        $fileName = '/User/Mails/Foo/Bar.php';
+
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
+
+        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'infrastructure:make:mail Foo/Bar User');
+
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()),
+                    needles: ['{{ class }}', '{{ namespace }}']
+                )
+            )->toBeFalse();
+
+        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
+    })
+    ->group('commands');
+
 it(description: 'can force generate exists Mail class')
     ->tap(function () {
-        $fileName = '/User/Mail/UserApproved.php';
+        $fileName = '/User/Mails/UserApproved.php';
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
@@ -51,7 +72,7 @@ it(description: 'can force generate exists Mail class')
 
 it(description: 'cannot generate the Mail, if the Mail already exists')
     ->tap(function () {
-        $fileName = '/User/Mail/UserApproved.php';
+        $fileName = '/User/Mails/UserApproved.php';
 
         expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 

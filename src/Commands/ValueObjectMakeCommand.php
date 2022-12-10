@@ -7,6 +7,7 @@ use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
 use KoalaFacade\DiamondConsole\Contracts\Console;
+use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Support\Source;
 
@@ -31,9 +32,12 @@ class ValueObjectMakeCommand extends Command implements Console
     public function getNamespace(): string
     {
         return Source::resolveNamespace(
-            structures: Source::resolveDomainPath(),
-            prefix: $this->resolveDomainArgument(),
-            suffix: 'ValueObjects'
+            data: new NamespaceData(
+                structures: Source::resolveDomainPath(),
+                domainArgument: $this->resolveDomainArgument(),
+                nameArgument: $this->resolveNameArgument(),
+                endsWith: 'ValueObjects',
+            )
         );
     }
 

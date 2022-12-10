@@ -4,7 +4,7 @@ namespace {{ namespace }};
 
 use KoalaFacade\DiamondConsole\Foundation\Action;
 
-class {{ class }} extends Action
+readonly class {{ class }} extends Action
 {
     public function execute()
     {

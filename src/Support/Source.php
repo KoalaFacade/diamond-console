@@ -3,6 +3,7 @@
 namespace KoalaFacade\DiamondConsole\Support;
 
 use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
 
 class Source
 {
@@ -32,12 +33,28 @@ class Source
         return static::resolvePathForStructure(key: 'infrastructure');
     }
 
-    public static function resolveNamespace(string $structures, string $prefix, string $suffix): string
+    public static function resolveNamespace(NamespaceData $data): string
     {
-        return Str::of(string: '\\:prefix\\:suffix')
-            ->start($structures)
-            ->replace(search: ':prefix', replace: $prefix)
-            ->replace(search: ':suffix', replace: $suffix);
+        return Str::replace(
+            search: '/',
+            replace: '\\',
+            subject: static::resolveNamespaceDir(
+                data: $data,
+                namespace: Str::of(string: '/')
+                    ->start(prefix: $data->structures)
+                    ->append(values: Str::finish($data->domainArgument, cap: '/'))
+                    ->finish(cap: $data->endsWith)
+            )
+        );
+    }
+
+    public static function resolveNamespaceDir(NamespaceData $data, string $namespace): string
+    {
+        return Str::contains(haystack: $data->nameArgument, needles: '/') ?
+            Str::of(string: '/')
+                ->start(prefix: $namespace)
+                ->finish(cap: dirname($data->nameArgument))
+            : $namespace;
     }
 
     public static function resolveNamespacePath(string $namespace): string

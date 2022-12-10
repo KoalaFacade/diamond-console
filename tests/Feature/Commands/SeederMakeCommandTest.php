@@ -24,6 +24,26 @@ it(description: 'can generate Seeder')
     })
     ->group('command');
 
+it(description: 'can generate Seeder with separator')
+    ->tap(function () {
+        $fileName = '/User/Database/Seeders/Foo/BarSeeder.php';
+
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
+
+        Artisan::call(command: 'infrastructure:make:seeder Foo/BarSeeder User');
+
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()),
+                    needles: ['{{ namespace }}', '{{ class }}']
+                )
+            )->toBeFalse();
+
+        fileDelete(paths: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()));
+    })
+    ->group('command');
+
 it(description: 'can generate Seeder with force option')
     ->tap(function () {
         $fileName = '/User/Database/Seeders/UserSeeder.php';

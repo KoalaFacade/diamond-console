@@ -28,6 +28,27 @@ it(description: 'can generate new Model class')
     })
     ->group(groups: 'commands');
 
+it(description: 'can generate new Model class with separator')
+    ->tap(function () {
+        $fileName = '/Shared/User/Models/Foo/bar.php';
+
+        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
+
+        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:make:model Foo/bar User');
+
+        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileName),
+                    needles: ['{{ class }}', '{{ namespace }}']
+                )
+            )->toBeFalse();
+
+        fileDelete(paths: fileGet(relativeFileName: $fileName));
+    })
+    ->group(groups: 'commands');
+
 it(description: 'can force generate exists Model class')
     ->tap(function () {
         $fileName = '/Shared/User/Models/User.php';
