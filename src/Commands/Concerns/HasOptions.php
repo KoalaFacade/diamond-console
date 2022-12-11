@@ -29,4 +29,12 @@ trait HasOptions
 
         return $name;
     }
+
+    public function resolveEventOption(): string | null
+    {
+        /** @var string|null $name */
+        $name = $this->option(key: 'event');
+
+        return $name;
+    }
 }

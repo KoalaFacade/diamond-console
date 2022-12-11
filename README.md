@@ -28,6 +28,7 @@ and advanced.
         - [Value Object](#domainmakevalue-object-referralcode-user)
         - [Observer](#infrastructuremakeobserver-userobserver-user)
         - [Event](#infrastructuremakeevent-postevent-post)
+        - [Listener](#infrastructuremakelistener-postlistener-post)
 2. [Contribution](#contribution)
 
 ## Documentation
@@ -276,6 +277,24 @@ Command for generate a Event class to your project.
 |  Name   |           Description           |
 |:-------:|:-------------------------------:|
 | --force | Force create the Event class |
+
+---
+
+#### `infrastructure:make:listener PostListener Post`
+Command for generate a Listener class to your project.
+
+
+|  Name  |     Description     |
+|:------:|:-------------------:|
+|  Name  | Listener name class |
+| Domain |     Domain Name     |
+
+**Options**
+
+|       Name        |                      Description                      |
+|:-----------------:|:-----------------------------------------------------:|
+| --event=NameEvent | For create Event class and use it into Listener class |
+|      --force      |           Force create the Listener class             |
 
 ---
 
