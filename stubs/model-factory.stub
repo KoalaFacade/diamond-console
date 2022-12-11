@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use {{ factoryContractNamespace }}\{{ factoryContract }}
+use {{ factoryContractNamespace }}\{{ factoryContract }};
 
 class {{ class }} extends Model
 {
     use HasFactory;
 
     /**
-    * Resolve model factory class with Dependency Injection
-    *
-    * @return Factory
-    */
+     * Resolve model factory class with Dependency Injection
+     *
+     * @return Factory
+     */
     protected static function newFactory(): Factory
     {
         /** @var {{ factoryContract }} $factory */
