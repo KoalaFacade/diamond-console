@@ -16,19 +16,22 @@ and advanced.
 1. [Documentation](#documentation)
     - [Installation](#installation)
     - [Commands](#commands)
-        - [Action](#domainmakeaction-generateprofileaction-user)
-        - [Enum](#domainmakeenum-role-user)
-        - [Data Transfer Object](#domainmakedata-transfer-object-roledata-user)
-        - [Migration](#applicationmigration-createusertable)
-        - [Model](#domainmakemodel-user-user)
-        - [Factory](#infrastructuremakefactory-rolefactory-user)
-        - [Mail](#infrastructuremakemail-approveduser-user)
-        - [Service Provider](#infrastructuremakeprovider-factoryserviceprovider-user)
-        - [Seeder](#infrastructuremakeseeder-userseeder-user)
-        - [Value Object](#domainmakevalue-object-referralcode-user)
-        - [Observer](#infrastructuremakeobserver-userobserver-user)
-        - [Event](#infrastructuremakeevent-postevent-post)
-        - [Listener](#infrastructuremakelistener-postlistener-post)
+        - [Application](#application)
+            - [Migration](#applicationmigration-create_user_table)
+        - [Domain](#domain)
+            - [Action](#domainmakeaction-generateprofileaction-user)
+            - [Data Transfer Object](#domainmakedata-transfer-object-roledata-user)
+            - [Enum](#domainmakeenum-role-user)
+            - [Model](#domainmakemodel-user-user)
+            - [Value Object](#domainmakevalue-object-referralcode-user)
+        - [Infrastructure](#infrastructure)
+            - [Event](#infrastructuremakeevent-postevent-post)
+            - [Factory](#infrastructuremakefactory-rolefactory-user)
+            - [Listener](#infrastructuremakelistener-postlistener-post)
+            - [Mail](#infrastructuremakemail-approveduser-user)
+            - [Observer](#infrastructuremakeobserver-userobserver-user)
+            - [Seeder](#infrastructuremakeseeder-userseeder-user)
+            - [Service Provider](#infrastructuremakeprovider-factoryserviceprovider-user)
 2. [Contribution](#contribution)
 
 ## Documentation
@@ -48,6 +51,28 @@ The command below will generate namespace in composer and base directory structu
 ---
 ### Commands
 
+#### Application
+
+#### `application:migration create_user_table`
+Command for generate a Migration file
+
+**Arguments**
+
+|  Name  | Description |
+|:------:|:-----------:|
+|  Name  | Table Name  |
+
+**Options**
+
+|        Name        |                      Description                       |
+|:------------------:|:------------------------------------------------------:|
+| --table=tableName  |    To generate a Migration with purpose edit table     |
+| --create=tableName | To generate a Migration with purpose to create a table |
+
+---
+
+#### Domain
+
 #### `domain:make:action GenerateProfileAction User`
 Command for generate an Action inside your Domain directory.
 
@@ -63,24 +88,6 @@ Command for generate an Action inside your Domain directory.
 |  Name   |          Description          |
 |:-------:|:-----------------------------:|
 | --force | Force create the Action class |
-
----
-
-#### `domain:make:enum Role User`
-Command for generate an Enum to your Domain directory.
-
-**Arguments**
-
-|  Name  |   Description   |
-|:------:|:---------------:|
-|  Name  | Enum class name |
-| Domain |   Domain Name   |
-
-**Options**
-
-|  Name   |         Description         |
-|:-------:|:---------------------------:|
-| --force | Force create the Enum class |
 
 ---
 
@@ -102,21 +109,21 @@ Command for generate a Data Transfer Object with plain PHP to your domain direct
 
 ---
 
-#### `application:migration create_user_table`
-Command for generate a Migration file
+#### `domain:make:enum Role User`
+Command for generate an Enum to your Domain directory.
 
 **Arguments**
 
-|  Name  | Description |
-|:------:|:-----------:|
-|  Name  | Table Name  |
+|  Name  |   Description   |
+|:------:|:---------------:|
+|  Name  | Enum class name |
+| Domain |   Domain Name   |
 
 **Options**
 
-|        Name        |                      Description                       |
-|:------------------:|:------------------------------------------------------:|
-| --table=tableName  |    To generate a Migration with purpose edit table     |
-| --create=tableName | To generate a Migration with purpose to create a table |
+|  Name   |         Description         |
+|:-------:|:---------------------------:|
+| --force | Force create the Enum class |
 
 ---
 
@@ -140,6 +147,44 @@ the Model at the same time.
 |  -f or --factory  | Create Factory class when Model created this option will generate two files, <br/> Factory contract and Factory concrete |
 |      --force      |                                                  Force create the Model class                                                   |
 
+---
+
+#### `domain:make:value-object ReferralCode User`
+Command for generate a Value Object class.
+this command will generate Value Object class into Domain.
+
+**Arguments**
+
+|  Name  |         Description         |
+|:------:|:---------------------------:|
+|  Name  |   Value Object name class   |
+| Domain |         Domain Name         |
+
+**Options**
+
+|  Name   |               Description               |
+|:-------:|:---------------------------------------:|
+| --force |   Force create the Value Object class   |
+
+---
+
+#### Infrastructure
+
+#### `infrastructure:make:event PostEvent Post`
+Command for generate a Event class to your project.
+
+**Arguments**
+
+|  Name  |     Description     |
+|:------:|:-------------------:|
+|  Name  | Event name class |
+| Domain |     Domain Name     |
+
+**Options**
+
+|  Name   |           Description           |
+|:-------:|:-------------------------------:|
+| --force | Force create the Event class |
 
 ---
 
@@ -168,6 +213,24 @@ so you can do Dependency Injection at Service Provider for resolve this one.
 
 ---
 
+#### `infrastructure:make:listener PostListener Post`
+Command for generate a Listener class to your project.
+
+
+|  Name  |     Description     |
+|:------:|:-------------------:|
+|  Name  | Listener name class |
+| Domain |     Domain Name     |
+
+**Options**
+
+|       Name        |                      Description                      |
+|:-----------------:|:-----------------------------------------------------:|
+| --event=NameEvent | For create Event class and use it into Listener class |
+|      --force      |           Force create the Listener class             |
+
+---
+
 #### `infrastructure:make:mail ApprovedUser User`
 Command for generate a Mail class.
 this command will generate Mail class into Infrastructure side because this class purpose is
@@ -188,22 +251,21 @@ store to external.
 
 ---
 
-#### `infrastructure:make:provider FactoryServiceProvider User`
-Command for generate a Service Provider class.
-this command will generate Service Provider class into Infrastructure to binds between Domain and Infrastructure.
+#### `infrastructure:make:observer UserObserver User`
+Command for generate a Observer class to your project.
 
 **Arguments**
 
-|  Name  |         Description         |
-|:------:|:---------------------------:|
-|  Name  | Service Provider name class |
-| Domain |         Domain Name         |
+|  Name  |     Description     |
+|:------:|:-------------------:|
+|  Name  | Observer name class |
+| Domain |     Domain Name     |
 
 **Options**
 
-|  Name   |               Description               |
-|:-------:|:---------------------------------------:|
-| --force | Force create the Service Provider class |
+|  Name   |           Description           |
+|:-------:|:-------------------------------:|
+| --force | Force create the Observer class |
 
 ---
 #### `infrastructure:make:seeder UserSeeder User`
@@ -225,76 +287,22 @@ this command will generate Seeder class into Infrastructure because this class p
 
 ---
 
-#### `domain:make:value-object ReferralCode User`
-Command for generate a Value Object class.
-this command will generate Value Object class into Domain.
+#### `infrastructure:make:provider FactoryServiceProvider User`
+Command for generate a Service Provider class.
+this command will generate Service Provider class into Infrastructure to binds between Domain and Infrastructure.
 
 **Arguments**
 
 |  Name  |         Description         |
 |:------:|:---------------------------:|
-|  Name  |   Value Object name class   |
+|  Name  | Service Provider name class |
 | Domain |         Domain Name         |
 
 **Options**
 
 |  Name   |               Description               |
 |:-------:|:---------------------------------------:|
-| --force |   Force create the Value Object class   |
-
----
-
-#### `infrastructure:make:observer UserObserver User`
-Command for generate a Observer class to your project.
-
-**Arguments**
-
-|  Name  |     Description     |
-|:------:|:-------------------:|
-|  Name  | Observer name class |
-| Domain |     Domain Name     |
-
-**Options**
-
-|  Name   |           Description           |
-|:-------:|:-------------------------------:|
-| --force | Force create the Observer class |
-
----
-
-#### `infrastructure:make:event PostEvent Post`
-Command for generate a Event class to your project.
-
-**Arguments**
-
-|  Name  |     Description     |
-|:------:|:-------------------:|
-|  Name  | Event name class |
-| Domain |     Domain Name     |
-
-**Options**
-
-|  Name   |           Description           |
-|:-------:|:-------------------------------:|
-| --force | Force create the Event class |
-
----
-
-#### `infrastructure:make:listener PostListener Post`
-Command for generate a Listener class to your project.
-
-
-|  Name  |     Description     |
-|:------:|:-------------------:|
-|  Name  | Listener name class |
-| Domain |     Domain Name     |
-
-**Options**
-
-|       Name        |                      Description                      |
-|:-----------------:|:-----------------------------------------------------:|
-| --event=NameEvent | For create Event class and use it into Listener class |
-|      --force      |           Force create the Listener class             |
+| --force | Force create the Service Provider class |
 
 ---
 
