@@ -27,6 +27,6 @@ return [
     'structures' => [
         Layer::infrastructure->name => 'Infrastructure',
         Layer::domain->name => 'Domain',
-        Layer::application->name => 'app'
+        Layer::application->name => 'app',
     ],
 ];
