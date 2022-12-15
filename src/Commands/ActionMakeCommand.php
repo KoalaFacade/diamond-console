@@ -29,6 +29,7 @@ class ActionMakeCommand extends Command implements Console
         $this->info(string: 'Successfully generate action file');
     }
 
+
     public function getNamespace(): string
     {
         return Source::resolveNamespace(

@@ -60,11 +60,16 @@ class Source
     public static function resolveNamespacePath(string $namespace): string
     {
         return base_path(
-            path: static::resolveBasePath() . Str::replace(
-                search: '\\',
-                replace: '/',
-                subject: $namespace
-            )
+            path: static::resolveBasePath() . static::transformNamespaceToPath(namespace: $namespace)
+        );
+    }
+
+    public static function transformNamespaceToPath(string $namespace): string
+    {
+        return Str::replace(
+            search: '\\',
+            replace: '/',
+            subject: $namespace
         );
     }
 
