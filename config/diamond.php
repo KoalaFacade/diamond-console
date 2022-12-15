@@ -1,5 +1,7 @@
 <?php
 
+use KoalaFacade\DiamondConsole\Enums\Layer;
+
 return [
     /*
      | --------------------------------------------------------------------
@@ -23,7 +25,8 @@ return [
      |
      */
     'structures' => [
-        'infrastructure' => 'Infrastructure',
-        'domain' => 'Domain',
+        Layer::infrastructure->name => 'Infrastructure',
+        Layer::domain->name => 'Domain',
+        Layer::application->name => 'app'
     ],
 ];
