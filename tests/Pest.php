@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 
 uses(Tests\TestCase::class)
     ->beforeEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(basePath()))
+    ->afterEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(base_path(path: applicationPath() . '/Http/User')))
     ->in(__DIR__ . '/Feature');
 
 uses(Tests\TestCase::class)
@@ -68,6 +69,14 @@ function infrastructurePath(): string
 {
     /* @var string $path */
     $path = config(key: 'diamond.structures.infrastructure');
+
+    return $path;
+}
+
+function applicationPath(): string
+{
+    /* @var string $path */
+    $path = config(key: 'diamond.structures.application');
 
     return $path;
 }

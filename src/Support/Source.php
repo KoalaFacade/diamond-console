@@ -33,6 +33,11 @@ class Source
         return static::resolvePathForStructure(key: 'infrastructure');
     }
 
+    public static function resolveApplicationPath(): string
+    {
+        return static::resolvePathForStructure(key: 'application');
+    }
+
     public static function resolveNamespace(NamespaceData $data): string
     {
         return Str::replace(
