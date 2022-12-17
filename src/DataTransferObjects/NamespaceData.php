@@ -10,7 +10,7 @@ readonly class NamespaceData extends DataTransferObject
         public string $structures,
         public string $domainArgument,
         public string $nameArgument,
-        public string $endsWith
+        public string | null $endsWith = null
     ) {
     }
 }

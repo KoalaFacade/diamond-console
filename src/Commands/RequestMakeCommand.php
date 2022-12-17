@@ -33,10 +33,9 @@ class RequestMakeCommand extends Command implements Console
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveApplicationPath(),
-                domainArgument: 'Http',
+                structures: Source::resolveApplicationPath() . '\\Http',
+                domainArgument: 'Requests\\' . $this->resolveDomainArgument(),
                 nameArgument: $this->resolveNameArgument(),
-                endsWith: 'Requests\\' . $this->resolveDomainArgument(),
             )
         );
     }
