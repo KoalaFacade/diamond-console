@@ -48,8 +48,8 @@ class Source
                 data: $data,
                 namespace: Str::of(string: '/')
                     ->start(prefix: $data->structures)
-                    ->append(values: Str::finish($data->domainArgument, cap: '/'))
-                    ->finish(cap: $data->endsWith)
+                    ->append(values: $data->domainArgument)
+                    ->finish(cap: $data->endsWith ? '/' . $data->endsWith : '')
             )
         );
     }
