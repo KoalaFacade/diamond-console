@@ -14,9 +14,11 @@
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Enums\Layer;
 
 uses(Tests\TestCase::class)
     ->beforeEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(basePath()))
+    ->afterEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(base_path(path: applicationPath() . '/Http/Requests/User')))
     ->in(__DIR__ . '/Feature');
 
 uses(Tests\TestCase::class)
@@ -56,20 +58,27 @@ function basePath(): string
     return base_path($path);
 }
 
-function domainPath(): string
+function resolvePathForStructure(string $key): string
 {
-    /* @var string $path */
-    $path = config(key: 'diamond.structures.domain');
+    /** @var string $path */
+    $path = config(key: 'diamond.structures.' . $key);
 
     return $path;
 }
 
+function domainPath(): string
+{
+    return resolvePathForStructure(key: Layer::domain->name);
+}
+
 function infrastructurePath(): string
 {
-    /* @var string $path */
-    $path = config(key: 'diamond.structures.infrastructure');
+    return resolvePathForStructure(key: Layer::infrastructure->name);
+}
 
-    return $path;
+function applicationPath(): string
+{
+    return resolvePathForStructure(key: Layer::application->name);
 }
 
 function fileExists(string $relativeFileName, null | string $prefix = null): bool

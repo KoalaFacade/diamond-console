@@ -18,6 +18,7 @@ and advanced.
     - [Commands](#commands)
         - [Application](#application)
             - [Migration](#applicationmigration-create_user_table)
+            - [Request](#applicationmakerequest-storeuserrequest-user)
         - [Domain](#domain)
             - [Action](#domainmakeaction-generateprofileaction-user)
             - [Data Transfer Object](#domainmakedata-transfer-object-roledata-user)
@@ -68,6 +69,24 @@ Command for generate a Migration file
 |:------------------:|:------------------------------------------------------:|
 | --table=tableName  |    To generate a Migration with purpose edit table     |
 | --create=tableName | To generate a Migration with purpose to create a table |
+
+---
+
+#### `application:make:request StoreUserRequest User`
+Command for generate a Request file
+
+**Arguments**
+
+|  Name  |     Description    |
+|:------:|:------------------:|
+|  Name  | Request class name |
+| Domain |    Domain Name     |
+
+**Options**
+
+|  Name   |           Description          |
+|:-------:|:------------------------------:|
+| --force | Force create the Request class |
 
 ---
 
