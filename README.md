@@ -33,7 +33,7 @@ and advanced.
             - [Seeder](#infrastructuremakeseeder-userseeder-user)
             - [Service Provider](#infrastructuremakeprovider-factoryserviceprovider-user)
         -  [Diamond](#diamond)
-            - [Migration](#diamondmigration-createusertable)
+            - [Migration](#diamondmakemigration-createusertable)
 2. [Contribution](#contribution)
 
 ## Documentation
@@ -311,7 +311,7 @@ this command will generate Service Provider class into Infrastructure to binds b
 #### Diamond
 > Diamond console purpose for generate files in Laravel default structures.
 
-#### `diamond:migration create_user_table`
+#### `diamond:make:migration create_user_table`
 Command for generate a Migration file
 
 **Arguments**
