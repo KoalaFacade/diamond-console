@@ -18,7 +18,7 @@ use KoalaFacade\DiamondConsole\Enums\Layer;
 
 uses(Tests\TestCase::class)
     ->beforeEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(basePath()))
-    ->afterEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(base_path(path: applicationPath() . '/Http/User')))
+    ->afterEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(base_path(path: applicationPath() . '/Http/Requests/User')))
     ->in(__DIR__ . '/Feature');
 
 uses(Tests\TestCase::class)

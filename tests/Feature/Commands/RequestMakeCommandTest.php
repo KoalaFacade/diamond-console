@@ -9,7 +9,7 @@ use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate new Request class')
     ->tap(function () {
-        $fileName = app_path(path: 'Http/User/Requests/StoreUserRequest.php');
+        $fileName = app_path(path: 'Http/Requests/User/StoreUserRequest.php');
 
         expect(value: File::exists(path: $fileName))->toBeFalse();
 
@@ -28,7 +28,7 @@ it(description: 'can generate new Request class')
 
 it(description: 'can generate new Request class with separator')
     ->tap(function () {
-        $fileName = app_path(path: 'Http/User/Requests/Foo/BarRequest.php');
+        $fileName = app_path(path: 'Http/Requests/User/Foo/BarRequest.php');
 
         expect(value: File::exists(path: $fileName))->toBeFalse();
 
@@ -47,7 +47,7 @@ it(description: 'can generate new Request class with separator')
 
 it(description: 'can force generate exists Request class')
     ->tap(function () {
-        $fileName = app_path(path: 'Http/User/Requests/StoreUserRequest.php');
+        $fileName = app_path(path: 'Http/Requests/User/StoreUserRequest.php');
 
         expect(value: File::exists(path: $fileName))->toBeFalse();
 
@@ -67,7 +67,7 @@ it(description: 'can force generate exists Request class')
 
 it(description: 'cannot generate the Request, if the Request already exists')
     ->tap(function () {
-        $fileName = app_path(path: 'Http/User/Requests/StoreUserRequest.php');
+        $fileName = app_path(path: 'Http/Requests/User/StoreUserRequest.php');
 
         expect(value: File::exists(path: $fileName))->toBeFalse();
 

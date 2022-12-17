@@ -36,7 +36,7 @@ class RequestMakeCommand extends Command implements Console
                 structures: Source::resolveApplicationPath(),
                 domainArgument: 'Http',
                 nameArgument: $this->resolveNameArgument(),
-                endsWith: $this->resolveDomainArgument() . '\\Requests',
+                endsWith: 'Requests\\' . $this->resolveDomainArgument(),
             )
         );
     }
