@@ -4,6 +4,7 @@ namespace KoalaFacade\DiamondConsole\Support;
 
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
+use KoalaFacade\DiamondConsole\Enums\Layer;
 
 class Source
 {
@@ -25,17 +26,17 @@ class Source
 
     public static function resolveDomainPath(): string
     {
-        return static::resolvePathForStructure(key: 'domain');
+        return static::resolvePathForStructure(key: Layer::domain->name);
     }
 
     public static function resolveInfrastructurePath(): string
     {
-        return static::resolvePathForStructure(key: 'infrastructure');
+        return static::resolvePathForStructure(key: Layer::infrastructure->name);
     }
 
     public static function resolveApplicationPath(): string
     {
-        return static::resolvePathForStructure(key: 'application');
+        return static::resolvePathForStructure(key: Layer::application->name);
     }
 
     public static function resolveNamespace(NamespaceData $data): string
