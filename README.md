@@ -17,7 +17,6 @@ and advanced.
     - [Installation](#installation)
     - [Commands](#commands)
         - [Application](#application)
-            - [Migration](#applicationmigration-create_user_table)
             - [Request](#applicationmakerequest-storeuserrequest-user)
         - [Domain](#domain)
             - [Action](#domainmakeaction-generateprofileaction-user)
@@ -33,6 +32,8 @@ and advanced.
             - [Observer](#infrastructuremakeobserver-userobserver-user)
             - [Seeder](#infrastructuremakeseeder-userseeder-user)
             - [Service Provider](#infrastructuremakeprovider-factoryserviceprovider-user)
+        -  [Diamond](#diamond)
+            - [Migration](#diamondmigration-createusertable)
 2. [Contribution](#contribution)
 
 ## Documentation
@@ -54,37 +55,19 @@ The command below will generate namespace in composer and base directory structu
 
 #### Application
 
-#### `application:migration create_user_table`
-Command for generate a Migration file
-
-**Arguments**
-
-|  Name  | Description |
-|:------:|:-----------:|
-|  Name  | Table Name  |
-
-**Options**
-
-|        Name        |                      Description                       |
-|:------------------:|:------------------------------------------------------:|
-| --table=tableName  |    To generate a Migration with purpose edit table     |
-| --create=tableName | To generate a Migration with purpose to create a table |
-
----
-
 #### `application:make:request StoreUserRequest User`
 Command for generate a Request file
 
 **Arguments**
 
-|  Name  |     Description    |
+|  Name  |    Description     |
 |:------:|:------------------:|
 |  Name  | Request class name |
 | Domain |    Domain Name     |
 
 **Options**
 
-|  Name   |           Description          |
+|  Name   |          Description           |
 |:-------:|:------------------------------:|
 | --force | Force create the Request class |
 
@@ -153,7 +136,7 @@ the Model at the same time.
 
 **Arguments**
 
-|  Name  |    Description   |
+|  Name  |   Description    |
 |:------:|:----------------:|
 |  Name  | Model class name |
 | Domain |   Domain Name    |
@@ -164,7 +147,7 @@ the Model at the same time.
 |:-----------------:|:------------------------------------------------------------------------------------------------------------------------:|
 | -m or --migration |                                         Create Migration file when model created                                         |
 |  -f or --factory  | Create Factory class when Model created this option will generate two files, <br/> Factory contract and Factory concrete |
-|      --force      |                                                  Force create the Model class                                                   |
+|      --force      |                                               Force create the Model class                                               |
 
 ---
 
@@ -190,19 +173,19 @@ this command will generate Value Object class into Domain.
 #### Infrastructure
 
 #### `infrastructure:make:event PostEvent Post`
-Command for generate a Event class to your project.
+Command for generate an Event class to your project.
 
 **Arguments**
 
-|  Name  |     Description     |
-|:------:|:-------------------:|
+|  Name  |   Description    |
+|:------:|:----------------:|
 |  Name  | Event name class |
-| Domain |     Domain Name     |
+| Domain |   Domain Name    |
 
 **Options**
 
-|  Name   |           Description           |
-|:-------:|:-------------------------------:|
+|  Name   |         Description          |
+|:-------:|:----------------------------:|
 | --force | Force create the Event class |
 
 ---
@@ -246,7 +229,7 @@ Command for generate a Listener class to your project.
 |       Name        |                      Description                      |
 |:-----------------:|:-----------------------------------------------------:|
 | --event=NameEvent | For create Event class and use it into Listener class |
-|      --force      |           Force create the Listener class             |
+|      --force      |            Force create the Listener class            |
 
 ---
 
@@ -271,7 +254,7 @@ store to external.
 ---
 
 #### `infrastructure:make:observer UserObserver User`
-Command for generate a Observer class to your project.
+Command for generate an Observer class to your project.
 
 **Arguments**
 
@@ -322,6 +305,27 @@ this command will generate Service Provider class into Infrastructure to binds b
 |  Name   |               Description               |
 |:-------:|:---------------------------------------:|
 | --force | Force create the Service Provider class |
+
+---
+
+#### Diamond
+> Diamond console purpose for generate files in Laravel default structures.
+
+#### `diamond:migration create_user_table`
+Command for generate a Migration file
+
+**Arguments**
+
+|  Name  | Description |
+|:------:|:-----------:|
+|  Name  | Table Name  |
+
+**Options**
+
+|        Name        |                      Description                       |
+|:------------------:|:------------------------------------------------------:|
+| --table=tableName  |    To generate a Migration with purpose edit table     |
+| --create=tableName | To generate a Migration with purpose to create a table |
 
 ---
 

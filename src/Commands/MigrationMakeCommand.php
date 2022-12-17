@@ -17,7 +17,7 @@ class MigrationMakeCommand extends Command
 {
     use HasArguments, HasOptions;
 
-    protected $signature = 'application:migration {name} {--create=} {--table=} {--force}';
+    protected $signature = 'diamond:migration {name} {--create=} {--table=} {--force}';
 
     protected $description = 'Create a new migration';
 
