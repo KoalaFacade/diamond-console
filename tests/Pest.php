@@ -17,8 +17,13 @@ use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Enums\Layer;
 
 uses(Tests\TestCase::class)
-    ->beforeEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(basePath()))
-    ->afterEach(fn () => resolve(name: Filesystem::class)->deleteDirectory(base_path(path: applicationPath() . '/Http/Requests/User')))
+    ->beforeEach(function() {
+        $fileSystem = new FileSystem();
+
+        $fileSystem->deleteDirectory(basePath());
+        $fileSystem->cleanDirectory(base_path(path: applicationPath() . '/Http/Requests'));
+        $fileSystem->cleanDirectory(base_path(path: 'database/migrations'));
+    })
     ->in(__DIR__ . '/Feature');
 
 uses(Tests\TestCase::class)
