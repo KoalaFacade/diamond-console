@@ -95,7 +95,6 @@ it(description: 'can generate new Model class with Migration')
                     needles: ['{{ table_name }}']
                 )
             )->toBeFalse();
-
     })
     ->group(groups: 'commands');
 
@@ -128,7 +127,6 @@ it(description: 'can force generate exists Model class with Migration')
                     needles: ['{{ table_name }}']
                 )
             )->toBeFalse();
-
     })
     ->group(groups: 'commands');
 
@@ -163,7 +161,6 @@ it(description: 'can generate Model with factory')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
     })
     ->group(groups: 'commands');
 

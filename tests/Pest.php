@@ -17,7 +17,7 @@ use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Enums\Layer;
 
 uses(Tests\TestCase::class)
-    ->beforeEach(function() {
+    ->beforeEach(function () {
         $fileSystem = new FileSystem();
 
         $fileSystem->deleteDirectory(basePath());
