@@ -3,6 +3,7 @@
 namespace KoalaFacade\DiamondConsole\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
@@ -48,7 +49,7 @@ class RequestMakeCommand extends Command implements Console
     public function resolvePlaceholders(): PlaceholderData
     {
         return new PlaceholderData(
-            namespace: $this->getNamespace(),
+            namespace: Str::ucfirst(string: $this->getNamespace()),
             class: $this->getClassName(),
         );
     }
