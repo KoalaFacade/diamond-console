@@ -18,6 +18,7 @@ and advanced.
     - [Commands](#commands)
         - [Application](#application)
             - [Request](#applicationmakerequest-storeuserrequest-user)
+            - [Resource](#applicationmakeresource-userresource-user-modeluser)
         - [Domain](#domain)
             - [Action](#domainmakeaction-generateprofileaction-user)
             - [Data Transfer Object](#domainmakedata-transfer-object-roledata-user)
@@ -32,8 +33,8 @@ and advanced.
             - [Observer](#infrastructuremakeobserver-userobserver-user)
             - [Seeder](#infrastructuremakeseeder-userseeder-user)
             - [Service Provider](#infrastructuremakeprovider-factoryserviceprovider-user)
-        -  [Diamond](#diamond)
-            - [Migration](#diamondmakemigration-createusertable)
+        - [Diamond](#diamond)
+            - [Migration](#diamondmakemigration-create_user_table)
 2. [Contribution](#contribution)
 
 ## Documentation
@@ -70,6 +71,25 @@ Command for generate a Request file
 |  Name   |          Description           |
 |:-------:|:------------------------------:|
 | --force | Force create the Request class |
+
+---
+
+#### `application:make:resource UserResource User --model=User`
+Command for generate a Request file
+
+**Arguments**
+
+|  Name  |    Description     |
+|:------:|:------------------:|
+|  Name  | Resource class name |
+| Domain |    Domain Name     |
+
+**Options**
+
+|        Name        |           Description           |
+|:------------------:|:-------------------------------:|
+| --model=ModelName  |    To hint Model class on Resource    |
+|      --force       | Force create the Resource class |
 
 ---
 

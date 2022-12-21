@@ -37,4 +37,12 @@ trait HasOptions
 
         return $name;
     }
+
+    public function resolveModelOption(): string
+    {
+        /** @var string $name */
+        $name = $this->option(key: 'model');
+
+        return $name;
+    }
 }
