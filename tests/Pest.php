@@ -22,6 +22,7 @@ uses(Tests\TestCase::class)
 
         $fileSystem->deleteDirectory(basePath());
         $fileSystem->cleanDirectory(base_path(path: applicationPath() . '/Http/Requests'));
+        $fileSystem->cleanDirectory(base_path(path: applicationPath() . '/Http/Resources'));
         $fileSystem->cleanDirectory(base_path(path: 'database/migrations'));
     })
     ->in(__DIR__ . '/Feature');
