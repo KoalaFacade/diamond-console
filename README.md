@@ -18,7 +18,7 @@ and advanced.
     - [Commands](#commands)
         - [Application](#application)
             - [Request](#applicationmakerequest-storeuserrequest-user)
-            - [Resource](#applicationmakeresource-userresource-user-modeluser)
+            - [Resource](#applicationmakeresource-userresource-user---modeluser)
         - [Domain](#domain)
             - [Action](#domainmakeaction-generateprofileaction-user)
             - [Data Transfer Object](#domainmakedata-transfer-object-roledata-user)
