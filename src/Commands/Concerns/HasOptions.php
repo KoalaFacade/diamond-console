@@ -38,9 +38,9 @@ trait HasOptions
         return $name;
     }
 
-    public function resolveModelOption(): string
+    public function resolveModelOption(): string | null
     {
-        /** @var string $name */
+        /** @var string|null $name */
         $name = $this->option(key: 'model');
 
         return $name;

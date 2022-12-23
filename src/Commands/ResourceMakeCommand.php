@@ -69,7 +69,7 @@ class ResourceMakeCommand extends Command implements Console
             data: new NamespaceData(
                 structures: Source::resolveDomainPath(),
                 domainArgument: 'Shared\\' . $this->resolveDomainArgument(),
-                nameArgument: $this->resolveModelOption(),
+                nameArgument: $this->resolveModelOption() ?? '',
                 endsWith: 'Models\\' . $this->resolveModelOption(),
             )
         );

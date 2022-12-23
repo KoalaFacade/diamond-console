@@ -21,6 +21,7 @@ and advanced.
             - [Resource](#applicationmakeresource-userresource-user---modeluser)
         - [Domain](#domain)
             - [Action](#domainmakeaction-generateprofileaction-user)
+            - [Builder](#domainmakebuilder-userbuilder-user)
             - [Data Transfer Object](#domainmakedata-transfer-object-roledata-user)
             - [Enum](#domainmakeenum-role-user)
             - [Model](#domainmakemodel-user-user)
@@ -110,6 +111,25 @@ Command for generate an Action inside your Domain directory.
 |  Name   |          Description          |
 |:-------:|:-----------------------------:|
 | --force | Force create the Action class |
+
+---
+
+#### `domain:make:builder UserBuilder User`
+Command for generate a Query Builder inside your Domain directory.
+
+**Arguments**
+
+|  Name  |    Description     |
+|:------:|:------------------:|
+|  Name  | Builder class name |
+| Domain |    Domain Name     |
+
+**Options**
+
+|       Name        |             Description              |
+|:-----------------:|:------------------------------------:|
+| --model=ModelName | To hint Model class on Query Builder |
+|      --force      |    Force create the Builder class    |
 
 ---
 
