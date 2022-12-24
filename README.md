@@ -133,7 +133,8 @@ Command for generate a Query Builder inside your Domain directory.
 
 **Usage**
 
-On Models use the Builder and add a function like bellow.
+In your model you can use the builder like the example below.
+
 `src/Domain/Shared/User/Models/User.php`
 ```php
 <?php
