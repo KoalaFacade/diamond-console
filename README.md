@@ -80,17 +80,17 @@ Command for generate a Request file
 
 **Arguments**
 
-|  Name  |    Description     |
-|:------:|:------------------:|
+|  Name  |     Description     |
+|:------:|:-------------------:|
 |  Name  | Resource class name |
-| Domain |    Domain Name     |
+| Domain |     Domain Name     |
 
 **Options**
 
-|        Name        |           Description           |
-|:------------------:|:-------------------------------:|
-| --model=ModelName  |    To hint Model class on Resource    |
-|      --force       | Force create the Resource class |
+|        Name        |             Description              |
+|:------------------:|:------------------------------------:|
+| --model=ModelName  |   To hint Model class on Resource    |
+|      --force       |   Force create the Resource class    |
 
 ---
 
@@ -130,6 +130,38 @@ Command for generate a Query Builder inside your Domain directory.
 |:-----------------:|:------------------------------------:|
 | --model=ModelName | To hint Model class on Query Builder |
 |      --force      |    Force create the Builder class    |
+
+**Usage**
+
+On Models use the Builder and add a function like bellow.
+`src/Domain/Shared/User/Models/User.php`
+```php
+<?php
+
+namespace Domain\Shared\User\Models;
+
+use Domain\Shared\User\Models\Builders\UserBuilder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * @mixin  UserBuilder
+ */
+class User extends Model
+{
+    use HasFactory;
+    
+    /**
+     * @param  $query
+     * 
+     * @return UserBuilder<User>
+     */
+    public function newEloquentBuilder($query): UserBuilder
+    {
+        return new UserBuilder(query: $query);
+    }
+}
+```
 
 ---
 
