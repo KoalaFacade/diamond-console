@@ -21,6 +21,7 @@ and advanced.
             - [Resource](#applicationmakeresource-userresource-user---modeluser)
         - [Domain](#domain)
             - [Action](#domainmakeaction-generateprofileaction-user)
+            - [Builder](#domainmakebuilder-userbuilder-user)
             - [Data Transfer Object](#domainmakedata-transfer-object-roledata-user)
             - [Enum](#domainmakeenum-role-user)
             - [Model](#domainmakemodel-user-user)
@@ -79,17 +80,17 @@ Command for generate a Request file
 
 **Arguments**
 
-|  Name  |    Description     |
-|:------:|:------------------:|
+|  Name  |     Description     |
+|:------:|:-------------------:|
 |  Name  | Resource class name |
-| Domain |    Domain Name     |
+| Domain |     Domain Name     |
 
 **Options**
 
-|        Name        |           Description           |
-|:------------------:|:-------------------------------:|
-| --model=ModelName  |    To hint Model class on Resource    |
-|      --force       | Force create the Resource class |
+|        Name        |             Description              |
+|:------------------:|:------------------------------------:|
+| --model=ModelName  |   To hint Model class on Resource    |
+|      --force       |   Force create the Resource class    |
 
 ---
 
@@ -110,6 +111,58 @@ Command for generate an Action inside your Domain directory.
 |  Name   |          Description          |
 |:-------:|:-----------------------------:|
 | --force | Force create the Action class |
+
+---
+
+#### `domain:make:builder UserBuilder User`
+Command for generate a Query Builder inside your Domain directory.
+
+**Arguments**
+
+|  Name  |    Description     |
+|:------:|:------------------:|
+|  Name  | Builder class name |
+| Domain |    Domain Name     |
+
+**Options**
+
+|       Name        |             Description              |
+|:-----------------:|:------------------------------------:|
+| --model=ModelName | To hint Model class on Query Builder |
+|      --force      |    Force create the Builder class    |
+
+**Usage**
+
+In your model you can use the builder like the example below.
+
+`src/Domain/Shared/User/Models/User.php`
+```php
+<?php
+
+namespace Domain\Shared\User\Models;
+
+use Domain\Shared\User\Models\Builders\UserBuilder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * @mixin  UserBuilder
+ */
+class User extends Model
+{
+    use HasFactory;
+    
+    /**
+     * @param  $query
+     * 
+     * @return UserBuilder<User>
+     */
+    public function newEloquentBuilder($query): UserBuilder
+    {
+        return new UserBuilder(query: $query);
+    }
+}
+```
 
 ---
 
