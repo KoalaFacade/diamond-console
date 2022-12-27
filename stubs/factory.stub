@@ -2,8 +2,8 @@
 
 namespace {{ namespace }};
 
-use KoalaFacade\DiamondConsole\Foundation\CreateNewFactory;
 use {{ factoryContractNamespace }}\{{ factoryContract }} as Factory;
+use KoalaFacade\DiamondConsole\Foundation\CreateNewFactory;
 
 final class {{ class }} extends CreateNewFactory implements Factory
 {
