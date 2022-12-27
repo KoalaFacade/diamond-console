@@ -16,10 +16,8 @@ class {{ class }}
 
     /**
      * Create a new event instance.
-     *
-     * @return void
      */
-    public function __construct(): void
+    public function __construct()
     {
         //
     }
