@@ -43,7 +43,13 @@ class ResourceMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'resource');
+        $stub = 'resource';
+
+        if ($this->resolveModelOption()) {
+            $stub .= '-model';
+        }
+
+        return Source::resolveStubForPath(name: $stub);
     }
 
     public function resolvePlaceholders(): PlaceholderData
@@ -63,15 +69,19 @@ class ResourceMakeCommand extends Command implements Console
         );
     }
 
-    public function resolveModelNamespace(): string
+    public function resolveModelNamespace(): string | null
     {
-        return Source::resolveNamespace(
-            data: new NamespaceData(
-                structures: Source::resolveDomainPath(),
-                domainArgument: 'Shared\\' . $this->resolveDomainArgument(),
-                nameArgument: $this->resolveModelOption() ?? '',
-                endsWith: 'Models\\' . $this->resolveModelOption(),
-            )
-        );
+        if ($this->resolveModelOption()) {
+            $namespace = Source::resolveNamespace(
+                data: new NamespaceData(
+                    structures: Source::resolveDomainPath(),
+                    domainArgument: 'Shared\\' . $this->resolveDomainArgument(),
+                    nameArgument: $this->resolveModelOption(),
+                    endsWith: 'Models\\' . $this->resolveModelOption(),
+                )
+            );
+        }
+
+        return $namespace ?? null;
     }
 }

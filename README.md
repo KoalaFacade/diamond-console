@@ -18,7 +18,7 @@ and advanced.
     - [Commands](#commands)
         - [Application](#application)
             - [Request](#applicationmakerequest-storeuserrequest-user)
-            - [Resource](#applicationmakeresource-userresource-user---modeluser)
+            - [Resource](#applicationmakeresource-userresource-user)
         - [Domain](#domain)
             - [Action](#domainmakeaction-generateprofileaction-user)
             - [Builder](#domainmakebuilder-userbuilder-user)
@@ -75,7 +75,7 @@ Command for generate a Request file
 
 ---
 
-#### `application:make:resource UserResource User --model=User`
+#### `application:make:resource UserResource User`
 Command for generate a Request file
 
 **Arguments**

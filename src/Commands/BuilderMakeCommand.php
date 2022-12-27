@@ -65,7 +65,7 @@ class BuilderMakeCommand extends Command implements Console
     public function resolveModelNamespace(): string | null
     {
         if ($this->resolveModelOption()) {
-            return Source::resolveNamespace(
+            $namespace = Source::resolveNamespace(
                 data: new NamespaceData(
                     structures: Source::resolveDomainPath(),
                     domainArgument: 'Shared\\' . $this->resolveDomainArgument(),
@@ -75,6 +75,6 @@ class BuilderMakeCommand extends Command implements Console
             );
         }
 
-        return null;
+        return $namespace ?? null;
     }
 }
