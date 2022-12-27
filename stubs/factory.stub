@@ -12,7 +12,7 @@ final class {{ class }} extends CreateNewFactory implements Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             //
