@@ -86,7 +86,7 @@ class InstallCommand extends Command
             $filesystem = new Filesystem;
             $providerPath = app_path(path: 'Providers');
             $filesystem->ensureDirectoryExists($this->resolveInfrastructurePath());
-            $filesystem->copyDirectory(directory: $providerPath, destination: $this->resolveInfrastructurePath());
+            $filesystem->moveDirectory(from: $providerPath, to: $this->resolveInfrastructurePath());
             $providerFiles = $filesystem->files($this->resolveInfrastructurePath());
             $configPath = base_path(path: '/config/app.php');
             $contents = Str::replace(
