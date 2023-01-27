@@ -52,6 +52,14 @@ The command below will generate namespace in composer and base directory structu
 ```bash
  php artisan diamond:install
 ```
+
+**Options**
+
+|      Name       |               Description                |
+|:---------------:|:----------------------------------------:|
+| --skip-refactor | Skip refactor app path to Infrastructure |
+
+---
 ---
 ### Commands
 
