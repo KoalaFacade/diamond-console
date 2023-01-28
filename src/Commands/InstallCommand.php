@@ -84,10 +84,8 @@ class InstallCommand extends Command
     {
         if (! $this->option('skip-refactor')) {
             $filesystem = new Filesystem;
-            $providerPath = app_path(path: 'Providers');
             $filesystem->ensureDirectoryExists($this->resolveInfrastructurePath());
-            $filesystem->moveDirectory(from: $providerPath, to: $this->resolveInfrastructurePath());
-            $providerFiles = $filesystem->files($this->resolveInfrastructurePath());
+            $filesystem->moveDirectory(from: app_path(path: 'Providers'), to: $this->resolveInfrastructurePath());
             $configPath = base_path(path: '/config/app.php');
             $contents = Str::replace(
                 search: 'App\\Providers',
@@ -97,7 +95,7 @@ class InstallCommand extends Command
 
             $filesystem->put(path: $configPath, contents: $contents);
 
-            foreach ($providerFiles as $file) {
+            foreach ($filesystem->files($this->resolveInfrastructurePath()) as $file) {
                 $contents = Str::replace(
                     search: 'App\\Providers',
                     replace: $this->resolveNamespace(),
