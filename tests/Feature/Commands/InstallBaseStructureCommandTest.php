@@ -28,6 +28,10 @@ it(
 
         $this->assertTrue(condition: file_exists($baseDirectoryPath));
 
+        $this->assertTrue(condition: file_exists($baseDirectoryPath . '/' . config(key: 'diamond.structures.infrastructure') . '/Laravel/Providers'));
+
+        $this->assertFalse(condition: file_exists(app_path('Providers')));
+
         foreach ($baseStructures as $structure) {
             $this->assertTrue(condition: file_exists($baseDirectoryPath . $structure));
         }
