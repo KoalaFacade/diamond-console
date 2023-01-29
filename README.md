@@ -52,6 +52,10 @@ The command below will generate namespace in composer and base directory structu
 ```bash
  php artisan diamond:install
 ```
+And then run this command for regenerate the autoload class.
+```bash
+composer dump-autoload
+```
 
 **Options**
 
