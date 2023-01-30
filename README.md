@@ -1,4 +1,4 @@
-![KoalaFacade Logo](https://camo.githubusercontent.com/cc271582ba553880fcdfe628ce5a24f4b410c82032469cffb30eaf03afa2944b/68747470733a2f2f692e6962622e636f2f437670575758762f4c6f676f2d4b6f616c616772616d6d65722d62616e6e65722e706e67)
+![KoalaFacade Logo](https://i.ibb.co/Yy1nJw2/banner-diamond.png)
 
 <p align="center">
     <a href="https://packagist.org/packages/koalafacade/diamond-console"><img src="https://img.shields.io/packagist/v/KoalaFacade/diamond-console?color=F28D1A&style=for-the-badge" alt="Test Passing"/></a>
