@@ -2,8 +2,8 @@
 
 namespace {{ namespace }};
 
-use KoalaFacade\DiamondConsole\Foundation\CreateNewFactory;
 use {{ factoryContractNamespace }}\{{ factoryContract }} as Factory;
+use KoalaFacade\DiamondConsole\Foundation\CreateNewFactory;
 
 final class {{ class }} extends CreateNewFactory implements Factory
 {
@@ -12,7 +12,7 @@ final class {{ class }} extends CreateNewFactory implements Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             //
