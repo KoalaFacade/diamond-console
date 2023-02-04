@@ -11,12 +11,6 @@
 and advanced.
 >
 
-## Table of Contents
-
-1. [Documentation](#documentation)
-    
-2. [Contribution](#contribution)
-
 ## Documentation
 you can visit our official documentation to read the usage case [Diamond Console's Docs](https://koalafacade.github.io/packages/diamond-console/)
 ### Contribution
