@@ -12,9 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-
-    matrix:
-      laravel: [ "^9.0", "^10.0" ]
+      matrix:
+        laravel: [ "^9.0", "^10.0" ]
 
     name: "PHP${{ matrix.php }} - Laravel${{ matrix.laravel }}"
 
