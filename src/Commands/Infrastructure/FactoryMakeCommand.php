@@ -1,6 +1,6 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Commands;
+namespace KoalaFacade\DiamondConsole\Commands\Infrastructure;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;

@@ -7,6 +7,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Composer\ResolveComposerAutoLoaderAction;
+use KoalaFacade\DiamondConsole\Enums\Layer;
 use KoalaFacade\DiamondConsole\Support\Source;
 use Throwable;
 
@@ -68,16 +69,12 @@ class InstallCommand extends Command
 
     protected function resolveInfrastructurePath(): string
     {
-        $path = base_path() . '/' . config(key: 'diamond.base_directory') . config(key: 'diamond.structures.infrastructure') . '/Laravel/Providers';
-
-        return $path;
+        return Layer::infrastructure->resolvePath(suffix: '/Laravel/Providers');
     }
 
     protected function resolveNamespace(): string
     {
-        $namespace = config(key: 'diamond.structures.infrastructure') . '\\Laravel\\Providers';
-
-        return $namespace;
+        return Layer::infrastructure->resolveNamespace(suffix: '\\Laravel\\Providers');
     }
 
     protected function resolveRefactor(): void

@@ -1,6 +1,6 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Commands;
+namespace KoalaFacade\DiamondConsole\Commands\Infrastructure;
 
 use Illuminate\Console\Command;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
@@ -11,29 +11,39 @@ use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Support\Source;
 
-class DataTransferObjectMakeCommand extends Command implements Console
+class ObserverMakeCommand extends Command implements Console
 {
     use HasArguments, HasOptions, InteractsWithConsole;
 
-    protected $signature = 'domain:make:data-transfer-object {name} {domain} {--force}';
+    protected $signature = 'infrastructure:make:observer {name} {domain} {--force}';
 
-    protected $description = 'Create a new Data Transfer Object';
+    protected $description = 'Create a new observer';
+
+    public function beforeCreate(): void
+    {
+        $this->info(string: 'Generating file to our project');
+    }
+
+    public function afterCreate(): void
+    {
+        $this->info(string: 'Successfully generate observer file');
+    }
 
     public function getNamespace(): string
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveDomainPath(),
+                structures: Source::resolveInfrastructurePath(),
                 domainArgument: $this->resolveDomainArgument(),
                 nameArgument: $this->resolveNameArgument(),
-                endsWith: 'DataTransferObjects',
+                endsWith: 'Database\\Observers',
             )
         );
     }
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'data-transfer-object');
+        return Source::resolveStubForPath(name: 'observer');
     }
 
     public function resolvePlaceholders(): PlaceholderData
@@ -42,15 +52,5 @@ class DataTransferObjectMakeCommand extends Command implements Console
             namespace: $this->getNamespace(),
             class: $this->getClassName(),
         );
-    }
-
-    public function beforeCreate(): void
-    {
-        $this->info(string: 'Generating data transfer object file to your project');
-    }
-
-    public function afterCreate(): void
-    {
-        $this->info(string: 'Successfully generate data transfer object file');
     }
 }

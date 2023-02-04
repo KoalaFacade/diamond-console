@@ -1,6 +1,6 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Commands;
+namespace KoalaFacade\DiamondConsole\Commands\Domain;
 
 use Illuminate\Console\Command;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
