@@ -1,9 +1,8 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Commands;
+namespace KoalaFacade\DiamondConsole\Commands\Domain;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
@@ -12,52 +11,46 @@ use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Support\Source;
 
-class RequestMakeCommand extends Command implements Console
+class DataTransferObjectMakeCommand extends Command implements Console
 {
     use HasArguments, HasOptions, InteractsWithConsole;
 
-    protected $signature = 'application:make:request {name} {domain} {--force}';
+    protected $signature = 'domain:make:data-transfer-object {name} {domain} {--force}';
 
-    protected $description = 'Create a new request';
-
-    public function beforeCreate(): void
-    {
-        $this->info(string: 'Generating request file to your project');
-    }
-
-    public function afterCreate(): void
-    {
-        $this->info(string: 'Successfully generate request file');
-    }
+    protected $description = 'Create a new Data Transfer Object';
 
     public function getNamespace(): string
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveApplicationPath() . '\\Http',
-                domainArgument: 'Requests\\' . $this->resolveDomainArgument(),
+                structures: Source::resolveDomainPath(),
+                domainArgument: $this->resolveDomainArgument(),
                 nameArgument: $this->resolveNameArgument(),
+                endsWith: 'DataTransferObjects',
             )
         );
     }
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'request');
+        return Source::resolveStubForPath(name: 'data-transfer-object');
     }
 
     public function resolvePlaceholders(): PlaceholderData
     {
         return new PlaceholderData(
-            namespace: Str::ucfirst(string: $this->getNamespace()),
+            namespace: $this->getNamespace(),
             class: $this->getClassName(),
         );
     }
 
-    public function getNamespacePath(): string
+    public function beforeCreate(): void
     {
-        return base_path(
-            path: Source::transformNamespaceToPath(namespace: $this->getNamespace())
-        );
+        $this->info(string: 'Generating data transfer object file to your project');
+    }
+
+    public function afterCreate(): void
+    {
+        $this->info(string: 'Successfully generate data transfer object file');
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Commands;
+namespace KoalaFacade\DiamondConsole\Commands\Application;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Commands\Application\Concerns\InteractsWithConsoleInApplication;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
-use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
 use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
@@ -14,7 +14,7 @@ use KoalaFacade\DiamondConsole\Support\Source;
 
 class ResourceMakeCommand extends Command implements Console
 {
-    use HasArguments, HasOptions, InteractsWithConsole;
+    use HasArguments, HasOptions, InteractsWithConsoleInApplication;
 
     protected $signature = 'application:make:resource {name} {domain} {--model=} {--force}';
 
@@ -59,13 +59,6 @@ class ResourceMakeCommand extends Command implements Console
             class: $this->getClassName(),
             model: $this->resolveModelOption(),
             modelNamespace: $this->resolveModelNamespace()
-        );
-    }
-
-    public function getNamespacePath(): string
-    {
-        return base_path(
-            path: Source::transformNamespaceToPath(namespace: $this->getNamespace())
         );
     }
 

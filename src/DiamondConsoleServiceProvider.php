@@ -6,7 +6,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use SplFileInfo;
+use Symfony\Component\Finder\SplFileInfo;
 
 class DiamondConsoleServiceProvider extends ServiceProvider
 {
@@ -34,15 +34,33 @@ class DiamondConsoleServiceProvider extends ServiceProvider
      */
     public function diamondCommands(): array
     {
+        $commandDirectories = ['Application', 'Domain', 'Infrastructure'];
+        $commandPath = __DIR__ . '/Commands';
+
         $fileSystem = new Filesystem();
 
-        $commandFiles = $fileSystem->files(directory: __DIR__ . '/Commands');
+        $commandFiles = $fileSystem->files(directory: $commandPath);
 
-        return Arr::map(
+        $generalCommands = Arr::map(
             array: $commandFiles,
-            callback: fn (SplFileInfo $file) => Str::of(string: $file->getBasename(suffix: '.php'))
-                ->start(prefix: 'KoalaFacade\\DiamondConsole\\Commands\\')
-                ->toString()
+            callback: fn (SplFileInfo $file) => $this->resolveCommandNamespace(file: $file)
         );
+
+        $domainDrivenCommands = Arr::map(
+            array: $commandDirectories,
+            callback: fn (string $directory) => Arr::map(
+                array: $fileSystem->files(directory: $commandPath . '\\' . $directory),
+                callback: fn (SplFileInfo $file) => $this->resolveCommandNamespace(file: $file, directory: $directory)
+            )
+        );
+
+        return Arr::flatten(array: array_merge($generalCommands, $domainDrivenCommands));
+    }
+
+    protected function resolveCommandNamespace(SplFileInfo $file, string | null $directory = null): string
+    {
+        return Str::of(string: $file->getFilenameWithoutExtension())
+            ->prepend(values: $directory ? "$directory\\" : '')
+            ->prepend(values: __NAMESPACE__ . '\\Commands\\');
     }
 }
