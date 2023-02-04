@@ -49,7 +49,7 @@ class DiamondConsoleServiceProvider extends ServiceProvider
         $domainDrivenCommands = Arr::map(
             array: $commandDirectories,
             callback: fn (string $directory) => Arr::map(
-                array: $fileSystem->files(directory: $commandPath . '\\' . $directory),
+                array: $fileSystem->files(directory: $commandPath . '/' . $directory),
                 callback: fn (SplFileInfo $file) => $this->resolveCommandNamespace(file: $file, directory: $directory)
             )
         );
