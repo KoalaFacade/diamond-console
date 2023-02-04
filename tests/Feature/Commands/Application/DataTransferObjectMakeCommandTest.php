@@ -9,7 +9,7 @@ use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate new DTO')
     ->tap(function () {
-        $filePath = app_path(path: 'DataTransferObjects/Post/PostData.php');
+        $filePath = base_path(path: applicationPath() . '/DataTransferObjects/Post/PostData.php');
 
         expect(value: File::exists(path: $filePath))->toBeFalse();
 
@@ -28,7 +28,7 @@ it(description: 'can generate new DTO')
 
 it(description: 'can generate new DTO with separator')
     ->tap(function () {
-        $filePath = app_path(path: 'DataTransferObjects/Post/Foo/BarData.php');
+        $filePath = base_path(path: applicationPath() . '/DataTransferObjects/Post/Foo/BarData.php');
 
         expect(value: File::exists(path: $filePath))->toBeFalse();
 
@@ -49,7 +49,7 @@ it(description: 'can generate new DTO with separator')
 
 it(description: 'can force generate exists DTO')
     ->tap(function () {
-        $filePath = app_path(path: 'DataTransferObjects/Post/PostData.php');
+        $filePath = base_path(path: applicationPath() . '/DataTransferObjects/Post/PostData.php');
 
         expect(value: File::exists(path: $filePath))->toBeFalse();
 
@@ -69,7 +69,7 @@ it(description: 'can force generate exists DTO')
 
 it(description: 'cannot generate the DTO, if the DTO already exists')
     ->tap(function () {
-        $filePath = app_path(path: 'DataTransferObjects/Post/PostData.php');
+        $filePath = base_path(path: applicationPath() . '/DataTransferObjects/Post/PostData.php');
 
         expect(value: File::exists(path: $filePath))->toBeFalse();
 
