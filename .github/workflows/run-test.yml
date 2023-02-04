@@ -13,9 +13,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        dependency-version: [prefer-lowest, prefer-stable]
         laravel: [ "^9.0", "^10.0" ]
+        include:
+          - laravel: ^10.0
+            testbench: ^8.0
+          - laravel: ^9.0
+            testbench: ^7.0
 
-    name: "PHP${{ matrix.php }} - Laravel${{ matrix.laravel }}"
+    name: "PHP${{ matrix.php }} - Laravel${{ matrix.laravel }} - ${{ matrix.dependency-version }}"
 
     steps:
       - name: Checkout
@@ -30,8 +36,8 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-            composer require "laravel/framework:${{ matrix.laravel }}" --dev --no-interaction --no-update
-            composer update --prefer-stable --no-interaction --no-progress --ansi
+            composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --dev --no-interaction --no-update
+            composer update --${{ matrix.dependency-version }} --no-interaction --no-progress --ansi
 
       - name: Unit Tests
         run: vendor/bin/pest --colors=always
