@@ -15,10 +15,8 @@ class {{ class }} extends Mailable
 
     /**
      * Create a new message instance.
-     *
-     * @return void
      */
-    public function __construct(): void
+    public function __construct()
     {
         //
     }
@@ -26,9 +24,9 @@ class {{ class }} extends Mailable
     /**
      * Get the message envelope.
      *
-     * @return \Illuminate\Mail\Mailables\Envelope
+     * @return Envelope
      */
-    public function envelope(): \Illuminate\Mail\Mailables\Envelope
+    public function envelope(): Envelope
     {
         return new Envelope(
             subject: '{{ subject }}',
@@ -38,9 +36,9 @@ class {{ class }} extends Mailable
     /**
      * Get the message content definition.
      *
-     * @return \Illuminate\Mail\Mailables\Content
+     * @return Content
      */
-    public function content(): \Illuminate\Mail\Mailables\Content
+    public function content(): Content
     {
         return new Content(
             view: 'view.name',

@@ -8,10 +8,8 @@ class {{ class }}
 {
     /**
      * Create the event listener.
-     *
-     * @return void
      */
-    public function __construct(): void
+    public function __construct()
     {
         //
     }

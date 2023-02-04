@@ -18,8 +18,10 @@ and advanced.
     - [Commands](#commands)
         - [Application](#application)
             - [Request](#applicationmakerequest-storeuserrequest-user)
+            - [Resource](#applicationmakeresource-userresource-user)
         - [Domain](#domain)
             - [Action](#domainmakeaction-generateprofileaction-user)
+            - [Builder](#domainmakebuilder-userbuilder-user)
             - [Data Transfer Object](#domainmakedata-transfer-object-roledata-user)
             - [Enum](#domainmakeenum-role-user)
             - [Model](#domainmakemodel-user-user)
@@ -32,8 +34,8 @@ and advanced.
             - [Observer](#infrastructuremakeobserver-userobserver-user)
             - [Seeder](#infrastructuremakeseeder-userseeder-user)
             - [Service Provider](#infrastructuremakeprovider-factoryserviceprovider-user)
-        -  [Diamond](#diamond)
-            - [Migration](#diamondmakemigration-createusertable)
+        - [Diamond](#diamond)
+            - [Migration](#diamondmakemigration-create_user_table)
 2. [Contribution](#contribution)
 
 ## Documentation
@@ -50,6 +52,18 @@ The command below will generate namespace in composer and base directory structu
 ```bash
  php artisan diamond:install
 ```
+And then run this command for regenerate the autoload class.
+```bash
+composer dump-autoload
+```
+
+**Options**
+
+|      Name       |               Description                |
+|:---------------:|:----------------------------------------:|
+| --skip-refactor | Skip refactor app path to Infrastructure |
+
+---
 ---
 ### Commands
 
@@ -73,6 +87,25 @@ Command for generate a Request file
 
 ---
 
+#### `application:make:resource UserResource User`
+Command for generate a Request file
+
+**Arguments**
+
+|  Name  |     Description     |
+|:------:|:-------------------:|
+|  Name  | Resource class name |
+| Domain |     Domain Name     |
+
+**Options**
+
+|        Name        |             Description              |
+|:------------------:|:------------------------------------:|
+| --model=ModelName  |   To hint Model class on Resource    |
+|      --force       |   Force create the Resource class    |
+
+---
+
 #### Domain
 
 #### `domain:make:action GenerateProfileAction User`
@@ -90,6 +123,58 @@ Command for generate an Action inside your Domain directory.
 |  Name   |          Description          |
 |:-------:|:-----------------------------:|
 | --force | Force create the Action class |
+
+---
+
+#### `domain:make:builder UserBuilder User`
+Command for generate a Query Builder inside your Domain directory.
+
+**Arguments**
+
+|  Name  |    Description     |
+|:------:|:------------------:|
+|  Name  | Builder class name |
+| Domain |    Domain Name     |
+
+**Options**
+
+|       Name        |             Description              |
+|:-----------------:|:------------------------------------:|
+| --model=ModelName | To hint Model class on Query Builder |
+|      --force      |    Force create the Builder class    |
+
+**Usage**
+
+In your model you can use the builder like the example below.
+
+`src/Domain/Shared/User/Models/User.php`
+```php
+<?php
+
+namespace Domain\Shared\User\Models;
+
+use Domain\Shared\User\Models\Builders\UserBuilder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * @mixin  UserBuilder
+ */
+class User extends Model
+{
+    use HasFactory;
+    
+    /**
+     * @param  $query
+     * 
+     * @return UserBuilder<User>
+     */
+    public function newEloquentBuilder($query): UserBuilder
+    {
+        return new UserBuilder(query: $query);
+    }
+}
+```
 
 ---
 

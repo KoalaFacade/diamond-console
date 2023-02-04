@@ -16,6 +16,8 @@ readonly class PlaceholderData extends DataTransferObject
         public null | string $factoryContractNamespace = null,
         public null | string $event = null,
         public null | string $eventNamespace = null,
+        public null | string $model = null,
+        public null | string $modelNamespace = null,
     ) {
     }
 
