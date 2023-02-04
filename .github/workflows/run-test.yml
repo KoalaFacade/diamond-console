@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      matrix:
+        laravel: [ "^9.0", "^10.0" ]
+
+    name: "PHP${{ matrix.php }} - Laravel${{ matrix.laravel }}"
 
     steps:
       - name: Checkout
@@ -25,7 +29,9 @@ jobs:
           coverage: none
 
       - name: Install PHP dependencies
-        run: composer update --prefer-stable --no-interaction --no-progress --ansi
+        run: |
+            composer require "laravel/framework:${{ matrix.laravel }}" --dev --no-interaction --no-update
+            composer update --prefer-stable --no-interaction --no-progress --ansi
 
       - name: Unit Tests
         run: vendor/bin/pest --colors=always
