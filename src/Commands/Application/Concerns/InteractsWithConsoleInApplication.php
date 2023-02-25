@@ -11,6 +11,8 @@ trait InteractsWithConsoleInApplication
 {
     use InteractsWithConsole;
 
+    abstract public function getNamespace(): string;
+
     public function getNamespacePath(): string
     {
         return base_path(
