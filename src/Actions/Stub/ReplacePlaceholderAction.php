@@ -18,9 +18,6 @@ readonly class ReplacePlaceholderAction extends Action
     /**
      * Replace Placeholder Stub data
      *
-     * @param  string  $filePath
-     * @param  PlaceholderData  $placeholders
-     * @return void
      *
      * @throws FileNotFoundException
      */

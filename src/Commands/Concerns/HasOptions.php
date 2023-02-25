@@ -19,9 +19,6 @@ trait HasOptions
         return (bool) $this->option(key: 'factory');
     }
 
-    /**
-     * @return string|null
-     */
     protected function resolveTableName(): string | null
     {
         /** @var string|null $name */

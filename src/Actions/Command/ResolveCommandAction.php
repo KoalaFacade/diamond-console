@@ -21,8 +21,6 @@ readonly class ResolveCommandAction extends Action
     }
 
     /**
-     * @return void
-     *
      * @throws FileAlreadyExistException
      * @throws FileNotFoundException
      */
