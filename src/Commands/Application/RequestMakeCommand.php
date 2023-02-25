@@ -3,13 +3,11 @@
 namespace KoalaFacade\DiamondConsole\Commands\Application;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Commands\Application\Concerns\InteractsWithConsoleInApplication;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
 use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
-use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Support\Source;
 
 class RequestMakeCommand extends Command implements Console
@@ -44,13 +42,5 @@ class RequestMakeCommand extends Command implements Console
     public function getStubPath(): string
     {
         return Source::resolveStubForPath(name: 'request');
-    }
-
-    public function resolvePlaceholders(): PlaceholderData
-    {
-        return new PlaceholderData(
-            namespace: Str::ucfirst(string: $this->getNamespace()),
-            class: $this->getClassName(),
-        );
     }
 }
