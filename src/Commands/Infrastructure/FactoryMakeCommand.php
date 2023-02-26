@@ -76,7 +76,10 @@ class FactoryMakeCommand extends Command implements Console
 
     protected function resolveModelName(): string
     {
-        return $this->option(key: 'model') ?? Str::replaceLast(search: 'Factory', replace: '', subject: $this->getClassName());
+        /** @var string | null $model */
+        $model = $this->option(key: 'model');
+
+        return $model ?? Str::replaceLast(search: 'Factory', replace: '', subject: $this->getClassName());
     }
 
     public function getStubPath(): string
