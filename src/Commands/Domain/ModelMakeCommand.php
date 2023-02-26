@@ -54,6 +54,7 @@ class ModelMakeCommand extends Command implements Console
                 parameters: [
                     'name' => $this->resolveFactoryNameSuffix(),
                     'domain' => $this->resolveDomainArgument(),
+                    '--model' => $this->getClassName(),
                 ]
             );
         }

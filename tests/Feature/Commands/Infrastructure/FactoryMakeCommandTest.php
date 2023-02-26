@@ -8,25 +8,24 @@ use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate Factory Concrete and Interface')
     ->tap(function () {
-        $fileContract = '/Shared/Contracts/Database/Factories/UserFactory.php';
+        $fileContract = '/Shared/Contracts/Database/Factories/User.php';
         $fileConcrete = '/User/Database/Factories/UserFactory.php';
 
         expect(value: fileExists(relativeFileName: $fileContract))->toBeFalse()
             ->and(value: fileExists(relativeFileName: $fileConcrete, prefix: infrastructurePath()))->toBeFalse();
 
-        Artisan::call(command: 'infrastructure:make:factory UserFactory User');
+        Artisan::call(command: 'infrastructure:make:factory UserFactory User --model=User');
 
         expect(value: fileExists(relativeFileName: $fileContract))->toBeTrue()
             ->and(value: fileExists(relativeFileName: $fileConcrete, prefix: infrastructurePath()))->toBeTrue()
             ->and(value: Str::contains(
                 haystack: Artisan::output(),
                 needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Contract']
-            ))->toBeTrue();
-
-        expect(value: Str::contains(
-            haystack: fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
-            needles: ['{{ class }}', '{{ namespace }}']
-        ))->toBeFalse()
+            ))->toBeTrue()
+            ->and(value: Str::contains(
+                haystack: fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
+                needles: ['{{ class }}', '{{ namespace }}']
+            ))->toBeFalse()
             ->and(value: Str::contains(
                 haystack: fileGet(relativeFileName: $fileContract),
                 needles: ['{{ class }}', '{{ namespace }}']
@@ -36,7 +35,7 @@ it(description: 'can generate Factory Concrete and Interface')
 
 it(description: 'can generate Factory Concrete and Interface with force option')
     ->tap(function () {
-        $fileContract = '/Shared/Contracts/Database/Factories/UserFactory.php';
+        $fileContract = '/Shared/Contracts/Database/Factories/User.php';
         $fileConcrete = '/User/Database/Factories/UserFactory.php';
 
         expect(value: fileExists(relativeFileName: $fileContract))->toBeFalse()
@@ -60,14 +59,13 @@ it(description: 'can generate Factory Concrete and Interface with force option')
                     haystack: Artisan::output(),
                     needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Contract']
                 )
-            )->toBeTrue();
-
-        expect(
-            value: Str::contains(
-                haystack: fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
-                needles: ['{{ class }}', '{{ namespace }}']
-            )
-        )->toBeFalse()
+            )->toBeTrue()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
+                    needles: ['{{ class }}', '{{ namespace }}']
+                )
+            )->toBeFalse()
             ->and(
                 value: Str::contains(
                     haystack: fileGet(relativeFileName: $fileContract),
@@ -79,7 +77,7 @@ it(description: 'can generate Factory Concrete and Interface with force option')
 
 it(description: 'cannot generate the Factory, if the Factory already exists')
     ->tap(function () {
-        $fileContract = '/Shared/Contracts/Database/Factories/UserFactory.php';
+        $fileContract = '/Shared/Contracts/Database/Factories/User.php';
         $fileConcrete = '/User/Database/Factories/UserFactory.php';
 
         expect(value: fileExists(relativeFileName: $fileContract))->toBeFalse()
