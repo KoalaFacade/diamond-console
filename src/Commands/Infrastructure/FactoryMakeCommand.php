@@ -1,6 +1,6 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Commands;
+namespace KoalaFacade\DiamondConsole\Commands\Infrastructure;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -57,7 +57,7 @@ class FactoryMakeCommand extends Command implements Console
             class: $this->resolveNameArgument(),
             factoryContract: $this->factoryContractMakeAction->getClassName(),
             factoryContractNamespace: $this->factoryContractMakeAction->getNamespace(),
-            modelName: $this->resolveModelName(),
+            model: $this->resolveModelName(),
             modelNamespace: $this->getModelNamespace(),
         );
     }

@@ -1,0 +1,28 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ eventNamespace }};
+
+class {{ class }}
+{
+    /**
+     * Create the event listener.
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param  {{ event }}  $event
+     *
+     * @return void
+     */
+    public function handle({{ event }} $event): void
+    {
+        //
+    }
+}

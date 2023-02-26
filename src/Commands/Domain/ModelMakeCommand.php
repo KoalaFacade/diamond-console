@@ -1,6 +1,6 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Commands;
+namespace KoalaFacade\DiamondConsole\Commands\Domain;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
@@ -35,7 +35,7 @@ class ModelMakeCommand extends Command implements Console
     {
         if ($this->resolveMigrationOption()) {
             Artisan::call(
-                command: Str::of('application:migration Create[name]Table --create=[create]')
+                command: Str::of('diamond:make:migration Create[name]Table --create=[create]')
                     ->replace(
                         search: '[name]',
                         replace: Str::pluralStudly($this->resolveNameArgument())

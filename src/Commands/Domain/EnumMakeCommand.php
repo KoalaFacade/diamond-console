@@ -1,6 +1,6 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Commands;
+namespace KoalaFacade\DiamondConsole\Commands\Domain;
 
 use Illuminate\Console\Command;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
@@ -11,39 +11,45 @@ use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Support\Source;
 
-class ObserverMakeCommand extends Command implements Console
+class EnumMakeCommand extends Command implements Console
 {
     use HasArguments, HasOptions, InteractsWithConsole;
 
-    protected $signature = 'infrastructure:make:observer {name} {domain} {--force}';
+    protected $signature = 'domain:make:enum {name} {domain} {--force}';
 
-    protected $description = 'Create a new observer';
-
-    public function beforeCreate(): void
-    {
-        $this->info(string: 'Generating file to our project');
-    }
+    protected $description = 'Create a new enum';
 
     public function afterCreate(): void
     {
-        $this->info(string: 'Successfully generate observer file');
+        $this->info(string: 'Successfully generate enum file');
+    }
+
+    public function beforeCreate(): void
+    {
+        $this->info(string: 'Generating enum file to your project');
+
+        if (version_compare(version1: PHP_VERSION, version2: '8.1.0', operator: '<=')) {
+            throw new \RuntimeException(
+                message: 'The required PHP version is 8.1 while the version you have is ' . PHP_VERSION
+            );
+        }
     }
 
     public function getNamespace(): string
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveInfrastructurePath(),
+                structures: Source::resolveDomainPath(),
                 domainArgument: $this->resolveDomainArgument(),
                 nameArgument: $this->resolveNameArgument(),
-                endsWith: 'Database\\Observers',
+                endsWith: 'Enums',
             )
         );
     }
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'observer');
+        return Source::resolveStubForPath(name: 'enum');
     }
 
     public function resolvePlaceholders(): PlaceholderData

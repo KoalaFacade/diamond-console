@@ -8,7 +8,6 @@ readonly abstract class Action
      * Resolve an action class
      *
      * @param  array<array-key, mixed>  $parameters
-     * @return static
      */
     public static function resolve(array $parameters = []): static
     {

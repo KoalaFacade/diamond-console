@@ -42,16 +42,16 @@
     "prefer-stable": true,
     "require": {
         "php": "~8.2",
-        "illuminate/support": "^9.41",
-        "illuminate/console": "^9.41",
-        "illuminate/filesystem": "^9.41",
-        "illuminate/container": "^9.42"
+        "illuminate/support": "^9.41 | ^10.0.0",
+        "illuminate/console": "^9.41 | ^10.0.0",
+        "illuminate/filesystem": "^9.41 | ^10.0.0",
+        "illuminate/container": "^9.42 | ^10.0.0"
     },
     "require-dev": {
         "laravel/pint": "^1.2",
         "pestphp/pest": "^1.22",
         "pestphp/pest-plugin-laravel": "^1.3",
-        "orchestra/testbench": "^7.14",
+        "orchestra/testbench": "^7.14|^8.0",
         "phpstan/phpstan": "^1.9"
     },
     "config": {

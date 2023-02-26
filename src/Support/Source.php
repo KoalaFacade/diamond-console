@@ -4,6 +4,7 @@ namespace KoalaFacade\DiamondConsole\Support;
 
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
+use KoalaFacade\DiamondConsole\Enums\Layer;
 
 class Source
 {
@@ -25,12 +26,17 @@ class Source
 
     public static function resolveDomainPath(): string
     {
-        return static::resolvePathForStructure(key: 'domain');
+        return static::resolvePathForStructure(key: Layer::domain->name);
     }
 
     public static function resolveInfrastructurePath(): string
     {
-        return static::resolvePathForStructure(key: 'infrastructure');
+        return static::resolvePathForStructure(key: Layer::infrastructure->name);
+    }
+
+    public static function resolveApplicationPath(): string
+    {
+        return static::resolvePathForStructure(key: Layer::application->name);
     }
 
     public static function resolveNamespace(NamespaceData $data): string
@@ -42,8 +48,8 @@ class Source
                 data: $data,
                 namespace: Str::of(string: '/')
                     ->start(prefix: $data->structures)
-                    ->append(values: Str::finish($data->domainArgument, cap: '/'))
-                    ->finish(cap: $data->endsWith)
+                    ->append(values: $data->domainArgument)
+                    ->finish(cap: $data->endsWith ? '/' . $data->endsWith : '')
             )
         );
     }
@@ -60,11 +66,16 @@ class Source
     public static function resolveNamespacePath(string $namespace): string
     {
         return base_path(
-            path: static::resolveBasePath() . Str::replace(
-                search: '\\',
-                replace: '/',
-                subject: $namespace
-            )
+            path: static::resolveBasePath() . static::transformNamespaceToPath(namespace: $namespace)
+        );
+    }
+
+    public static function transformNamespaceToPath(string $namespace): string
+    {
+        return Str::replace(
+            search: '\\',
+            replace: '/',
+            subject: $namespace
         );
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Commands;
+namespace KoalaFacade\DiamondConsole\Commands\Infrastructure;
 
 use Illuminate\Console\Command;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
@@ -11,39 +11,39 @@ use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Support\Source;
 
-class ActionMakeCommand extends Command implements Console
+class ObserverMakeCommand extends Command implements Console
 {
     use HasArguments, HasOptions, InteractsWithConsole;
 
-    protected $signature = 'domain:make:action {name} {domain} {--force}';
+    protected $signature = 'infrastructure:make:observer {name} {domain} {--force}';
 
-    protected $description = 'Create a new action';
+    protected $description = 'Create a new observer';
 
     public function beforeCreate(): void
     {
-        $this->info(string: 'Generating action file to your project');
+        $this->info(string: 'Generating file to our project');
     }
 
     public function afterCreate(): void
     {
-        $this->info(string: 'Successfully generate action file');
+        $this->info(string: 'Successfully generate observer file');
     }
 
     public function getNamespace(): string
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveDomainPath(),
+                structures: Source::resolveInfrastructurePath(),
                 domainArgument: $this->resolveDomainArgument(),
                 nameArgument: $this->resolveNameArgument(),
-                endsWith: 'Actions',
+                endsWith: 'Database\\Observers',
             )
         );
     }
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'action');
+        return Source::resolveStubForPath(name: 'observer');
     }
 
     public function resolvePlaceholders(): PlaceholderData

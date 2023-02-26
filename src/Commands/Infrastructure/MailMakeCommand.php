@@ -1,9 +1,8 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Commands;
+namespace KoalaFacade\DiamondConsole\Commands\Infrastructure;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
@@ -12,22 +11,22 @@ use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
 use KoalaFacade\DiamondConsole\Support\Source;
 
-class ProviderMakeCommand extends Command implements Console
+class MailMakeCommand extends Command implements Console
 {
     use HasArguments, HasOptions, InteractsWithConsole;
 
-    protected $signature = 'infrastructure:make:provider {name} {domain} {--force}';
+    protected $signature = 'infrastructure:make:mail {name} {domain} {--force}';
 
-    protected $description = 'Create a new service provider class';
+    protected $description = 'Create a new mail';
 
     public function beforeCreate(): void
     {
-        $this->info(string: 'Generating provider to your project.');
+        $this->info(string: 'Generating file to our project');
     }
 
     public function afterCreate(): void
     {
-        $this->info(string: 'Successfully generate provider file.');
+        $this->info(string: 'Successfully generate base file');
     }
 
     public function getNamespace(): string
@@ -37,14 +36,14 @@ class ProviderMakeCommand extends Command implements Console
                 structures: Source::resolveInfrastructurePath(),
                 domainArgument: $this->resolveDomainArgument(),
                 nameArgument: $this->resolveNameArgument(),
-                endsWith: 'Providers',
+                endsWith: 'Mails',
             )
         );
     }
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'provider');
+        return Source::resolveStubForPath(name: 'mail');
     }
 
     public function resolvePlaceholders(): PlaceholderData
@@ -52,14 +51,7 @@ class ProviderMakeCommand extends Command implements Console
         return new PlaceholderData(
             namespace: $this->getNamespace(),
             class: $this->getClassName(),
+            subject: $this->resolveNameArgument(),
         );
-    }
-
-    public function getClassName(): string
-    {
-        return Str::of($this->resolveNameArgument())
-            ->ucfirst()
-            ->finish(cap: 'ServiceProvider')
-            ->classBasename();
     }
 }

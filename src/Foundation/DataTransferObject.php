@@ -54,9 +54,6 @@ abstract readonly class DataTransferObject
 
     /**
      * Resolve result array-key of toArray method from behaviour
-     *
-     * @param  string  $key
-     * @return string
      */
     protected function resolveArrayKey(string $key): string
     {

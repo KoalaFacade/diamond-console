@@ -15,7 +15,6 @@ trait HasResolvable
      * @template TValue
      *
      * @param  array<TKey, TValue>  $data
-     * @return static
      */
     public static function resolveFromArray(array $data): static
     {
@@ -29,7 +28,6 @@ trait HasResolvable
      * @template TValue
      *
      * @param  FormRequest | Model | array<TKey, TValue>  $abstract
-     * @return static
      */
     public static function resolveFrom(FormRequest | Model | array $abstract): static
     {
@@ -50,9 +48,6 @@ trait HasResolvable
 
     /**
      * Resolve unstructured data from FormRequest
-     *
-     * @param  FormRequest  $request
-     * @return static
      */
     public static function resolveFromFormRequest(FormRequest $request): static
     {
@@ -61,9 +56,6 @@ trait HasResolvable
 
     /**
      * Resolve unstructured data from Model
-     *
-     * @param  Model  $model
-     * @return static
      */
     public static function resolveFromModel(Model $model): static
     {

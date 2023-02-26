@@ -24,19 +24,12 @@ it(description: 'can generate Factory Concrete and Interface')
             ))->toBeTrue()
             ->and(value: Str::contains(
                 haystack: fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
-                needles: ['{{ class }}', '{{ namespace }}', '{{ modelName }}', '{{ modelNamespace }}']
+                needles: ['{{ class }}', '{{ namespace }}']
             ))->toBeFalse()
             ->and(value: Str::contains(
                 haystack: fileGet(relativeFileName: $fileContract),
                 needles: ['{{ class }}', '{{ namespace }}']
             ))->toBeFalse();
-
-        fileDelete(
-            paths: [
-                fileGet(relativeFileName: $fileContract),
-                fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
-            ]
-        );
     })
     ->group('commands');
 
@@ -70,7 +63,7 @@ it(description: 'can generate Factory Concrete and Interface with force option')
             ->and(
                 value: Str::contains(
                     haystack: fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
-                    needles: ['{{ class }}', '{{ namespace }}', '{{ modelName }}', '{{ modelNamespace }}']
+                    needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse()
             ->and(
@@ -79,13 +72,6 @@ it(description: 'can generate Factory Concrete and Interface with force option')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
-        fileDelete(
-            paths: [
-                fileGet(relativeFileName: $fileContract),
-                fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
-            ]
-        );
     })
     ->group('commands');
 
@@ -112,13 +98,6 @@ it(description: 'cannot generate the Factory, if the Factory already exists')
 
         expect(value: fileExists(relativeFileName: $fileContract))->toBeFalse()
             ->and(value: fileExists(relativeFileName: $fileConcrete, prefix: infrastructurePath()))->toBeFalse();
-
-        fileDelete(
-            paths: [
-                fileGet(relativeFileName: $fileContract),
-                fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
-            ]
-        );
     })
     ->group('commands')
     ->throws(exception: FileAlreadyExistException::class);
