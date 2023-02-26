@@ -24,7 +24,7 @@ it(description: 'can generate Factory Concrete and Interface')
             ))->toBeTrue()
             ->and(value: Str::contains(
                 haystack: fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
-                needles: ['{{ class }}', '{{ namespace }}']
+                needles: ['{{ class }}', '{{ namespace }}', '{{ modelName }}', '{{ modelNamespace }}']
             ))->toBeFalse()
             ->and(value: Str::contains(
                 haystack: fileGet(relativeFileName: $fileContract),
@@ -70,7 +70,7 @@ it(description: 'can generate Factory Concrete and Interface with force option')
             ->and(
                 value: Str::contains(
                     haystack: fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
-                    needles: ['{{ class }}', '{{ namespace }}']
+                    needles: ['{{ class }}', '{{ namespace }}', '{{ modelName }}', '{{ modelNamespace }}']
                 )
             )->toBeFalse()
             ->and(

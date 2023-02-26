@@ -59,9 +59,8 @@ it(description: 'can force generate exists Model class')
         Artisan::call(command: 'domain:make:model User User');
         Artisan::call(command: 'domain:make:model User User --force');
 
-        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue();
-
         expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+            ->and(value: fileExists(relativeFileName: $fileName))->toBeTrue()
             ->and(
                 value: Str::contains(
                     haystack: fileGet(relativeFileName: $fileName),
