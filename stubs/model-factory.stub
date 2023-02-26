@@ -5,8 +5,7 @@ namespace {{ namespace }};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\Factory;
-
-use {{ factoryContractNamespace }}\{{ factoryContract }}
+use {{ factoryContractNamespace }}\{{ factoryContract }} as {{ factoryContractAlias }}
 
 class {{ class }} extends Model
 {
@@ -19,8 +18,8 @@ class {{ class }} extends Model
     */
     protected static function newFactory(): Factory
     {
-        /** @var {{ factoryContract }} $factory */
-        $factory = resolve({{ factoryContract }}::class);
+        /** @var {{ factoryContractAlias }} $factory */
+        $factory = resolve(name: {{ factoryContractAlias }}::class);
 
         return $factory->resolveFactory();
     }

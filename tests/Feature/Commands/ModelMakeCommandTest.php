@@ -90,14 +90,13 @@ it(description: 'can generate new Model class with Migration')
         $migrationName = now()->format('Y_m_d_his') . '_' . $tableName . '.php';
 
         expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
-            ->and(File::exists(path: base_path('database/migrations/' . $migrationName)))->toBeTrue();
-
-        expect(
-            value: Str::contains(
-                haystack: fileGet(relativeFileName: $fileName),
-                needles: ['{{ class }}', '{{ namespace }}']
-            )
-        )->toBeFalse()
+            ->and(File::exists(path: base_path('database/migrations/' . $migrationName)))->toBeTrue()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileName),
+                    needles: ['{{ class }}', '{{ namespace }}']
+                )
+            )->toBeFalse()
             ->and(
                 value: Str::contains(
                     haystack: File::get(base_path('database/migrations/' . $migrationName)),
@@ -126,14 +125,13 @@ it(description: 'can force generate exists Model class with Migration')
         $migrationName = now()->format('Y_m_d_his') . '_' . $tableName . '.php';
 
         expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
-            ->and(File::exists(path: base_path('database/migrations/' . $migrationName)))->toBeTrue();
-
-        expect(
-            value: Str::contains(
-                haystack: fileGet(relativeFileName: $fileName),
-                needles: ['{{ class }}', '{{ namespace }}']
-            )
-        )->toBeFalse()
+            ->and(File::exists(path: base_path('database/migrations/' . $migrationName)))->toBeTrue()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileName),
+                    needles: ['{{ class }}', '{{ namespace }}']
+                )
+            )->toBeFalse()
             ->and(
                 value: Str::contains(
                     haystack: File::get(base_path('database/migrations/' . $migrationName)),
@@ -148,28 +146,38 @@ it(description: 'can force generate exists Model class with Migration')
 
 it(description: 'can generate Model with factory')
     ->tap(function () {
-        $fileContract = '/Shared/Contracts/Database/Factories/UserFactory.php';
+        $fileContract = '/Shared/Contracts/Database/Factories/User.php';
         $fileConcrete = '/User/Database/Factories/UserFactory.php';
         $fileModel = '/Shared/User/Models/User.php';
 
-        expect(value: fileExists(relativeFileName: $fileContract))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileConcrete))->toBeFalse();
 
         Artisan::call(command: 'domain:make:model User User --factory --force');
 
+
         expect(value: fileExists(relativeFileName: $fileContract))->toBeTrue()
             ->and(value: fileExists(relativeFileName: $fileConcrete, prefix: infrastructurePath()))->toBeTrue()
-            ->and(value: fileExists(relativeFileName: $fileModel))->toBeTrue();
-
-        expect(
-            value: Str::contains(
-                haystack: fileGet(relativeFileName: $fileModel),
-                needles: ['{{ class }}', '{{ namespace }}', '{{ factoryContract }}', '{{ factoryContractNamespace }}']
-            )
-        )->toBeFalse()
+            ->and(value: fileExists(relativeFileName: $fileModel))->toBeTrue()
+            ->and(
+                value: Str::contains(
+                    haystack: fileGet(relativeFileName: $fileModel),
+                    needles: [
+                        '{{ class }}',
+                        '{{ namespace }}',
+                        '{{ factoryContract }}',
+                        '{{ factoryContractNamespace }}',
+                    ]
+                )
+            )->toBeFalse()
             ->and(
                 value: Str::contains(
                     haystack: fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
-                    needles: ['{{ factoryContract }}', '{{ factoryContractNamespace }}']
+                    needles: [
+                        '{{ factoryContract }}',
+                        '{{ factoryContractNamespace }}',
+                        '{{ modelName }}',
+                        '{{ modelNamespace }}'
+                    ]
                 )
             )->toBeFalse()
             ->and(
