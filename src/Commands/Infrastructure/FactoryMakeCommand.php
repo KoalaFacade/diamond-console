@@ -4,7 +4,6 @@ namespace KoalaFacade\DiamondConsole\Commands\Infrastructure;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Factory\FactoryContractMakeAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
@@ -25,7 +24,6 @@ class FactoryMakeCommand extends Command implements Console
     protected $description = 'Create a model Factory';
 
     protected Console $factoryContractMakeAction;
-
 
     /**
      * @throws FileNotFoundException

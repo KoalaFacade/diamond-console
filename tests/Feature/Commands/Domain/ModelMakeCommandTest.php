@@ -63,7 +63,6 @@ it(description: 'can force generate exists Model class')
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
-
     })
     ->group(groups: 'commands');
 
@@ -142,7 +141,6 @@ it(description: 'can generate Model with factory')
 
         Artisan::call(command: 'domain:make:model User User --factory --force');
 
-
         expect(value: fileExists(relativeFileName: $fileContract))->toBeTrue()
             ->and(value: fileExists(relativeFileName: $fileConcrete, prefix: infrastructurePath()))->toBeTrue()
             ->and(value: fileExists(relativeFileName: $fileModel))->toBeTrue()
@@ -164,7 +162,7 @@ it(description: 'can generate Model with factory')
                         '{{ factoryContract }}',
                         '{{ factoryContractNamespace }}',
                         '{{ model }}',
-                        '{{ modelNamespace }}'
+                        '{{ modelNamespace }}',
                     ]
                 )
             )->toBeFalse()
