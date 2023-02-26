@@ -4,6 +4,7 @@ namespace KoalaFacade\DiamondConsole\Actions\Factory;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
 use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
@@ -64,7 +65,7 @@ readonly class FactoryContractMakeAction extends Action implements Console
 
     public function resolveNameArgument(): string
     {
-        return $this->console->resolveNameArgument();
+        return Str::replaceLast(search: 'Factory', replace: '', subject: $this->console->resolveNameArgument());
     }
 
     public function afterCreate(): void

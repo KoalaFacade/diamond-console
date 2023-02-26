@@ -4,6 +4,7 @@ namespace KoalaFacade\DiamondConsole\Commands\Infrastructure;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Factory\FactoryContractMakeAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
@@ -19,11 +20,12 @@ class FactoryMakeCommand extends Command implements Console
 {
     use InteractsWithConsole, HasOptions, HasArguments;
 
-    protected $signature = 'infrastructure:make:factory {name} {domain} {--force}';
+    protected $signature = 'infrastructure:make:factory {name} {domain} {--model=} {--force}';
 
     protected $description = 'Create a model Factory';
 
     protected Console $factoryContractMakeAction;
+
 
     /**
      * @throws FileNotFoundException
@@ -54,8 +56,27 @@ class FactoryMakeCommand extends Command implements Console
             namespace: $this->getNamespace(),
             class: $this->resolveNameArgument(),
             factoryContract: $this->factoryContractMakeAction->getClassName(),
-            factoryContractNamespace: $this->factoryContractMakeAction->getNamespace()
+            factoryContractNamespace: $this->factoryContractMakeAction->getNamespace(),
+            model: $this->resolveModelName(),
+            modelNamespace: $this->getModelNamespace(),
         );
+    }
+
+    protected function getModelNamespace(): string | null
+    {
+        return Source::resolveNamespace(
+            data: new NamespaceData(
+                structures: Source::resolveDomainPath(),
+                domainArgument: 'Shared\\' . $this->resolveDomainArgument(),
+                nameArgument: $this->resolveModelName(),
+                endsWith: 'Models',
+            )
+        );
+    }
+
+    protected function resolveModelName(): string
+    {
+        return $this->option(key: 'model') ?? Str::replaceLast(search: 'Factory', replace: '', subject: $this->getClassName());
     }
 
     public function getStubPath(): string
