@@ -30,15 +30,17 @@ class InstallCommand extends Command
         $fileSystem->ensureDirectoryExists(path: $this->resolveBaseDirectoryPath());
 
         foreach ($this->resolveBaseStructures() as $structure) {
-            $path = $this->resolveBaseDirectoryPath() . $structure;
+            if ($structure != 'app') {
+                $path = $this->resolveBaseDirectoryPath() . $structure;
 
-            if ($fileSystem->exists(path: $path)) {
-                $this->line(string: 'Skipping generate ' . $structure . ' , the base directory is exists');
+                if ($fileSystem->exists(path: $path)) {
+                    $this->line(string: 'Skipping generate ' . $structure . ' , the base directory is exists');
 
-                continue;
+                    continue;
+                }
+
+                $fileSystem->makeDirectory(path: $path);
             }
-
-            $fileSystem->makeDirectory(path: $path);
         }
 
         ResolveComposerAutoLoaderAction::resolve()->execute();

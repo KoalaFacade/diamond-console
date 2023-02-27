@@ -21,7 +21,9 @@ it(
         $this->assertFalse(condition: file_exists($baseDirectoryPath));
 
         foreach ($baseStructures as $structure) {
-            $this->assertFalse(condition: file_exists($baseDirectoryPath . $structure));
+            if ($structure != 'app') {
+                $this->assertFalse(condition: file_exists($baseDirectoryPath . $structure));
+            }
         }
 
         Artisan::call(command: 'diamond:install');
@@ -33,7 +35,9 @@ it(
         $this->assertFalse(condition: file_exists(app_path('Providers')));
 
         foreach ($baseStructures as $structure) {
-            $this->assertTrue(condition: file_exists($baseDirectoryPath . $structure));
+            if ($structure != 'app') {
+                $this->assertTrue(condition: file_exists($baseDirectoryPath . $structure));
+            }
         }
     }
 )->group('commands');
@@ -47,7 +51,9 @@ it(
         $this->assertFalse(condition: file_exists($baseDirectoryPath));
 
         foreach ($baseStructures as $structure) {
-            $this->assertFalse(condition: file_exists($baseDirectoryPath . $structure));
+            if ($structure != 'app') {
+                $this->assertFalse(condition: file_exists($baseDirectoryPath . $structure));
+            }
         }
 
         Artisan::call(command: 'diamond:install --skip-refactor');
@@ -55,7 +61,9 @@ it(
         $this->assertTrue(condition: file_exists($baseDirectoryPath));
 
         foreach ($baseStructures as $structure) {
-            $this->assertTrue(condition: file_exists($baseDirectoryPath . $structure));
+            if ($structure != 'app') {
+                $this->assertTrue(condition: file_exists($baseDirectoryPath . $structure));
+            }
         }
     }
 )->group('commands');
