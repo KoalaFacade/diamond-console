@@ -2,26 +2,15 @@
 
 namespace KoalaFacade\DiamondConsole\Foundation\DataTransferObject;
 
+use CuyZ\Valinor\Mapper\MappingError;
+use CuyZ\Valinor\MapperBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 trait HasResolvable
 {
-    /**
-     * Resolve unstructured data from array
-     *
-     * @template TKey of array-key
-     * @template TValue
-     *
-     * @param  array<TKey, TValue>  $data
-     * @return static
-     */
-    public static function resolveFromArray(array $data): static
-    {
-        return throw new \RuntimeException();
-    }
-
     /**
      * Resolve unstructured data from polymorphism types
      *
@@ -30,6 +19,8 @@ trait HasResolvable
      *
      * @param  FormRequest | Model | array<TKey, TValue>  $abstract
      * @return static
+     *
+     * @throws MappingError
      */
     public static function resolveFrom(FormRequest | Model | array $abstract): static
     {
@@ -46,6 +37,27 @@ trait HasResolvable
         }
 
         return throw new \RuntimeException;
+    }
+
+    /**
+     * Resolve unstructured data from array
+     *
+     * @template TKey of array-key
+     * @template TValue
+     *
+     * @param  array<TKey, TValue>  $data
+     * @return static
+     *
+     * @throws MappingError
+     */
+    public static function resolveFromArray(array $data): static
+    {
+        /** @var static $instance */
+        $instance = (new MapperBuilder())
+            ->mapper()
+            ->map(signature: static::class, source: static::resolveTheArrayKeyForm(data: $data));
+
+        return $instance;
     }
 
     /**
@@ -68,5 +80,56 @@ trait HasResolvable
     public static function resolveFromModel(Model $model): static
     {
         return throw new \RuntimeException;
+    }
+
+    /**
+     * @template TArrayKey of array-key
+     * @template TArrayValue
+     *
+     * @param  array<TArrayKey, TArrayValue>  $data
+     * @return array<TArrayKey, mixed>
+     */
+    protected static function resolveTheArrayKeyForm(array $data): array
+    {
+        $array = [];
+
+        foreach ($data as $key => $value) {
+            $key = static::resolveArrayKeyOfInput(key: $key);
+
+            if (Arr::accessible(value: $value)) {
+                /** @var array<TArrayKey, TArrayValue> $valueContainsArray */
+                $valueContainsArray = $value;
+
+                $array[$key] = static::resolveTheArrayKeyForm(data: $valueContainsArray);
+
+                continue;
+            }
+
+            $array[$key] = $value;
+        }
+
+        return $array;
+    }
+
+    /**
+     * Resolve result array-key of toArray method from behaviour
+     *
+     * @param  string  $key
+     * @return string
+     */
+    protected static function resolveArrayKeyOfInput(string $key): string
+    {
+        return Str::camel(value: $key);
+    }
+
+    /**
+     * Resolve result array-key of toArray method from behaviour
+     *
+     * @param  string  $key
+     * @return string
+     */
+    protected function resolveArrayKey(string $key): string
+    {
+        return Str::snake(value: $key);
     }
 }

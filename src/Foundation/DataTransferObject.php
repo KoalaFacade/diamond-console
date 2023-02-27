@@ -3,7 +3,6 @@
 namespace KoalaFacade\DiamondConsole\Foundation;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Foundation\DataTransferObject\HasResolvable;
 
 abstract readonly class DataTransferObject
@@ -50,16 +49,5 @@ abstract readonly class DataTransferObject
                 fn ($value, $key): array => [$this->resolveArrayKey($key) => $value]
             )
             ->toArray();
-    }
-
-    /**
-     * Resolve result array-key of toArray method from behaviour
-     *
-     * @param  string  $key
-     * @return string
-     */
-    protected function resolveArrayKey(string $key): string
-    {
-        return Str::snake($key);
     }
 }
