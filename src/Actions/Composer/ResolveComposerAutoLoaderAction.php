@@ -52,8 +52,6 @@ readonly class ResolveComposerAutoLoaderAction extends Action
     }
 
     /**
-     * @return stdClass
-     *
      * @throws FileNotFoundException
      * @throws Throwable
      */

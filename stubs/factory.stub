@@ -2,11 +2,20 @@
 
 namespace {{ namespace }};
 
-use {{ factoryContractNamespace }}\{{ factoryContract }} as Factory;
 use KoalaFacade\DiamondConsole\Foundation\CreateNewFactory;
+use {{ factoryContractNamespace }}\{{ factoryContract }} as Factory;
+use {{ modelNamespace }}\{{ model }};
 
 final class {{ class }} extends CreateNewFactory implements Factory
 {
+    /**
+     * @return class-string
+     */
+    public function modelName(): string
+    {
+        return {{ model }};
+    }
+
     /**
      * Define the model's default state.
      *

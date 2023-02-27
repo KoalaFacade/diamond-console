@@ -56,6 +56,7 @@ it(description: 'can force generate exists Model class')
         Artisan::call(command: 'domain:make:model User User --force');
 
         expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+            ->and(value: fileExists(relativeFileName: $fileName))->toBeTrue()
             ->and(
                 value: Str::contains(
                     haystack: fileGet(relativeFileName: $fileName),
@@ -132,11 +133,11 @@ it(description: 'can force generate exists Model class with Migration')
 
 it(description: 'can generate Model with factory')
     ->tap(function () {
-        $fileContract = '/Shared/Contracts/Database/Factories/UserFactory.php';
+        $fileContract = '/Shared/Contracts/Database/Factories/User.php';
         $fileConcrete = '/User/Database/Factories/UserFactory.php';
         $fileModel = '/Shared/User/Models/User.php';
 
-        expect(value: fileExists(relativeFileName: $fileContract))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileConcrete))->toBeFalse();
 
         Artisan::call(command: 'domain:make:model User User --factory --force');
 
@@ -146,13 +147,23 @@ it(description: 'can generate Model with factory')
             ->and(
                 value: Str::contains(
                     haystack: fileGet(relativeFileName: $fileModel),
-                    needles: ['{{ class }}', '{{ namespace }}', '{{ factoryContract }}', '{{ factoryContractNamespace }}']
+                    needles: [
+                        '{{ class }}',
+                        '{{ namespace }}',
+                        '{{ factoryContract }}',
+                        '{{ factoryContractNamespace }}',
+                    ]
                 )
             )->toBeFalse()
             ->and(
                 value: Str::contains(
                     haystack: fileGet(relativeFileName: $fileConcrete, prefix: infrastructurePath()),
-                    needles: ['{{ factoryContract }}', '{{ factoryContractNamespace }}']
+                    needles: [
+                        '{{ factoryContract }}',
+                        '{{ factoryContractNamespace }}',
+                        '{{ model }}',
+                        '{{ modelNamespace }}',
+                    ]
                 )
             )->toBeFalse()
             ->and(

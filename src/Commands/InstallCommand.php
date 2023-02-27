@@ -48,9 +48,6 @@ class InstallCommand extends Command
         $this->info(string: 'Successfully generate base file');
     }
 
-    /**
-     * @return string
-     */
     protected function resolveBaseDirectoryPath(): string
     {
         return base_path(path: Source::resolveBasePath());
