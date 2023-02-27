@@ -5,6 +5,7 @@ namespace KoalaFacade\DiamondConsole\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Composer\ResolveComposerAutoLoaderAction;
 use KoalaFacade\DiamondConsole\Enums\Layer;
@@ -61,7 +62,7 @@ class InstallCommand extends Command
         /** @var array<string> $structures */
         $structures = config(key: 'diamond.structures');
 
-        return $structures;
+        return  Arr::except(array: $structures, keys: Layer::application->name);
     }
 
     protected function resolveInfrastructurePath(): string

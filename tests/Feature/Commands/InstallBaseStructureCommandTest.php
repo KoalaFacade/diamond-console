@@ -1,6 +1,8 @@
 <?php
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
+use KoalaFacade\DiamondConsole\Enums\Layer;
 
 beforeEach(closure: function () {
     (new Illuminate\Filesystem\Filesystem())
@@ -16,7 +18,7 @@ it(
     description: 'can generate base structure',
     closure: function () {
         $baseDirectoryPath = base_path(path: config(key: 'diamond.base_directory'));
-        $baseStructures = config(key: 'diamond.structures');
+        $baseStructures = Arr::except(array: config(key: 'diamond.structures'), keys: Layer::application->name);
 
         $this->assertFalse(condition: file_exists($baseDirectoryPath));
 
@@ -42,7 +44,7 @@ it(
     description: 'can generate base structure with skip refactor',
     closure: function () {
         $baseDirectoryPath = base_path(path: config(key: 'diamond.base_directory'));
-        $baseStructures = config(key: 'diamond.structures');
+        $baseStructures = Arr::except(array: config(key: 'diamond.structures'), keys: Layer::application->name);
 
         $this->assertFalse(condition: file_exists($baseDirectoryPath));
 
