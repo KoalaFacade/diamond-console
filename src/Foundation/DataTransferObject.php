@@ -57,6 +57,6 @@ abstract readonly class DataTransferObject
      */
     protected function resolveArrayKey(string $key): string
     {
-        return Str::snake($key);
+        return Str::snake(value: $key);
     }
 }
