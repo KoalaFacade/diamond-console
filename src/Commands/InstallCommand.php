@@ -5,6 +5,7 @@ namespace KoalaFacade\DiamondConsole\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Composer\ResolveComposerAutoLoaderAction;
 use KoalaFacade\DiamondConsole\Enums\Layer;
@@ -30,17 +31,15 @@ class InstallCommand extends Command
         $fileSystem->ensureDirectoryExists(path: $this->resolveBaseDirectoryPath());
 
         foreach ($this->resolveBaseStructures() as $structure) {
-            if ($structure != 'app') {
-                $path = $this->resolveBaseDirectoryPath() . $structure;
+            $path = $this->resolveBaseDirectoryPath() . $structure;
 
-                if ($fileSystem->exists(path: $path)) {
-                    $this->line(string: 'Skipping generate ' . $structure . ' , the base directory is exists');
+            if ($fileSystem->exists(path: $path)) {
+                $this->line(string: 'Skipping generate ' . $structure . ' , the base directory is exists');
 
-                    continue;
-                }
-
-                $fileSystem->makeDirectory(path: $path);
+                continue;
             }
+
+            $fileSystem->makeDirectory(path: $path);
         }
 
         ResolveComposerAutoLoaderAction::resolve()->execute();
@@ -63,7 +62,7 @@ class InstallCommand extends Command
         /** @var array<string> $structures */
         $structures = config(key: 'diamond.structures');
 
-        return $structures;
+        return  Arr::except(array: $structures, keys: Layer::application->name);
     }
 
     protected function resolveInfrastructurePath(): string
