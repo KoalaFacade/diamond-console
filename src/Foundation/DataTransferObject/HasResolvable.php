@@ -50,7 +50,7 @@ trait HasResolvable
      *
      * @throws MappingError
      */
-    public static function resolveFromArray(array $data): static
+    public static function resolve(array $data): static
     {
         /** @var static $instance */
         $instance = (new MapperBuilder())
@@ -58,6 +58,24 @@ trait HasResolvable
             ->map(signature: static::class, source: static::resolveTheArrayKeyForm(data: $data));
 
         return $instance;
+    }
+
+    /**
+     * Resolve unstructured data from array
+     *
+     * @template TKey of array-key
+     * @template TValue
+     *
+     * @param  array<TKey, TValue>  $data
+     * @return static
+     *
+     * @throws MappingError
+     *
+     * @deprecated can use resolve()
+     */
+    public static function resolveFromArray(array $data): static
+    {
+        return static::resolve($data);
     }
 
     /**
@@ -83,6 +101,8 @@ trait HasResolvable
     }
 
     /**
+     * Resolve all array key form according the config
+     *
      * @template TArrayKey of array-key
      * @template TArrayValue
      *
@@ -112,7 +132,7 @@ trait HasResolvable
     }
 
     /**
-     * Resolve result array-key of toArray method from behaviour
+     * Resolve the input of array key to constructor naming
      *
      * @param  string  $key
      * @return string
@@ -120,16 +140,5 @@ trait HasResolvable
     protected static function resolveArrayKeyOfInput(string $key): string
     {
         return Str::camel(value: $key);
-    }
-
-    /**
-     * Resolve result array-key of toArray method from behaviour
-     *
-     * @param  string  $key
-     * @return string
-     */
-    protected function resolveArrayKey(string $key): string
-    {
-        return Str::snake(value: $key);
     }
 }
