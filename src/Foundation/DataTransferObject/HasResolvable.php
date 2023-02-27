@@ -18,7 +18,6 @@ trait HasResolvable
      * @template TValue
      *
      * @param  FormRequest | Model | array<TKey, TValue>  $abstract
-     * @return static
      *
      * @throws MappingError
      */
@@ -46,7 +45,6 @@ trait HasResolvable
      * @template TValue
      *
      * @param  array<TKey, TValue>  $data
-     * @return static
      *
      * @throws MappingError
      */
@@ -67,7 +65,6 @@ trait HasResolvable
      * @template TValue
      *
      * @param  array<TKey, TValue>  $data
-     * @return static
      *
      * @throws MappingError
      *
@@ -80,9 +77,6 @@ trait HasResolvable
 
     /**
      * Resolve unstructured data from FormRequest
-     *
-     * @param  FormRequest  $request
-     * @return static
      */
     public static function resolveFromFormRequest(FormRequest $request): static
     {
@@ -91,9 +85,6 @@ trait HasResolvable
 
     /**
      * Resolve unstructured data from Model
-     *
-     * @param  Model  $model
-     * @return static
      */
     public static function resolveFromModel(Model $model): static
     {
@@ -133,9 +124,6 @@ trait HasResolvable
 
     /**
      * Resolve the input of array key to constructor naming
-     *
-     * @param  string  $key
-     * @return string
      */
     protected static function resolveArrayKeyOfInput(string $key): string
     {
