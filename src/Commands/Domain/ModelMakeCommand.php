@@ -23,7 +23,7 @@ class ModelMakeCommand extends Command implements Console
 
     protected function resolveFactoryNameSuffix(): string
     {
-        return Str::finish(Str::ucfirst($this->resolveNameArgument()), cap: 'Factory');
+        return Str::finish($this->resolveNameArgument(), cap: 'Factory');
     }
 
     public function beforeCreate(): void
@@ -86,7 +86,7 @@ class ModelMakeCommand extends Command implements Console
         return new PlaceholderData(
             namespace: $this->getNamespace(),
             class: $this->getClassName(),
-            factoryContract: $this->resolveFactoryNameSuffix(),
+            factoryContract: $this->resolveNameArgument(),
             factoryContractNamespace: Source::resolveNamespace(
                 data: new NamespaceData(
                     structures: Source::resolveDomainPath(),
@@ -94,7 +94,8 @@ class ModelMakeCommand extends Command implements Console
                     nameArgument: $this->resolveNameArgument(),
                     endsWith: 'Contracts\\Database\\Factories',
                 )
-            )
+            ),
+            factoryContractAlias: $this->resolveFactoryNameSuffix()
         );
     }
 
