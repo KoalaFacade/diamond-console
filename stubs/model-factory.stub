@@ -5,7 +5,7 @@ namespace {{ namespace }};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use {{ factoryContractNamespace }}\{{ factoryContract }} as {{ factoryContractAlias }}
+use {{ factoryContractNamespace }}\{{ factoryContract }} as {{ factoryContractAlias }};
 
 class {{ class }} extends Model
 {

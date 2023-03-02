@@ -13,7 +13,7 @@ final class {{ class }} extends CreateNewFactory implements Factory
      */
     public function modelName(): string
     {
-        return {{ model }};
+        return {{ model }}::class;
     }
 
     /**
