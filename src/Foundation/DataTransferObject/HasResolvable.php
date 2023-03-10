@@ -107,8 +107,7 @@ trait HasResolvable
         foreach ($data as $key => $value) {
             $key = static::resolveArrayKeyOfInput(key: $key);
 
-            if (Arr::accessible(value: $value)) {
-                /** @var array<TArrayKey, TArrayValue> $valueContainsArray */
+            if (is_array(value: $value)) {
                 $valueContainsArray = $value;
 
                 $array[$key] = static::resolveTheArrayKeyForm(data: $valueContainsArray);
