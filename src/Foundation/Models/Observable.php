@@ -11,9 +11,14 @@ use KoalaFacade\DiamondConsole\Models\Model;
  */
 trait Observable
 {
+    /**
+     * @var array<int, string>
+     */
+    protected static array $additionalObservers = [];
+
     public static function bootObservable(): void
     {
-        $namespace = static::class;
+        $namespace = self::class;
 
         $className = class_basename(class: $namespace);
 
@@ -22,10 +27,14 @@ trait Observable
             ->before(search: 'Models')
             ->toString();
 
-        $observeClass = Layer::infrastructure->resolveNamespace(suffix: $domainOfModel . 'Database\\Observe\\' . $className . 'Observe');
+        $observeNamespace = Layer::infrastructure->resolveNamespace(suffix: $domainOfModel . 'Database\\Observe\\' . $className . 'Observe');
 
-        if (class_exists($observeClass)) {
-            (new $namespace)->registerObserver(class: $observeClass);
+        static::$additionalObservers[] = $observeNamespace;
+
+        foreach (static::$additionalObservers as $observerNamespace) {
+            if (class_exists($observerNamespace)) {
+                (new self)->registerObserver(class: $observerNamespace);
+            }
         }
     }
 }
