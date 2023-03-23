@@ -17,12 +17,12 @@ trait Observable
 
         $className = class_basename(class: $namespace);
 
-        $domain = Str::of(string: $namespace)
+        $domainOfModel = Str::of(string: $namespace)
             ->after(search: 'Shared')
             ->before(search: 'Models')
             ->toString();
 
-        $observeClass = Layer::infrastructure->resolveNamespace(suffix: $domain . 'Database\\Observe\\' . $className . 'Observe');
+        $observeClass = Layer::infrastructure->resolveNamespace(suffix: $domainOfModel . 'Database\\Observe\\' . $className . 'Observe');
 
         if (class_exists($observeClass)) {
             (new $namespace)->registerObserver(class: $observeClass);
