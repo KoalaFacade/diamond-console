@@ -4,11 +4,13 @@ namespace KoalaFacade\DiamondConsole\Foundation;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\Support\Traits\Tappable;
 use KoalaFacade\DiamondConsole\Foundation\DataTransferObject\HasResolvable;
 
 abstract readonly class DataTransferObject
 {
     use HasResolvable;
+    use Tappable;
 
     /**
      * Prevent properties to included on create
@@ -58,5 +60,15 @@ abstract readonly class DataTransferObject
     protected function resolveArrayKey(string $key): string
     {
         return Str::snake(value: $key);
+    }
+
+    /**
+     * Die and dump the current Data.
+     *
+     * @return never
+     */
+    public function dd(): never
+    {
+        dd($this);
     }
 }
