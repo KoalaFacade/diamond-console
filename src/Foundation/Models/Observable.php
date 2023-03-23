@@ -14,7 +14,7 @@ trait Observable
     /**
      * @var array<int, string>
      */
-    protected static array $additionalObservers = [];
+    protected static array $observers = [];
 
     public static function bootObservable(): void
     {
@@ -27,11 +27,11 @@ trait Observable
             ->before(search: 'Models')
             ->toString();
 
-        $observeNamespace = Layer::infrastructure->resolveNamespace(suffix: $domainOfModel . 'Database\\Observe\\' . $className . 'Observe');
+        static::$observers[] = Layer::infrastructure->resolveNamespace(suffix: $domainOfModel . 'Database\\Observe\\' . $className . 'Observe');
 
-        static::$additionalObservers[] = $observeNamespace;
+        $observers = array_unique(array: static::$observers);
 
-        foreach (static::$additionalObservers as $observerNamespace) {
+        foreach ($observers as $observerNamespace) {
             if (class_exists($observerNamespace)) {
                 (new self)->registerObserver(class: $observerNamespace);
             }
