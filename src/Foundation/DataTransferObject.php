@@ -2,6 +2,7 @@
 
 namespace KoalaFacade\DiamondConsole\Foundation;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Tappable;
@@ -72,5 +73,22 @@ abstract readonly class DataTransferObject
     public function dd(): never
     {
         dd($this);
+    }
+
+    /**
+     * Abilities to orchestrate the Data
+     *
+     * @param ...$values
+     * @return static
+     */
+    public function recycle(...$values): static
+    {
+        $callback = Arr::first($values);
+
+        if (Collection::make($values)->containsOneItem() && $callback instanceof \Closure) {
+            return call_user_func($callback, $this);
+        }
+
+        return $this->with(...$values);
     }
 }
