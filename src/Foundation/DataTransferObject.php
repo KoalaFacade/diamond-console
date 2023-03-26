@@ -26,7 +26,7 @@ abstract readonly class DataTransferObject
     }
 
     /**
-     * Prevent properties to included on create
+     * Prevent properties to included on update
      *
      * @return array<empty>
      */
