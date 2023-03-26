@@ -135,6 +135,8 @@ it(description: 'can recycle the data with conditional')
             'name' => 'Kevin'
         ]);
 
+        $roleData = new RoleData(name: 'Maintainer');
+
         $addresses = [
             'main_address' => 'where',
             'main_address_1' => 'where',
@@ -143,12 +145,19 @@ it(description: 'can recycle the data with conditional')
         $data
             ->when(
                 value: true,
-                callback: fn (UserData $data) => $data
-                    ->recycle(function (UserData $data) use ($addresses): UserData {
-                        return $data->with(addresses: $addresses);
-                    })
+                callback: fn (UserData $data) => $data->with(addresses: $addresses)
             )
-            ->tap(callback: function (UserData $data) use ($addresses) {
-                expect($data->addresses)->toMatchArray(array: $addresses);
-            });
+            ->tap(
+                callback: fn (UserData $data) => expect($data->addresses)
+                    ->toMatchArray(array: $addresses)
+            );
+
+        $data
+            ->unless(
+                value: false,
+                callback: fn (UserData $data) => $data->with(mainRole: $roleData)
+            )
+            ->tap(
+                callback: fn (UserData $data) => expect($roleData->name)->toBe($roleData->name)
+            );
     });
