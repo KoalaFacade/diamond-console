@@ -80,10 +80,7 @@ it(description: 'can map array and can resolve the key')
 it(description: 'can recycle the data directly')
     ->group('unit', 'dto')
     ->skip(
-        conditionOrMessage: in_array(InstalledVersions::getVersion(packageName: 'spatie/php-cloneable'), [
-            '1.0.1.0',
-            '1.0.0.0'
-        ])
+        conditionOrMessage: InstalledVersions::getVersion(packageName: 'spatie/php-cloneable') === '1.0.0.0'
     )
     ->tap(callable: function () {
         $data = UserData::resolve(data: [
@@ -107,10 +104,7 @@ it(description: 'can recycle the data directly')
 it(description: 'can recycle the data with callback')
     ->group('unit', 'dto')
     ->skip(
-        conditionOrMessage: in_array(InstalledVersions::getVersion(packageName: 'spatie/php-cloneable'), [
-            '1.0.1.0',
-            '1.0.0.0'
-        ])
+        conditionOrMessage: InstalledVersions::getVersion(packageName: 'spatie/php-cloneable') === '1.0.0.0'
     )
     ->tap(callable: function () {
         $data = UserData::resolve(data: [
