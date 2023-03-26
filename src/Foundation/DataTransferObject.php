@@ -26,7 +26,7 @@ abstract readonly class DataTransferObject
     }
 
     /**
-     * Prevent properties to included on create
+     * Prevent properties to included on update
      *
      * @return array<empty>
      */
@@ -78,17 +78,20 @@ abstract readonly class DataTransferObject
     /**
      * Abilities to orchestrate the Data
      *
-     * @param ...$values
+     * @param mixed ...$values
      * @return static
      */
-    public function recycle(...$values): static
+    public function recycle(mixed ...$values): static
     {
         $callback = Arr::first($values);
 
         if (Collection::make($values)->containsOneItem() && $callback instanceof \Closure) {
-            return call_user_func($callback, $this);
+            /** @var static $instance */
+            $instance = call_user_func($callback, $this);
+        } else {
+            $instance = $this->with(...$values);
         }
 
-        return $this->with(...$values);
+        return $instance;
     }
 }
