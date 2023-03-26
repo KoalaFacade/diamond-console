@@ -1,5 +1,6 @@
 <?php
 
+use Composer\InstalledVersions;
 use Illuminate\Support\Arr;
 use Tests\Unit\DataTransferObjects\Fixtures\GenderEnum;
 use Tests\Unit\DataTransferObjects\Fixtures\RoleData;
@@ -75,3 +76,51 @@ it(description: 'can map array and can resolve the key')
         ]);
     })
     ->group('unit', 'dto');
+
+it(description: 'can recycle the data directly')
+    ->group('unit', 'dto')
+    ->skip(
+        conditionOrMessage: InstalledVersions::getVersion(packageName: 'spatie/php-cloneable') === '1.0.0.0'
+    )
+    ->tap(callable: function () {
+        $data = UserData::resolve(data: [
+            'name' => 'Kevin'
+        ]);
+
+        $addresses = [
+            'main_address' => 'where',
+            'main_address_1' => 'where',
+        ];
+
+        $data
+            ->recycle(
+                addresses: $addresses
+            )
+            ->tap(callback: function (UserData $data) use ($addresses) {
+                expect($data->addresses)->toMatchArray(array: $addresses);
+            });
+    });
+
+it(description: 'can recycle the data with callback')
+    ->group('unit', 'dto')
+    ->skip(
+        conditionOrMessage: InstalledVersions::getVersion(packageName: 'spatie/php-cloneable') === '1.0.0.0'
+    )
+    ->tap(callable: function () {
+        $data = UserData::resolve(data: [
+            'name' => 'Kevin'
+        ]);
+
+        $addresses = [
+            'main_address' => 'where',
+            'main_address_1' => 'where',
+        ];
+
+        $data
+            ->recycle(function (UserData $data) use ($addresses): UserData {
+                return $data->with(addresses: $addresses);
+            })
+            ->tap(callback: function (UserData $data) use ($addresses) {
+                expect($data->addresses)->toMatchArray(array: $addresses);
+            });
+    });
