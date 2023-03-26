@@ -5,6 +5,7 @@ namespace KoalaFacade\DiamondConsole\Foundation;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
 use KoalaFacade\DiamondConsole\Foundation\DataTransferObject\HasResolvable;
 use Spatie\Cloneable\Cloneable;
@@ -14,6 +15,7 @@ abstract readonly class DataTransferObject
     use HasResolvable;
     use Tappable;
     use Cloneable;
+    use Conditionable;
 
     /**
      * Prevent properties to included on create
