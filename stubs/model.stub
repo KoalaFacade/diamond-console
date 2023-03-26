@@ -3,7 +3,7 @@
 namespace {{ namespace }};
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use KoalaFacade\DiamondConsole\Models\Model;
 
 class {{ class }} extends Model
 {
