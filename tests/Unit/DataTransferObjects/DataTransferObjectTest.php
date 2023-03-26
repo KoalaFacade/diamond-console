@@ -124,3 +124,40 @@ it(description: 'can recycle the data with callback')
                 expect($data->addresses)->toMatchArray(array: $addresses);
             });
     });
+
+it(description: 'can recycle the data with conditional')
+    ->group('unit', 'dto')
+    ->skip(
+        conditionOrMessage: InstalledVersions::getVersion(packageName: 'spatie/php-cloneable') === '1.0.0.0'
+    )
+    ->tap(callable: function () {
+        $data = UserData::resolve(data: [
+            'name' => 'Kevin'
+        ]);
+
+        $roleData = new RoleData(name: 'Maintainer');
+
+        $addresses = [
+            'main_address' => 'where',
+            'main_address_1' => 'where',
+        ];
+
+        $data
+            ->when(
+                value: true,
+                callback: fn (UserData $data) => $data->with(addresses: $addresses)
+            )
+            ->tap(
+                callback: fn (UserData $data) => expect($data->addresses)
+                    ->toMatchArray(array: $addresses)
+            );
+
+        $data
+            ->unless(
+                value: false,
+                callback: fn (UserData $data) => $data->with(mainRole: $roleData)
+            )
+            ->tap(
+                callback: fn (UserData $data) => expect($roleData->name)->toBe($roleData->name)
+            );
+    });
