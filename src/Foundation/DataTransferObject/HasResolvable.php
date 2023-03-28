@@ -4,10 +4,12 @@ namespace KoalaFacade\DiamondConsole\Foundation\DataTransferObject;
 
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\MapperBuilder;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Contracts\DataMapper;
 
 trait HasResolvable
 {
@@ -39,6 +41,28 @@ trait HasResolvable
     }
 
     /**
+     * @throws MappingError
+     * @return HasResolvable
+     * @param array<TKey, TValue> | Model $data
+     *
+     * Hydrate incoming data to resolve unstructured data
+     *
+     * @template TKey of array-key
+     * @template TValue
+     */
+    public static function hydrate(array | Model $data): static
+    {
+        return resolve(name: DataMapper::class)
+            ->execute(
+                signature: static::class,
+                data: match (true) {
+                    $data instanceof Model => $data->attributesToArray(),
+                    default => $data
+                }
+            );
+    }
+
+    /**
      * Resolve unstructured data from array
      *
      * @template TKey of array-key
@@ -47,6 +71,8 @@ trait HasResolvable
      * @param  array<TKey, TValue>  $data
      *
      * @throws MappingError
+     *
+     * @deprecated use hydrate(array $data) instead
      */
     public static function resolve(array $data): static
     {
@@ -92,6 +118,8 @@ trait HasResolvable
     }
 
     /**
+     * @deprecated
+     *
      * Resolve all array key form according the config
      *
      * @template TArrayKey of array-key
