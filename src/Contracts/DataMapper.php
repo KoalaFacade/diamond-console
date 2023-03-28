@@ -9,8 +9,8 @@ interface DataMapper
 {
     /**
      * @throws MappingError
-     * @param array $data
-     * @return $this|DataMapperAction
+     * @param array<array-key, mixed> $data
+     * @return mixed
      * @param class-string | string $signature
      */
     public function execute(string $signature, array $data): mixed;

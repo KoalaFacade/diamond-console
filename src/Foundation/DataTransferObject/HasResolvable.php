@@ -42,7 +42,7 @@ trait HasResolvable
 
     /**
      * @throws MappingError
-     * @return HasResolvable
+     * @return static
      * @param array<TKey, TValue> | Model $data
      *
      * Hydrate incoming data to resolve unstructured data
@@ -52,14 +52,19 @@ trait HasResolvable
      */
     public static function hydrate(array | Model $data): static
     {
-        return resolve(name: DataMapper::class)
-            ->execute(
-                signature: static::class,
-                data: match (true) {
-                    $data instanceof Model => $data->attributesToArray(),
-                    default => $data
-                }
-            );
+        /** @var DataMapper $dataMapper */
+        $dataMapper = resolve(name: DataMapper::class);
+
+        /** @var static $instance */
+        $instance = $dataMapper->execute(
+            signature: static::class,
+            data: match (true) {
+                $data instanceof Model => $data->attributesToArray(),
+                default => $data
+            }
+        );
+
+        return $instance;
     }
 
     /**

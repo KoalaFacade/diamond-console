@@ -10,12 +10,6 @@ use KoalaFacade\DiamondConsole\Foundation\Action;
 
 readonly class DataMapperAction extends Action implements DataMapper
 {
-    /**
-     * @throws MappingError
-     * @param array $data
-     * @return $this|DataMapperAction
-     * @param class-string | string $signature
-     */
     public function execute(string $signature, array $data): mixed
     {
         return (new MapperBuilder)
