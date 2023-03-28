@@ -164,6 +164,7 @@ it(description: 'can recycle the data with conditional')
     });
 
 it(description: 'can hydrate data')
+    ->group('unit', 'dto')
     ->tap(callable: function () {
         $data = UserData::hydrate(data: [
             'gender' => GenderEnum::Female,
@@ -173,6 +174,7 @@ it(description: 'can hydrate data')
     });
 
 it(description: 'can change hydrate data mapper implementation')
+    ->group('unit', 'dto')
     ->tap(callable: function () {
         app()->instance(
             abstract: DataMapper::class,
