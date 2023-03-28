@@ -4,7 +4,6 @@ namespace KoalaFacade\DiamondConsole\Foundation\DataTransferObject;
 
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\MapperBuilder;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
@@ -41,11 +40,11 @@ trait HasResolvable
     }
 
     /**
-     * @throws MappingError
-     * @return static
-     * @param array<TKey, TValue> | Model $data
+     * @param  array<TKey, TValue> | Model  $data
      *
      * Hydrate incoming data to resolve unstructured data
+     *
+     * @throws MappingError
      *
      * @template TKey of array-key
      * @template TValue

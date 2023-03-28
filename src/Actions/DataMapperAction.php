@@ -2,7 +2,6 @@
 
 namespace KoalaFacade\DiamondConsole\Actions;
 
-use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\Mapper\Source\Source;
 use CuyZ\Valinor\MapperBuilder;
 use KoalaFacade\DiamondConsole\Contracts\DataMapper;

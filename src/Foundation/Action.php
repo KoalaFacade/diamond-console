@@ -2,7 +2,7 @@
 
 namespace KoalaFacade\DiamondConsole\Foundation;
 
-readonly abstract class Action
+abstract readonly class Action
 {
     /**
      * Resolve an action class

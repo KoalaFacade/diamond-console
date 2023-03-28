@@ -85,7 +85,7 @@ it(description: 'can recycle the data directly')
     )
     ->tap(callable: function () {
         $data = UserData::resolve(data: [
-            'name' => 'Kevin'
+            'name' => 'Kevin',
         ]);
 
         $addresses = [
@@ -109,7 +109,7 @@ it(description: 'can recycle the data with callback')
     )
     ->tap(callable: function () {
         $data = UserData::resolve(data: [
-            'name' => 'Kevin'
+            'name' => 'Kevin',
         ]);
 
         $addresses = [
@@ -133,7 +133,7 @@ it(description: 'can recycle the data with conditional')
     )
     ->tap(callable: function () {
         $data = UserData::resolve(data: [
-            'name' => 'Kevin'
+            'name' => 'Kevin',
         ]);
 
         $roleData = new RoleData(name: 'Maintainer');
@@ -176,7 +176,8 @@ it(description: 'can change hydrate data mapper implementation')
     ->tap(callable: function () {
         app()->instance(
             abstract: DataMapper::class,
-            instance: new class implements DataMapper {
+            instance: new class implements DataMapper
+            {
                 public function execute(string $signature, array $data): mixed
                 {
                     return new $signature(
@@ -189,7 +190,6 @@ it(description: 'can change hydrate data mapper implementation')
         $data = UserData::hydrate(data: [
             'gender' => GenderEnum::Female,
         ]);
-
 
         expect(value: $data->gender)->toBe(expected: GenderEnum::Female);
     });

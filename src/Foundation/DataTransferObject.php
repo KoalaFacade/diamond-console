@@ -69,8 +69,6 @@ abstract readonly class DataTransferObject
 
     /**
      * Die and dump the current Data.
-     *
-     * @return never
      */
     public function dd(): never
     {
@@ -79,9 +77,6 @@ abstract readonly class DataTransferObject
 
     /**
      * Abilities to orchestrate the Data
-     *
-     * @param mixed ...$values
-     * @return static
      */
     public function recycle(mixed ...$values): static
     {

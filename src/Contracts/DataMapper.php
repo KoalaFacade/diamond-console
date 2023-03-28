@@ -3,15 +3,14 @@
 namespace KoalaFacade\DiamondConsole\Contracts;
 
 use CuyZ\Valinor\Mapper\MappingError;
-use KoalaFacade\DiamondConsole\Actions\DataMapperAction;
 
 interface DataMapper
 {
     /**
+     * @param  array<array-key, mixed>  $data
+     * @param  class-string | string  $signature
+     *
      * @throws MappingError
-     * @param array<array-key, mixed> $data
-     * @return mixed
-     * @param class-string | string $signature
      */
     public function execute(string $signature, array $data): mixed;
 }
