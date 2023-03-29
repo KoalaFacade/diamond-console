@@ -130,7 +130,7 @@ trait HasResolvable
     }
 
     /**
-     * @param  array<TKey, TValue> | Model  $data
+     * @param  array<TKey, TValue> $data
      *
      * Hydrate incoming data to resolve unstructured data
      *
@@ -139,7 +139,7 @@ trait HasResolvable
      * @template TKey of array-key
      * @template TValue
      */
-    public static function hydrate(array | Model $data): static
+    public static function hydrate(array $data): static
     {
         /** @var DataMapper $dataMapper */
         $dataMapper = resolve(name: DataMapper::class);
@@ -147,10 +147,7 @@ trait HasResolvable
         /** @var static $instance */
         $instance = $dataMapper->execute(
             signature: static::class,
-            data: match (true) {
-                $data instanceof Model => $data->attributesToArray(),
-                default => $data
-            }
+            data: $data
         );
 
         return $instance;
