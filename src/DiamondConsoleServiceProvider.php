@@ -6,6 +6,8 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Actions\DataMapperAction;
+use KoalaFacade\DiamondConsole\Contracts\DataMapper;
 use Symfony\Component\Finder\SplFileInfo;
 
 class DiamondConsoleServiceProvider extends ServiceProvider
@@ -20,6 +22,8 @@ class DiamondConsoleServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(path: __DIR__ . '/../config/diamond.php', key: 'diamond');
+
+        $this->app->singletonIf(abstract: DataMapper::class, concrete: DataMapperAction::class);
     }
 
     protected function registerPublishers(): void

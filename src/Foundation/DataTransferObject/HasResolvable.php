@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Contracts\DataMapper;
 
 trait HasResolvable
 {
@@ -47,15 +48,12 @@ trait HasResolvable
      * @param  array<TKey, TValue>  $data
      *
      * @throws MappingError
+     *
+     * @deprecated use hydrate(array $data) instead
      */
     public static function resolve(array $data): static
     {
-        /** @var static $instance */
-        $instance = (new MapperBuilder())
-            ->mapper()
-            ->map(signature: static::class, source: static::resolveTheArrayKeyForm(data: $data));
-
-        return $instance;
+        return static::hydrate($data);
     }
 
     /**
@@ -92,6 +90,8 @@ trait HasResolvable
     }
 
     /**
+     * @deprecated
+     *
      * Resolve all array key form according the config
      *
      * @template TArrayKey of array-key
@@ -127,5 +127,29 @@ trait HasResolvable
     protected static function resolveArrayKeyOfInput(string $key): string
     {
         return Str::camel(value: $key);
+    }
+
+    /**
+     * @param  array<TKey, TValue> $data
+     *
+     * Hydrate incoming data to resolve unstructured data
+     *
+     * @throws MappingError
+     *
+     * @template TKey of array-key
+     * @template TValue
+     */
+    public static function hydrate(array $data): static
+    {
+        /** @var DataMapper $dataMapper */
+        $dataMapper = resolve(name: DataMapper::class);
+
+        /** @var static $instance */
+        $instance = $dataMapper->execute(
+            signature: static::class,
+            data: $data
+        );
+
+        return $instance;
     }
 }

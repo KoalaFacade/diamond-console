@@ -38,6 +38,14 @@ abstract readonly class DataTransferObject
     }
 
     /**
+     * Resolve result array-key of toArray method from behaviour
+     */
+    protected function resolveArrayKey(string $key): string
+    {
+        return Str::snake(value: $key);
+    }
+
+    /**
      * The method that will resolve the inheritance properties
      * naming to snake case that can fit with database column naming
      *
@@ -60,17 +68,7 @@ abstract readonly class DataTransferObject
     }
 
     /**
-     * Resolve result array-key of toArray method from behaviour
-     */
-    protected function resolveArrayKey(string $key): string
-    {
-        return Str::snake(value: $key);
-    }
-
-    /**
      * Die and dump the current Data.
-     *
-     * @return never
      */
     public function dd(): never
     {
@@ -79,9 +77,6 @@ abstract readonly class DataTransferObject
 
     /**
      * Abilities to orchestrate the Data
-     *
-     * @param mixed ...$values
-     * @return static
      */
     public function recycle(mixed ...$values): static
     {

@@ -2,6 +2,7 @@
 
 use Composer\InstalledVersions;
 use Illuminate\Support\Arr;
+use KoalaFacade\DiamondConsole\Contracts\DataMapper;
 use Tests\Unit\DataTransferObjects\Fixtures\GenderEnum;
 use Tests\Unit\DataTransferObjects\Fixtures\RoleData;
 use Tests\Unit\DataTransferObjects\Fixtures\UserData;
@@ -84,7 +85,7 @@ it(description: 'can recycle the data directly')
     )
     ->tap(callable: function () {
         $data = UserData::resolve(data: [
-            'name' => 'Kevin'
+            'name' => 'Kevin',
         ]);
 
         $addresses = [
@@ -108,7 +109,7 @@ it(description: 'can recycle the data with callback')
     )
     ->tap(callable: function () {
         $data = UserData::resolve(data: [
-            'name' => 'Kevin'
+            'name' => 'Kevin',
         ]);
 
         $addresses = [
@@ -132,7 +133,7 @@ it(description: 'can recycle the data with conditional')
     )
     ->tap(callable: function () {
         $data = UserData::resolve(data: [
-            'name' => 'Kevin'
+            'name' => 'Kevin',
         ]);
 
         $roleData = new RoleData(name: 'Maintainer');
@@ -160,4 +161,37 @@ it(description: 'can recycle the data with conditional')
             ->tap(
                 callback: fn (UserData $data) => expect($roleData->name)->toBe($roleData->name)
             );
+    });
+
+it(description: 'can hydrate data')
+    ->group('unit', 'dto')
+    ->tap(callable: function () {
+        $data = UserData::hydrate(data: [
+            'gender' => GenderEnum::Female,
+        ]);
+
+        expect(value: $data->gender)->toBe(expected: GenderEnum::Female);
+    });
+
+it(description: 'can change hydrate data mapper implementation')
+    ->group('unit', 'dto')
+    ->tap(callable: function () {
+        app()->instance(
+            abstract: DataMapper::class,
+            instance: new class implements DataMapper
+            {
+                public function execute(string $signature, array $data): mixed
+                {
+                    return new $signature(
+                        gender: $data['gender']
+                    );
+                }
+            }
+        );
+
+        $data = UserData::hydrate(data: [
+            'gender' => GenderEnum::Female,
+        ]);
+
+        expect(value: $data->gender)->toBe(expected: GenderEnum::Female);
     });
