@@ -128,4 +128,31 @@ trait HasResolvable
     {
         return Str::camel(value: $key);
     }
+
+    /**
+     * @param  array<TKey, TValue> | Model  $data
+     *
+     * Hydrate incoming data to resolve unstructured data
+     *
+     * @throws MappingError
+     *
+     * @template TKey of array-key
+     * @template TValue
+     */
+    public static function hydrate(array | Model $data): static
+    {
+        /** @var DataMapper $dataMapper */
+        $dataMapper = resolve(name: DataMapper::class);
+
+        /** @var static $instance */
+        $instance = $dataMapper->execute(
+            signature: static::class,
+            data: match (true) {
+                $data instanceof Model => $data->attributesToArray(),
+                default => $data
+            }
+        );
+
+        return $instance;
+    }
 }
