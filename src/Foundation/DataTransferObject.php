@@ -2,11 +2,14 @@
 
 namespace KoalaFacade\DiamondConsole\Foundation;
 
+use CuyZ\Valinor\Mapper\MappingError;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
+use KoalaFacade\DiamondConsole\Contracts\DataMapper;
 use KoalaFacade\DiamondConsole\Foundation\DataTransferObject\HasResolvable;
 use Spatie\Cloneable\Cloneable;
 
@@ -38,6 +41,14 @@ abstract readonly class DataTransferObject
     }
 
     /**
+     * Resolve result array-key of toArray method from behaviour
+     */
+    protected function resolveArrayKey(string $key): string
+    {
+        return Str::snake(value: $key);
+    }
+
+    /**
      * The method that will resolve the inheritance properties
      * naming to snake case that can fit with database column naming
      *
@@ -57,14 +68,6 @@ abstract readonly class DataTransferObject
                 fn ($value, $key): array => [$this->resolveArrayKey($key) => $value]
             )
             ->toArray();
-    }
-
-    /**
-     * Resolve result array-key of toArray method from behaviour
-     */
-    protected function resolveArrayKey(string $key): string
-    {
-        return Str::snake(value: $key);
     }
 
     /**
@@ -88,6 +91,33 @@ abstract readonly class DataTransferObject
         } else {
             $instance = $this->with(...$values);
         }
+
+        return $instance;
+    }
+
+    /**
+     * @param  array<TKey, TValue> | Model  $data
+     *
+     * Hydrate incoming data to resolve unstructured data
+     *
+     * @throws MappingError
+     *
+     * @template TKey of array-key
+     * @template TValue
+     */
+    public static function hydrate(array | Model $data): static
+    {
+        /** @var DataMapper $dataMapper */
+        $dataMapper = resolve(name: DataMapper::class);
+
+        /** @var static $instance */
+        $instance = $dataMapper->execute(
+            signature: static::class,
+            data: match (true) {
+                $data instanceof Model => $data->attributesToArray(),
+                default => $data
+            }
+        );
 
         return $instance;
     }

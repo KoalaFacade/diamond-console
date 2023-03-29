@@ -40,33 +40,6 @@ trait HasResolvable
     }
 
     /**
-     * @param  array<TKey, TValue> | Model  $data
-     *
-     * Hydrate incoming data to resolve unstructured data
-     *
-     * @throws MappingError
-     *
-     * @template TKey of array-key
-     * @template TValue
-     */
-    public static function hydrate(array | Model $data): static
-    {
-        /** @var DataMapper $dataMapper */
-        $dataMapper = resolve(name: DataMapper::class);
-
-        /** @var static $instance */
-        $instance = $dataMapper->execute(
-            signature: static::class,
-            data: match (true) {
-                $data instanceof Model => $data->attributesToArray(),
-                default => $data
-            }
-        );
-
-        return $instance;
-    }
-
-    /**
      * Resolve unstructured data from array
      *
      * @template TKey of array-key
@@ -80,12 +53,7 @@ trait HasResolvable
      */
     public static function resolve(array $data): static
     {
-        /** @var static $instance */
-        $instance = (new MapperBuilder())
-            ->mapper()
-            ->map(signature: static::class, source: static::resolveTheArrayKeyForm(data: $data));
-
-        return $instance;
+        return static::hydrate($data);
     }
 
     /**
