@@ -77,8 +77,8 @@ class ModelMakeCommand extends Command implements Console
     public function getStubPath(): string
     {
         return $this->resolveFactoryOption()
-            ? Source::resolveStubForPath(name: 'model-factory')
-            : Source::resolveStubForPath(name: 'model');
+            ? Source::resolveStubForPath(name: 'domain/model-factory')
+            : Source::resolveStubForPath(name: 'domain/model');
     }
 
     public function resolvePlaceholders(): PlaceholderData

@@ -35,7 +35,7 @@ readonly class FactoryContractMakeAction extends Action implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'factory-contract');
+        return Source::resolveStubForPath(name: 'infrastructure/factory-contract');
     }
 
     public function getNamespace(): string

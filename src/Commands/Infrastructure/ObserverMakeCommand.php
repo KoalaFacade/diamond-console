@@ -43,7 +43,7 @@ class ObserverMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'observer');
+        return Source::resolveStubForPath(name: 'infrastructure/observer');
     }
 
     public function resolvePlaceholders(): PlaceholderData

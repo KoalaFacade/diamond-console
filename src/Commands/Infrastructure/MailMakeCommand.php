@@ -43,7 +43,7 @@ class MailMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'mail');
+        return Source::resolveStubForPath(name: 'infrastructure/mail');
     }
 
     public function resolvePlaceholders(): PlaceholderData

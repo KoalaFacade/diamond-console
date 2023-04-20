@@ -50,7 +50,7 @@ class ListenerMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        $stub = 'listener';
+        $stub = 'infrastructure/listener';
 
         if ($this->resolveEventOption()) {
             $stub .= '-event';

@@ -31,7 +31,7 @@ class DataTransferObjectMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'data-transfer-object');
+        return Source::resolveStubForPath(name: 'application/data-transfer-object');
     }
 
     public function beforeCreate(): void

@@ -41,6 +41,6 @@ class RequestMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'request');
+        return Source::resolveStubForPath(name: 'application/request');
     }
 }

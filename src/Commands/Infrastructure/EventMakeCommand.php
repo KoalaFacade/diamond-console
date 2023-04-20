@@ -43,7 +43,7 @@ class EventMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'event');
+        return Source::resolveStubForPath(name: 'infrastructure/event');
     }
 
     public function resolvePlaceholders(): PlaceholderData

@@ -49,7 +49,7 @@ class EnumMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'enum');
+        return Source::resolveStubForPath(name: 'domain/enum');
     }
 
     public function resolvePlaceholders(): PlaceholderData
