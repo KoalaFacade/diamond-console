@@ -76,7 +76,7 @@ it(description: 'cannot generate the DTO, if the DTO already exists')
         Artisan::call(command: 'diamond:install');
         Artisan::call(command: 'application:make:data-transfer-object PostData Post');
 
-        expect(value:File::exists(path: $filePath))->toBeTrue();
+        expect(value: File::exists(path: $filePath))->toBeTrue();
 
         Artisan::call(command: 'application:make:data-transfer-object PostData Post');
     })

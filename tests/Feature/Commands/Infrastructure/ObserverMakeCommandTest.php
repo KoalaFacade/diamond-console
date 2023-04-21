@@ -8,7 +8,7 @@ it(description: 'can generate Observer')
     ->tap(function () {
         $fileName = '/User/Database/Observers/UserObserver.php';
 
-        expect(value:fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'infrastructure:make:observer UserObserver User');
 
@@ -26,7 +26,7 @@ it(description: 'can generate Observer with separator')
     ->tap(function () {
         $fileName = '/User/Database/Observers/Foo/BarObserver.php';
 
-        expect(value:fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'infrastructure:make:observer Foo/BarObserver User');
 

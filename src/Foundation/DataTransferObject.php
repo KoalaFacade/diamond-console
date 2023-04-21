@@ -66,8 +66,6 @@ abstract readonly class DataTransferObject
 
     /**
      * Die and dump the current Data.
-     *
-     * @return never
      */
     public function dd(): never
     {
