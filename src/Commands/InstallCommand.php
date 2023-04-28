@@ -62,7 +62,7 @@ class InstallCommand extends Command
         /** @var array<string> $structures */
         $structures = config(key: 'diamond.structures');
 
-        return  Arr::except(array: $structures, keys: Layer::application->name);
+        return Arr::except(array: $structures, keys: Layer::application->name);
     }
 
     protected function resolveInfrastructurePath(): string

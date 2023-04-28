@@ -43,7 +43,7 @@ class ResourceMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        $stub = 'resource';
+        $stub = 'application/resource';
 
         if ($this->resolveModelOption()) {
             $stub .= '-model';

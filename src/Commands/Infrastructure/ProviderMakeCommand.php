@@ -44,7 +44,7 @@ class ProviderMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'provider');
+        return Source::resolveStubForPath(name: 'infrastructure/provider');
     }
 
     public function resolvePlaceholders(): PlaceholderData

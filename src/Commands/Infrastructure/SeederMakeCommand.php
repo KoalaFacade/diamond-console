@@ -31,7 +31,7 @@ class SeederMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'seeder');
+        return Source::resolveStubForPath(name: 'infrastructure/seeder');
     }
 
     public function resolvePlaceholders(): PlaceholderData

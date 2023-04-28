@@ -43,7 +43,7 @@ class ActionMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'action');
+        return Source::resolveStubForPath(name: 'domain/action');
     }
 
     public function resolvePlaceholders(): PlaceholderData

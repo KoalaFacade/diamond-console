@@ -43,7 +43,7 @@ class BuilderMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        $stub = 'builder';
+        $stub = 'domain/builder';
 
         if ($this->resolveModelOption()) {
             $stub .= '-model';

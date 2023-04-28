@@ -43,7 +43,7 @@ class ValueObjectMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'value-object');
+        return Source::resolveStubForPath(name: 'domain/value-object');
     }
 
     public function resolvePlaceholders(): PlaceholderData

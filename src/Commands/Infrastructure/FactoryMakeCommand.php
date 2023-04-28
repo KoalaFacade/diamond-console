@@ -82,7 +82,7 @@ class FactoryMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'factory');
+        return Source::resolveStubForPath(name: 'infrastructure/factory');
     }
 
     public function getNamespace(): string
