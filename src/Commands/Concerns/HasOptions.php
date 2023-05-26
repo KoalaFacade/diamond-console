@@ -42,4 +42,12 @@ trait HasOptions
 
         return $name;
     }
+
+    public function resolveRenderOption(): string | null
+    {
+        /** @var string|null $name */
+        $name = $this->option(key: 'render');
+
+        return $name;
+    }
 }
