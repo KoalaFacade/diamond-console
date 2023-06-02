@@ -1,0 +1,17 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+class {{ class }} extends \Exception
+{
+    /**
+     * Render the exception into HTTP response.
+     */
+    public function render(Request $request): Response
+    {
+        return response(/* ... */);
+    }
+}
