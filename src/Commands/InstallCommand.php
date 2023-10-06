@@ -5,16 +5,18 @@ namespace KoalaFacade\DiamondConsole\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Composer\ResolveComposerAutoLoaderAction;
+use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Enums\Layer;
 use KoalaFacade\DiamondConsole\Support\Source;
 use Throwable;
 
 class InstallCommand extends Command
 {
-    protected $signature = 'diamond:install {--skip-refactor}';
+    use HasArguments;
+
+    protected $signature = 'domain:install {domain} {--skip-refactor}';
 
     protected $description = 'Install the Domain Driven Structure in your project';
 
@@ -30,8 +32,10 @@ class InstallCommand extends Command
 
         $fileSystem->ensureDirectoryExists(path: $this->resolveBaseDirectoryPath());
 
+        $domainName = $this->resolveDomainArgument();
+
         foreach ($this->resolveBaseStructures() as $structure) {
-            $path = $this->resolveBaseDirectoryPath() . $structure;
+            $path = $this->resolveBaseDirectoryPath() . $domainName . '/' . $structure;
 
             if ($fileSystem->exists(path: $path)) {
                 $this->line(string: 'Skipping generate ' . $structure . ' , the base directory is exists');
@@ -39,10 +43,10 @@ class InstallCommand extends Command
                 continue;
             }
 
-            $fileSystem->makeDirectory(path: $path);
+            $fileSystem->ensureDirectoryExists(path: $path);
         }
 
-        ResolveComposerAutoLoaderAction::resolve()->execute();
+        ResolveComposerAutoLoaderAction::resolve()->execute($domainName);
 
         $this->resolveRefactor();
 
@@ -62,17 +66,17 @@ class InstallCommand extends Command
         /** @var array<string> $structures */
         $structures = config(key: 'diamond.structures');
 
-        return Arr::except(array: $structures, keys: Layer::application->name);
+        return $structures;
     }
 
     protected function resolveInfrastructurePath(): string
     {
-        return Layer::infrastructure->resolvePath(suffix: '/Laravel/Providers');
+        return Layer::infrastructure->resolvePath(prefix: $this->resolveDomainArgument(), suffix: '/Laravel/Providers');
     }
 
     protected function resolveNamespace(): string
     {
-        return Layer::infrastructure->resolveNamespace(suffix: '\\Laravel\\Providers');
+        return Layer::infrastructure->resolveNamespace(prefix: $this->resolveDomainArgument() . '\\', suffix: '\\Laravel\\Providers');
     }
 
     protected function resolveRefactor(): void

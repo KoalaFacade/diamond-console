@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
-use KoalaFacade\DiamondConsole\Enums\Layer;
 
 beforeEach(closure: function () {
     (new Illuminate\Filesystem\Filesystem())
@@ -17,8 +15,9 @@ afterEach(closure: function () {
 it(
     description: 'can generate base structure',
     closure: function () {
+        $domain = 'MyApp';
         $baseDirectoryPath = base_path(path: config(key: 'diamond.base_directory'));
-        $baseStructures = Arr::except(array: config(key: 'diamond.structures'), keys: Layer::application->name);
+        $baseStructures = config(key: 'diamond.structures');
 
         $this->assertFalse(condition: file_exists($baseDirectoryPath));
 
@@ -26,16 +25,16 @@ it(
             $this->assertFalse(condition: file_exists($baseDirectoryPath . $structure));
         }
 
-        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:install ' . $domain);
 
         $this->assertTrue(condition: file_exists($baseDirectoryPath));
 
-        $this->assertTrue(condition: file_exists($baseDirectoryPath . '/' . config(key: 'diamond.structures.infrastructure') . '/Laravel/Providers'));
+        $this->assertTrue(condition: file_exists($baseDirectoryPath . $domain . '/' . config('diamond.structures.infrastructure') . '/Laravel/Providers'));
 
         $this->assertFalse(condition: file_exists(app_path('Providers')));
 
         foreach ($baseStructures as $structure) {
-            $this->assertTrue(condition: file_exists($baseDirectoryPath . $structure));
+            $this->assertTrue(condition: file_exists($baseDirectoryPath . $domain . '/' . $structure));
         }
     }
 )->group('commands');
@@ -43,8 +42,9 @@ it(
 it(
     description: 'can generate base structure with skip refactor',
     closure: function () {
+        $domain = 'MyApp';
         $baseDirectoryPath = base_path(path: config(key: 'diamond.base_directory'));
-        $baseStructures = Arr::except(array: config(key: 'diamond.structures'), keys: Layer::application->name);
+        $baseStructures = config(key: 'diamond.structures');
 
         $this->assertFalse(condition: file_exists($baseDirectoryPath));
 
@@ -52,12 +52,12 @@ it(
             $this->assertFalse(condition: file_exists($baseDirectoryPath . $structure));
         }
 
-        Artisan::call(command: 'diamond:install --skip-refactor');
+        Artisan::call(command: 'domain:install ' . $domain . ' --skip-refactor');
 
         $this->assertTrue(condition: file_exists($baseDirectoryPath));
 
         foreach ($baseStructures as $structure) {
-            $this->assertTrue(condition: file_exists($baseDirectoryPath . $structure));
+            $this->assertTrue(condition: file_exists($baseDirectoryPath . $domain . '/' . $structure));
         }
     }
 )->group('commands');

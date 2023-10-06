@@ -25,28 +25,22 @@ readonly class ResolveComposerAutoLoaderAction extends Action
      * @throws UnableToWriteFile
      * @throws Throwable
      */
-    public function execute(): bool
+    public function execute($domain): bool
     {
         /** @var string $baseDirectory */
         $baseDirectory = config(key: 'diamond.base_directory');
         $composer = $this->fetchComposerContents();
 
-        foreach ($this->resolveBaseStructures() as $structure) {
-            $namespace = Str::of(string: $structure)->finish(cap: '\\');
-            $directory = $namespace->replace(search: '\\', replace: '/');
+        $namespace = Str::of(string: $domain)->finish(cap: '\\');
+        $directory = $namespace->replace(search: '\\', replace: '/');
 
-            if (Arr::exists(array: $composer->autoload['psr-4'], key: $namespace->toString())) {
-                continue;
-            }
-
-            Arr::set(
-                array: $composer->autoload['psr-4'],
-                key: $namespace->toString(),
-                value: $directory
-                    ->start(prefix: $baseDirectory)
-                    ->toString()
-            );
-        }
+        Arr::set(
+            array: $composer->autoload['psr-4'],
+            key: $namespace->toString(),
+            value: $directory
+                ->start(prefix: $baseDirectory)
+                ->toString()
+        );
 
         return $this->updateComposerContents(contents: $composer);
     }
@@ -96,16 +90,5 @@ readonly class ResolveComposerAutoLoaderAction extends Action
     protected function resolveBasePathForComposer(): string
     {
         return base_path(path: 'composer.json');
-    }
-
-    /**
-     * @return array<string>
-     */
-    protected function resolveBaseStructures(): array
-    {
-        /** @var array<string> $structures */
-        $structures = config(key: 'diamond.structures');
-
-        return $structures;
     }
 }
