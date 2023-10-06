@@ -16,7 +16,7 @@ readonly class ResolveCommandAction extends Action
 {
     public function __construct(
         protected Console $console,
-        protected Closure | null $copyStubData = null,
+        protected ?Closure $copyStubData = null,
     ) {
     }
 

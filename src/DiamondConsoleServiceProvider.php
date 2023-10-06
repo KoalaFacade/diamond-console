@@ -57,7 +57,7 @@ class DiamondConsoleServiceProvider extends ServiceProvider
         return Arr::flatten(array: array_merge($generalCommands, $domainDrivenCommands));
     }
 
-    protected function resolveCommandNamespace(SplFileInfo $file, string | null $directory = null): string
+    protected function resolveCommandNamespace(SplFileInfo $file, string $directory = null): string
     {
         return Str::of(string: $file->getFilenameWithoutExtension())
             ->prepend(values: $directory ? "$directory\\" : '')

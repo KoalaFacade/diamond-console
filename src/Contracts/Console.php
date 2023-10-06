@@ -2,7 +2,7 @@
 
 namespace KoalaFacade\DiamondConsole\Contracts;
 
-interface Console extends Options, Placeholders, Arguments, LifeCycle
+interface Console extends Arguments, LifeCycle, Options, Placeholders
 {
     public function getFullPath(): string;
 

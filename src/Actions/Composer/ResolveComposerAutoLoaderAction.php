@@ -25,7 +25,7 @@ readonly class ResolveComposerAutoLoaderAction extends Action
      * @throws UnableToWriteFile
      * @throws Throwable
      */
-    public function execute($domain): bool
+    public function execute(string $domain): bool
     {
         /** @var string $baseDirectory */
         $baseDirectory = config(key: 'diamond.base_directory');
