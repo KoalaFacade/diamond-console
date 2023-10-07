@@ -5,7 +5,7 @@ namespace KoalaFacade\DiamondConsole\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
+// use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Actions\Composer\ResolveComposerAutoLoaderAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Enums\Layer;
@@ -48,7 +48,7 @@ class InstallCommand extends Command
 
         ResolveComposerAutoLoaderAction::resolve()->execute($domainName);
 
-        $this->resolveRefactor();
+        // $this->resolveRefactor();
 
         $this->info(string: 'Successfully generate base file');
     }
@@ -79,32 +79,32 @@ class InstallCommand extends Command
         return Layer::infrastructure->resolveNamespace(prefix: $this->resolveDomainArgument() . '\\', suffix: '\\Laravel\\Providers');
     }
 
-    protected function resolveRefactor(): void
-    {
-        if (! $this->option('skip-refactor')) {
-            $filesystem = new Filesystem;
-            $filesystem->ensureDirectoryExists($this->resolveInfrastructurePath());
-            $filesystem->moveDirectory(from: app_path(path: 'Providers'), to: $this->resolveInfrastructurePath());
-            $configPath = base_path(path: '/config/app.php');
-            /** @var string $contents */
-            $contents = Str::replace(
-                search: 'App\\Providers',
-                replace: $this->resolveNamespace(),
-                subject: $filesystem->get($configPath)
-            );
-
-            $filesystem->put(path: $configPath, contents: $contents);
-
-            foreach ($filesystem->files($this->resolveInfrastructurePath()) as $file) {
-                /** @var string $contents */
-                $contents = Str::replace(
-                    search: 'App\\Providers',
-                    replace: $this->resolveNamespace(),
-                    subject: $filesystem->get($file)
-                );
-
-                $filesystem->put(path: $file, contents: $contents);
-            }
-        }
-    }
+    // protected function resolveRefactor(): void
+    // {
+    //     if (! $this->option('skip-refactor')) {
+    //         $filesystem = new Filesystem;
+    //         $filesystem->ensureDirectoryExists($this->resolveInfrastructurePath());
+    //         $filesystem->moveDirectory(from: app_path(path: 'Providers'), to: $this->resolveInfrastructurePath());
+    //         $configPath = base_path(path: '/config/app.php');
+    //         /** @var string $contents */
+    //         $contents = Str::replace(
+    //             search: 'App\\Providers',
+    //             replace: $this->resolveNamespace(),
+    //             subject: $filesystem->get($configPath)
+    //         );
+    //
+    //         $filesystem->put(path: $configPath, contents: $contents);
+    //
+    //         foreach ($filesystem->files($this->resolveInfrastructurePath()) as $file) {
+    //             /** @var string $contents */
+    //             $contents = Str::replace(
+    //                 search: 'App\\Providers',
+    //                 replace: $this->resolveNamespace(),
+    //                 subject: $filesystem->get($file)
+    //             );
+    //
+    //             $filesystem->put(path: $file, contents: $contents);
+    //         }
+    //     }
+    // }
 }
