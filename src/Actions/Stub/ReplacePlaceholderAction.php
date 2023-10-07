@@ -47,6 +47,7 @@ readonly class ReplacePlaceholderAction extends Action
                 }
             );
 
+        /** @var string $contents */
         $contents = $stub;
 
         $filesystem->ensureDirectoryExists(path: Str::of($filePath)->beforeLast(search: '/'));
