@@ -62,7 +62,7 @@ class BuilderMakeCommand extends Command implements Console
         );
     }
 
-    public function resolveModelNamespace(): string | null
+    public function resolveModelNamespace(): ?string
     {
         if ($this->resolveModelOption()) {
             $namespace = Source::resolveNamespace(

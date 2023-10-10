@@ -8,17 +8,17 @@ use KoalaFacade\DiamondConsole\Foundation\DataTransferObject;
 readonly class PlaceholderData extends DataTransferObject
 {
     final public function __construct(
-        public null | string $namespace = null,
-        public null | string $class = null,
-        public null | string $subject = null,
-        public null | string $tableName = null,
-        public null | string $factoryContract = null,
-        public null | string $factoryContractNamespace = null,
-        public null | string $factoryContractAlias = null,
-        public null | string $event = null,
-        public null | string $eventNamespace = null,
-        public null | string $model = null,
-        public null | string $modelNamespace = null,
+        public ?string $namespace = null,
+        public ?string $class = null,
+        public ?string $subject = null,
+        public ?string $tableName = null,
+        public ?string $factoryContract = null,
+        public ?string $factoryContractNamespace = null,
+        public ?string $factoryContractAlias = null,
+        public ?string $event = null,
+        public ?string $eventNamespace = null,
+        public ?string $model = null,
+        public ?string $modelNamespace = null,
     ) {
     }
 

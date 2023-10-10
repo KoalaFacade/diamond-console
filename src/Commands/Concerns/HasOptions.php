@@ -19,7 +19,7 @@ trait HasOptions
         return (bool) $this->option(key: 'factory');
     }
 
-    protected function resolveTableName(): string | null
+    protected function resolveTableName(): ?string
     {
         /** @var string|null $name */
         $name = $this->option(key: 'create') ?: $this->option(key: 'table');
@@ -27,7 +27,7 @@ trait HasOptions
         return $name;
     }
 
-    public function resolveEventOption(): string | null
+    public function resolveEventOption(): ?string
     {
         /** @var string|null $name */
         $name = $this->option(key: 'event');
@@ -35,7 +35,7 @@ trait HasOptions
         return $name;
     }
 
-    public function resolveModelOption(): string | null
+    public function resolveModelOption(): ?string
     {
         /** @var string|null $name */
         $name = $this->option(key: 'model');
@@ -43,7 +43,7 @@ trait HasOptions
         return $name;
     }
 
-    public function resolveRenderOption(): string | null
+    public function resolveRenderOption(): ?string
     {
         /** @var string|null $name */
         $name = $this->option(key: 'render');

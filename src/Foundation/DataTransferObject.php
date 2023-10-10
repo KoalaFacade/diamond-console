@@ -10,9 +10,9 @@ use Spatie\Cloneable\Cloneable;
 
 abstract readonly class DataTransferObject
 {
+    use Cloneable;
     use HasResolvable;
     use Tappable;
-    use Cloneable;
 
     /**
      * Prevent properties to included on create

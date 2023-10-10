@@ -17,7 +17,7 @@ use KoalaFacade\DiamondConsole\Support\Source;
 
 class FactoryMakeCommand extends Command implements Console
 {
-    use InteractsWithConsole, HasOptions, HasArguments;
+    use HasArguments, HasOptions, InteractsWithConsole;
 
     protected $signature = 'infrastructure:make:factory {name} {domain} {--model=} {--force}';
 
@@ -60,7 +60,7 @@ class FactoryMakeCommand extends Command implements Console
         );
     }
 
-    protected function getModelNamespace(): string | null
+    protected function getModelNamespace(): ?string
     {
         return Source::resolveNamespace(
             data: new NamespaceData(

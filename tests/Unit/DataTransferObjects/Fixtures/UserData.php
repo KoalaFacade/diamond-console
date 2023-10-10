@@ -7,14 +7,14 @@ use KoalaFacade\DiamondConsole\Foundation\DataTransferObject;
 readonly class UserData extends DataTransferObject
 {
     public function __construct(
-        public string | null $name = null,
+        public ?string $name = null,
         /** @var array<int, RoleData> | null $roles */
-        public array | null $roles = null,
-        public RoleData | null $mainRole = null,
-        public int | null $age = null,
-        public GenderEnum | null $gender = null,
+        public ?array $roles = null,
+        public ?RoleData $mainRole = null,
+        public ?int $age = null,
+        public ?GenderEnum $gender = null,
         /** @var array<string, string> | null $address */
-        public array | null $addresses = null
+        public ?array $addresses = null
     ) {
     }
 }

@@ -10,15 +10,15 @@ enum Layer
 
     case infrastructure;
 
-    public function resolveNamespace(string $suffix = ''): string
+    public function resolveNamespace(string $prefix = '', string $suffix = ''): string
     {
         $key = $this->name;
 
-        return config(key: 'diamond.structures.' . $key) . $suffix;
+        return $prefix . config(key: 'diamond.structures.' . $key) . $suffix;
     }
 
-    public function resolvePath(string $suffix): string
+    public function resolvePath(string $prefix, string $suffix): string
     {
-        return base_path() . '/' . config(key: 'diamond.base_directory') . $this->resolveNamespace(suffix: $suffix);
+        return base_path() . '/' . config(key: 'diamond.base_directory') . $prefix . '/' . $this->resolveNamespace(suffix: $suffix);
     }
 }
