@@ -16,7 +16,7 @@ class InstallCommand extends Command
 {
     use HasArguments;
 
-    protected $signature = 'domain:install {domain} {--skip-refactor}';
+    protected $signature = 'domain:install {domain}';
 
     protected $description = 'Install the Domain Driven Structure in your project';
 
@@ -79,6 +79,8 @@ class InstallCommand extends Command
         return Layer::infrastructure->resolveNamespace(prefix: $this->resolveDomainArgument() . '\\', suffix: '\\Laravel\\Providers');
     }
 
+    // disable auto refactor app path for now, because we need further planning
+    //
     // protected function resolveRefactor(): void
     // {
     //     if (! $this->option('skip-refactor')) {
