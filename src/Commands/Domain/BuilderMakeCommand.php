@@ -33,8 +33,8 @@ class BuilderMakeCommand extends Command implements Console
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveDomainPath(),
-                domainArgument: 'Shared\\' . $this->resolveDomainArgument(),
+                domainArgument: $this->resolveDomainArgument(),
+                structures: Source::resolveDomainPath() . '\\Shared',
                 nameArgument: $this->resolveNameArgument(),
                 endsWith: 'Models\\Builders',
             )
@@ -67,8 +67,8 @@ class BuilderMakeCommand extends Command implements Console
         if ($this->resolveModelOption()) {
             $namespace = Source::resolveNamespace(
                 data: new NamespaceData(
-                    structures: Source::resolveDomainPath(),
-                    domainArgument: 'Shared\\' . $this->resolveDomainArgument(),
+                    domainArgument: $this->resolveDomainArgument(),
+                    structures: Source::resolveDomainPath() . '\\Shared',
                     nameArgument: $this->resolveModelOption(),
                     endsWith: 'Models\\' . $this->resolveModelOption(),
                 )
