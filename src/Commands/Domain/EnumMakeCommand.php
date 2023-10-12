@@ -27,20 +27,14 @@ class EnumMakeCommand extends Command implements Console
     public function beforeCreate(): void
     {
         $this->info(string: 'Generating enum file to your project');
-
-        if (version_compare(version1: PHP_VERSION, version2: '8.1.0', operator: '<=')) {
-            throw new \RuntimeException(
-                message: 'The required PHP version is 8.1 while the version you have is ' . PHP_VERSION
-            );
-        }
     }
 
     public function getNamespace(): string
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveDomainPath(),
                 domainArgument: $this->resolveDomainArgument(),
+                structures: Source::resolveDomainPath(),
                 nameArgument: $this->resolveNameArgument(),
                 endsWith: 'Enums',
             )
