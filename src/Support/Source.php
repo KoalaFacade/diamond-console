@@ -48,8 +48,8 @@ class Source
             subject: static::resolveNamespaceDir(
                 data: $data,
                 namespace: Str::of(string: '/')
-                    ->start(prefix: $data->structures)
-                    ->append(values: $data->domainArgument)
+                    ->start(prefix: $data->domainArgument)
+                    ->append(values: $data->structures)
                     ->finish(cap: $data->endsWith ? '/' . $data->endsWith : '')
             )
         );

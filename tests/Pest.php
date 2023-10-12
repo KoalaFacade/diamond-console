@@ -88,16 +88,16 @@ function applicationPath(): string
     return resolvePathForStructure(key: Layer::application->name);
 }
 
-function fileExists(string $relativeFileName, string $prefix = null): bool
+function fileExists(string $relativeFileName, string $domain, string $prefix = null): bool
 {
     return File::exists(
-        path: basePath() . ($prefix ?? domainPath()) . Str::start($relativeFileName, prefix: '/')
+        path: basePath() . $domain . '/' . ($prefix ?? domainPath()) . Str::start($relativeFileName, prefix: '/')
     );
 }
 
-function fileGet(string $relativeFileName, string $prefix = null): string
+function fileGet(string $relativeFileName, string $domain, string $prefix = null): string
 {
     return File::get(
-        path: basePath() . ($prefix ?? domainPath()) . Str::start($relativeFileName, prefix: '/')
+        path: basePath() . $domain . '/' . ($prefix ?? domainPath()) . Str::start($relativeFileName, prefix: '/')
     );
 }
