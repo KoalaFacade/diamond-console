@@ -8,17 +8,17 @@ use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate new Exception class')
     ->tap(function () {
-        $fileName = '/User/Exceptions/StoreUserException.php';
+        $fileName = '/Exceptions/StoreUserException.php';
 
-        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User'))->toBeFalse();
 
-        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:install User');
         Artisan::call(command: 'domain:make:exception StoreUserException User');
 
-        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User'))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: fileGet(relativeFileName: $fileName),
+                    haystack: fileGet(relativeFileName: $fileName, domain: 'User'),
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
@@ -27,17 +27,17 @@ it(description: 'can generate new Exception class')
 
 it(description: 'can generate new Exception class with render function')
     ->tap(function () {
-        $fileName = '/User/Exceptions/StoreUserException.php';
+        $fileName = '/Exceptions/StoreUserException.php';
 
-        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User'))->toBeFalse();
 
-        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:install User');
         Artisan::call(command: 'domain:make:exception StoreUserException User --render');
 
-        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User'))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: fileGet(relativeFileName: $fileName),
+                    haystack: fileGet(relativeFileName: $fileName, domain: 'User'),
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
@@ -46,17 +46,17 @@ it(description: 'can generate new Exception class with render function')
 
 it(description: 'can generate new Exception class with separator')
     ->tap(function () {
-        $fileName = '/User/Exceptions/Foo/BarException.php';
+        $fileName = '/Exceptions/Foo/BarException.php';
 
-        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User'))->toBeFalse();
 
-        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:install User');
         Artisan::call(command: 'domain:make:exception Foo/BarException User');
 
-        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User'))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: fileGet(relativeFileName: $fileName),
+                    haystack: fileGet(relativeFileName: $fileName, domain: 'User'),
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
@@ -65,18 +65,18 @@ it(description: 'can generate new Exception class with separator')
 
 it(description: 'can force generate exists Exception class')
     ->tap(function () {
-        $fileName = '/User/Exceptions/StoreUserException.php';
+        $fileName = '/Exceptions/StoreUserException.php';
 
-        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User'))->toBeFalse();
 
-        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:install User');
         Artisan::call(command: 'domain:make:exception StoreUserException User');
         Artisan::call(command: 'domain:make:exception StoreUserException User --force');
 
-        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User'))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: fileGet(relativeFileName: $fileName),
+                    haystack: fileGet(relativeFileName: $fileName, domain: 'User'),
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
@@ -85,18 +85,18 @@ it(description: 'can force generate exists Exception class')
 
 it(description: 'cannot generate the Exception, if the Exception already exists')
     ->tap(function () {
-        $fileName = '/User/Exceptions/StoreUserException.php';
+        $fileName = '/Exceptions/StoreUserException.php';
 
-        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User'))->toBeFalse();
 
-        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:install User');
         Artisan::call(command: 'domain:make:exception StoreUserException User');
 
-        expect(value: fileExists(relativeFileName: $fileName))->toBeTrue();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User'))->toBeTrue();
 
         Artisan::call(command: 'domain:make:exception StoreUserException User');
 
-        expect(value: fileExists(relativeFileName: $fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User'))->toBeFalse();
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);

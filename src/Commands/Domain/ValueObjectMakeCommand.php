@@ -33,8 +33,8 @@ class ValueObjectMakeCommand extends Command implements Console
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveDomainPath(),
                 domainArgument: $this->resolveDomainArgument(),
+                structures: Source::resolveDomainPath(),
                 nameArgument: $this->resolveNameArgument(),
                 endsWith: 'ValueObjects',
             )
