@@ -4,7 +4,9 @@ namespace KoalaFacade\DiamondConsole\Actions\Factory;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Actions\Composer\ResolveComposerAutoLoaderAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
 use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
@@ -42,8 +44,8 @@ readonly class FactoryContractMakeAction extends Action implements Console
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveDomainPath(),
                 domainArgument: 'Shared',
+                structures: $this->resolveDomainArgument(),
                 nameArgument: $this->resolveNameArgument(),
                 endsWith: 'Contracts\\Database\\Factories',
             )
@@ -68,10 +70,24 @@ readonly class FactoryContractMakeAction extends Action implements Console
         return Str::replaceLast(search: 'Factory', replace: '', subject: $this->console->resolveNameArgument());
     }
 
+    public function resolveDomainArgument(): string
+    {
+        return $this->console->argument(key: 'domain');
+    }
+
     public function afterCreate(): void
     {
         $this->console->info(
             string: 'Succeed generate Factory Interface at ' . $this->getFullPath()
         );
+    }
+
+    public function beforeCreate(): void
+    {
+        $filesystem = new Filesystem;
+
+        if (! $filesystem->exists(Source::resolveSharedPath())) {
+            ResolveComposerAutoLoaderAction::resolve()->execute(domain: Source::resolveSharedPath());
+        }
     }
 }
