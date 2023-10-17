@@ -72,7 +72,7 @@ readonly class FactoryContractMakeAction extends Action implements Console
 
     public function resolveDomainArgument(): string
     {
-        return $this->console->argument(key: 'domain');
+        return $this->console->resolveDomainArgument();
     }
 
     public function afterCreate(): void
@@ -86,8 +86,8 @@ readonly class FactoryContractMakeAction extends Action implements Console
     {
         $filesystem = new Filesystem;
 
-        if (! $filesystem->exists(Source::resolveSharedPath())) {
-            ResolveComposerAutoLoaderAction::resolve()->execute(domain: Source::resolveSharedPath());
+        if (! $filesystem->exists(Source::resolveBasePath() . '/Shared')) {
+            ResolveComposerAutoLoaderAction::resolve()->execute(domain: 'Shared');
         }
     }
 }

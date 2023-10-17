@@ -39,11 +39,6 @@ class Source
         return static::resolvePathForStructure(key: Layer::application->name);
     }
 
-    public static function resolveSharedPath(): string
-    {
-        return static::resolveBasePath() . '/Shared';
-    }
-
     public static function resolveNamespace(NamespaceData $data): string
     {
         /** @var string $result */
