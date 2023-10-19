@@ -1,0 +1,10 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ contractNamespace }}\{{ contractName }} as Repository;
+
+class {{ class }} implements Repository
+{
+    //
+}
