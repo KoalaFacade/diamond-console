@@ -53,8 +53,8 @@ class FactoryMakeCommand extends Command implements Console
         return new PlaceholderData(
             namespace: $this->getNamespace(),
             class: $this->resolveNameArgument(),
-            factoryContract: $this->factoryContractMakeAction->getClassName(),
-            factoryContractNamespace: $this->factoryContractMakeAction->getNamespace(),
+            contractName: $this->factoryContractMakeAction->getClassName(),
+            contractNamespace: $this->factoryContractMakeAction->getNamespace(),
             model: $this->resolveModelName(),
             modelNamespace: $this->getModelNamespace(),
         );

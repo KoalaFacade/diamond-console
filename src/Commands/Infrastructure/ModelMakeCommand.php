@@ -98,16 +98,16 @@ class ModelMakeCommand extends Command implements Console
         return new PlaceholderData(
             namespace: $this->getNamespace(),
             class: $this->getClassName(),
-            factoryContract: $this->resolveDomainArgument(),
-            factoryContractNamespace: Source::resolveNamespace(
+            contractName: $this->resolveDomainArgument(),
+            contractNamespace: Source::resolveNamespace(
                 data: new NamespaceData(
-                    domainArgument: $this->resolveDomainArgument(),
-                    structures: Source::resolveInfrastructurePath(),
+                    domainArgument: 'Shared',
+                    structures: $this->resolveDomainArgument(),
                     nameArgument: $this->resolveNameArgument(),
-                    endsWith: 'Database\\Factories'
+                    endsWith: 'Contracts\\Database\\Factories'
                 )
             ),
-            factoryContractAlias: $this->resolveFactoryNameSuffix()
+            contractAlias: $this->resolveFactoryNameSuffix()
         );
     }
 
