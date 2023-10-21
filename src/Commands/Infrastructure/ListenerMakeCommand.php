@@ -40,8 +40,8 @@ class ListenerMakeCommand extends Command implements Console
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveInfrastructurePath(),
                 domainArgument: $this->resolveDomainArgument(),
+                structures: Source::resolveInfrastructurePath(),
                 nameArgument: $this->resolveNameArgument(),
                 endsWith: 'Listeners',
             )
@@ -73,8 +73,8 @@ class ListenerMakeCommand extends Command implements Console
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveInfrastructurePath(),
                 domainArgument: $this->resolveDomainArgument(),
+                structures: Source::resolveInfrastructurePath(),
                 nameArgument: $this->resolveNameArgument(),
                 endsWith: 'Events\\' . $this->resolveEventOption(),
             )

@@ -1,6 +1,6 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Commands\Domain;
+namespace KoalaFacade\DiamondConsole\Commands\Infrastructure;
 
 use Illuminate\Console\Command;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
@@ -15,7 +15,7 @@ class BuilderMakeCommand extends Command implements Console
 {
     use HasArguments, HasOptions, InteractsWithConsole;
 
-    protected $signature = 'domain:make:builder {name} {domain} {--model=} {--force}';
+    protected $signature = 'infrastructure:make:builder {name} {domain} {--model=} {--force}';
 
     protected $description = 'Create a new query builder';
 
@@ -33,17 +33,17 @@ class BuilderMakeCommand extends Command implements Console
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveDomainPath(),
-                domainArgument: 'Shared\\' . $this->resolveDomainArgument(),
+                domainArgument: $this->resolveDomainArgument(),
+                structures: Source::resolveInfrastructurePath(),
                 nameArgument: $this->resolveNameArgument(),
-                endsWith: 'Models\\Builders',
+                endsWith: 'Database\\Models\\Builders',
             )
         );
     }
 
     public function getStubPath(): string
     {
-        $stub = 'domain/builder';
+        $stub = 'infrastructure/builder';
 
         if ($this->resolveModelOption()) {
             $stub .= '-model';
@@ -67,10 +67,10 @@ class BuilderMakeCommand extends Command implements Console
         if ($this->resolveModelOption()) {
             $namespace = Source::resolveNamespace(
                 data: new NamespaceData(
-                    structures: Source::resolveDomainPath(),
-                    domainArgument: 'Shared\\' . $this->resolveDomainArgument(),
+                    domainArgument: $this->resolveDomainArgument(),
+                    structures: Source::resolveInfrastructurePath(),
                     nameArgument: $this->resolveModelOption(),
-                    endsWith: 'Models\\' . $this->resolveModelOption(),
+                    endsWith: 'Database\\Models',
                 )
             );
         }

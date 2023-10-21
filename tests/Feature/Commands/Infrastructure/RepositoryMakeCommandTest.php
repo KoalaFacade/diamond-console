@@ -6,21 +6,21 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
-it(description: 'can generate Factory Concrete and Interface')
+it(description: 'can generate Repository Concrete and Interface')
     ->tap(function () {
-        $fileContract = '/Contracts/Database/Factories/User.php';
-        $fileConcrete = '/Database/Factories/UserFactory.php';
+        $fileContract = '/Contracts/Repositories/User.php';
+        $fileConcrete = '/Repositories/UserRepository.php';
 
         expect(value: fileExists(relativeFileName: $fileContract, domain: 'Shared', prefix: 'User'))->toBeFalse()
             ->and(value: fileExists(relativeFileName: $fileConcrete, domain: 'User', prefix: infrastructurePath()))->toBeFalse();
 
-        Artisan::call(command: 'infrastructure:make:factory UserFactory User --model=User');
+        Artisan::call(command: 'infrastructure:make:repository UserRepository User');
 
         expect(value: fileExists(relativeFileName: $fileContract, domain: 'Shared', prefix: 'User'))->toBeTrue()
             ->and(value: fileExists(relativeFileName: $fileConcrete, domain: 'User', prefix: infrastructurePath()))->toBeTrue()
             ->and(value: Str::contains(
                 haystack: Artisan::output(),
-                needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Contract']
+                needles: ['Succeed generate Repository concrete', 'Succeed generate Repository Interface']
             ))->toBeTrue()
             ->and(value: Str::contains(
                 haystack: fileGet(relativeFileName: $fileConcrete, domain: 'User', prefix: infrastructurePath()),
@@ -33,31 +33,31 @@ it(description: 'can generate Factory Concrete and Interface')
     })
     ->group('commands');
 
-it(description: 'can generate Factory Concrete and Interface with force option')
+it(description: 'can generate Repository Concrete and Interface with force option')
     ->tap(function () {
-        $fileContract = '/Contracts/Database/Factories/User.php';
-        $fileConcrete = '/Database/Factories/UserFactory.php';
+        $fileContract = '/Contracts/Repositories/User.php';
+        $fileConcrete = '/Repositories/UserRepository.php';
 
         expect(value: fileExists(relativeFileName: $fileContract, domain: 'Shared', prefix: 'User'))->toBeFalse()
             ->and(value: fileExists(relativeFileName: $fileConcrete, domain: 'User', prefix: infrastructurePath()))->toBeFalse();
 
-        Artisan::call(command: 'infrastructure:make:factory UserFactory User');
+        Artisan::call(command: 'infrastructure:make:repository UserRepository User');
 
         expect(value: fileExists(relativeFileName: $fileContract, domain: 'Shared', prefix: 'User'))->toBeTrue()
             ->and(value: fileExists(relativeFileName: $fileConcrete, domain: 'User', prefix: infrastructurePath()))->toBeTrue()
             ->and(value: Str::contains(
                 haystack: Artisan::output(),
-                needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Contract']
+                needles: ['Succeed generate Repository concrete', 'Succeed generate Repository Interface']
             ))->toBeTrue();
 
-        Artisan::call(command: 'infrastructure:make:factory UserFactory User --force');
+        Artisan::call(command: 'infrastructure:make:repository UserRepository User --force');
 
         expect(value: fileExists(relativeFileName: $fileContract, domain: 'Shared', prefix: 'User'))->toBeTrue()
             ->and(value: fileExists(relativeFileName: $fileConcrete, domain: 'User', prefix: infrastructurePath()))->toBeTrue()
             ->and(
                 value: Str::contains(
                     haystack: Artisan::output(),
-                    needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Contract']
+                    needles: ['Succeed generate Repository concrete', 'Succeed generate Repository Interface']
                 )
             )->toBeTrue()
             ->and(
@@ -75,26 +75,26 @@ it(description: 'can generate Factory Concrete and Interface with force option')
     })
     ->group('commands');
 
-it(description: 'cannot generate the Factory, if the Factory already exists')
+it(description: 'cannot generate the Repository, if the Repository already exists')
     ->tap(function () {
-        $fileContract = '/Contracts/Database/Factories/User.php';
-        $fileConcrete = '/Database/Factories/UserFactory.php';
+        $fileContract = '/Contracts/Repositories/User.php';
+        $fileConcrete = '/Repositories/UserRepository.php';
 
         expect(value: fileExists(relativeFileName: $fileContract, domain: 'Shared', prefix: 'User'))->toBeFalse()
             ->and(value: fileExists(relativeFileName: $fileConcrete, domain: 'User', prefix: infrastructurePath()))->toBeFalse();
 
-        Artisan::call(command: 'infrastructure:make:factory UserFactory User');
+        Artisan::call(command: 'infrastructure:make:repository UserRepository User');
 
         expect(value: fileExists(relativeFileName: $fileContract, domain: 'Shared', prefix: 'User'))->toBeTrue()
             ->and(value: fileExists(relativeFileName: $fileConcrete, domain: 'User', prefix: infrastructurePath()))->toBeTrue()
             ->and(
                 value: Str::contains(
                     haystack: Artisan::output(),
-                    needles: ['Succeed generate Factory concrete', 'Succeed generate Factory Contract']
+                    needles: ['Succeed generate Repository concrete', 'Succeed generate Repository Interface']
                 )
             )->toBeTrue();
 
-        Artisan::call(command: 'infrastructure:make:factory UserFactory User');
+        Artisan::call(command: 'infrastructure:make:repository UserRepository User');
 
         expect(value: fileExists(relativeFileName: $fileContract, domain: 'Shared', prefix: 'User'))->toBeFalse()
             ->and(value: fileExists(relativeFileName: $fileConcrete, domain: 'User', prefix: infrastructurePath()))->toBeFalse();

@@ -53,8 +53,8 @@ class FactoryMakeCommand extends Command implements Console
         return new PlaceholderData(
             namespace: $this->getNamespace(),
             class: $this->resolveNameArgument(),
-            factoryContract: $this->factoryContractMakeAction->getClassName(),
-            factoryContractNamespace: $this->factoryContractMakeAction->getNamespace(),
+            contractName: $this->factoryContractMakeAction->getClassName(),
+            contractNamespace: $this->factoryContractMakeAction->getNamespace(),
             model: $this->resolveModelName(),
             modelNamespace: $this->getModelNamespace(),
         );
@@ -64,10 +64,10 @@ class FactoryMakeCommand extends Command implements Console
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveDomainPath(),
-                domainArgument: 'Shared\\' . $this->resolveDomainArgument(),
+                domainArgument: $this->resolveDomainArgument(),
+                structures: Source::resolveInfrastructurePath(),
                 nameArgument: $this->resolveModelName(),
-                endsWith: 'Models',
+                endsWith: 'Database\\Models',
             )
         );
     }
@@ -89,8 +89,8 @@ class FactoryMakeCommand extends Command implements Console
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveInfrastructurePath(),
                 domainArgument: $this->resolveDomainArgument(),
+                structures: Source::resolveInfrastructurePath(),
                 nameArgument: $this->resolveNameArgument(),
                 endsWith: 'Database\\Factories',
             )

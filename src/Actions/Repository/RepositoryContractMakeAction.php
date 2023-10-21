@@ -1,6 +1,6 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Actions\Factory;
+namespace KoalaFacade\DiamondConsole\Actions\Repository;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -15,7 +15,7 @@ use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 use KoalaFacade\DiamondConsole\Foundation\Action;
 use KoalaFacade\DiamondConsole\Support\Source;
 
-readonly class FactoryContractMakeAction extends Action implements Console
+readonly class RepositoryContractMakeAction extends Action implements Console
 {
     use InteractsWithConsole;
 
@@ -37,7 +37,7 @@ readonly class FactoryContractMakeAction extends Action implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'infrastructure/factory-contract');
+        return Source::resolveStubForPath(name: 'infrastructure/repository-contract');
     }
 
     public function getNamespace(): string
@@ -47,7 +47,7 @@ readonly class FactoryContractMakeAction extends Action implements Console
                 domainArgument: 'Shared',
                 structures: $this->resolveDomainArgument(),
                 nameArgument: $this->resolveNameArgument(),
-                endsWith: 'Contracts\\Database\\Factories',
+                endsWith: 'Contracts\\Repositories',
             )
         );
     }
@@ -67,7 +67,7 @@ readonly class FactoryContractMakeAction extends Action implements Console
 
     public function resolveNameArgument(): string
     {
-        return Str::replaceLast(search: 'Factory', replace: '', subject: $this->console->resolveNameArgument());
+        return Str::replaceLast(search: 'Repository', replace: '', subject: $this->console->resolveNameArgument());
     }
 
     public function resolveDomainArgument(): string
@@ -78,7 +78,7 @@ readonly class FactoryContractMakeAction extends Action implements Console
     public function afterCreate(): void
     {
         $this->console->info(
-            string: 'Succeed generate Factory Interface at ' . $this->getFullPath()
+            string: 'Succeed generate Repository Interface at ' . $this->getFullPath()
         );
     }
 

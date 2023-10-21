@@ -6,16 +6,16 @@ use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate Observer')
     ->tap(function () {
-        $fileName = '/User/Database/Observers/UserObserver.php';
+        $fileName = '/Database/Observers/UserObserver.php';
 
-        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'infrastructure:make:observer UserObserver User');
 
-        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: infrastructurePath()))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()),
+                    haystack: fileGet(relativeFileName: $fileName, domain: 'User', prefix: infrastructurePath()),
                     needles: ['{{ namespace }}', '{{ class }}']
                 )
             )->toBeFalse();
@@ -24,16 +24,16 @@ it(description: 'can generate Observer')
 
 it(description: 'can generate Observer with separator')
     ->tap(function () {
-        $fileName = '/User/Database/Observers/Foo/BarObserver.php';
+        $fileName = '/Database/Observers/Foo/BarObserver.php';
 
-        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'infrastructure:make:observer Foo/BarObserver User');
 
-        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: infrastructurePath()))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()),
+                    haystack: fileGet(relativeFileName: $fileName, domain: 'User', prefix: infrastructurePath()),
                     needles: ['{{ namespace }}', '{{ class }}']
                 )
             )->toBeFalse();
@@ -42,17 +42,17 @@ it(description: 'can generate Observer with separator')
 
 it(description: 'can generate Observer with force option')
     ->tap(function () {
-        $fileName = '/User/Database/Observers/UserObserver.php';
+        $fileName = '/Database/Observers/UserObserver.php';
 
-        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'infrastructure:make:observer UserObserver User');
         Artisan::call(command: 'infrastructure:make:observer UserObserver User --force');
 
-        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: infrastructurePath()))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: fileGet(relativeFileName: $fileName, prefix: infrastructurePath()),
+                    haystack: fileGet(relativeFileName: $fileName, domain: 'User', prefix: infrastructurePath()),
                     needles: ['{{ namespace }}', '{{ class }}']
                 )
             )->toBeFalse();
@@ -61,17 +61,17 @@ it(description: 'can generate Observer with force option')
 
 it(description: 'cannot generate the Observer, if the Observer already exists')
     ->tap(function () {
-        $fileName = '/User/Database/Observers/UserObserver.php';
+        $fileName = '/Database/Observers/UserObserver.php';
 
-        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: infrastructurePath()))->toBeFalse();
 
         Artisan::call(command: 'infrastructure:make:observer UserObserver User');
 
-        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeTrue();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: infrastructurePath()))->toBeTrue();
 
         Artisan::call(command: 'infrastructure:make:observer UserObserver User ');
 
-        expect(value: fileExists(relativeFileName: $fileName, prefix: infrastructurePath()))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: infrastructurePath()))->toBeFalse();
     })
     ->group('command')
     ->throws(exception: FileAlreadyExistException::class);

@@ -1,10 +1,11 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Commands\Domain;
+namespace KoalaFacade\DiamondConsole\Commands\Infrastructure;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
+use KoalaFacade\DiamondConsole\Actions\Model\ModelContractMakeAction;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
 use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
@@ -17,9 +18,11 @@ class ModelMakeCommand extends Command implements Console
 {
     use HasArguments, HasOptions, InteractsWithConsole;
 
-    protected $signature = 'domain:make:model {name} {domain} {--f|factory} {--m|migration} {--force}';
+    protected $signature = 'infrastructure:make:model {name} {domain} {--f|factory} {--m|migration} {--force}';
 
     protected $description = 'Create a new model';
+
+    protected Console $modelContractMakeAction;
 
     protected function resolveFactoryNameSuffix(): string
     {
@@ -29,6 +32,10 @@ class ModelMakeCommand extends Command implements Console
     public function beforeCreate(): void
     {
         $this->info(string: 'Generating model file to your project');
+
+        $this->resolveModelContractConsole(
+            console: ModelContractMakeAction::resolve(parameters: ['console' => $this])->execute()
+        );
     }
 
     public function afterCreate(): void
@@ -62,14 +69,19 @@ class ModelMakeCommand extends Command implements Console
         $this->info(string: 'Successfully generate model file');
     }
 
+    public function resolveModelContractConsole(Console $console): void
+    {
+        $this->modelContractMakeAction = $console;
+    }
+
     public function getNamespace(): string
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveDomainPath(),
-                domainArgument: 'Shared\\' . $this->resolveDomainArgument(),
+                domainArgument: $this->resolveDomainArgument(),
+                structures: Source::resolveInfrastructurePath(),
                 nameArgument: $this->resolveNameArgument(),
-                endsWith: 'Models',
+                endsWith: 'Database\\Models',
             )
         );
     }
@@ -77,8 +89,8 @@ class ModelMakeCommand extends Command implements Console
     public function getStubPath(): string
     {
         return $this->resolveFactoryOption()
-            ? Source::resolveStubForPath(name: 'domain/model-factory')
-            : Source::resolveStubForPath(name: 'domain/model');
+            ? Source::resolveStubForPath(name: 'infrastructure/model-factory')
+            : Source::resolveStubForPath(name: 'infrastructure/model');
     }
 
     public function resolvePlaceholders(): PlaceholderData
@@ -86,16 +98,16 @@ class ModelMakeCommand extends Command implements Console
         return new PlaceholderData(
             namespace: $this->getNamespace(),
             class: $this->getClassName(),
-            factoryContract: $this->resolveNameArgument(),
-            factoryContractNamespace: Source::resolveNamespace(
+            contractName: $this->resolveDomainArgument(),
+            contractNamespace: Source::resolveNamespace(
                 data: new NamespaceData(
-                    structures: Source::resolveDomainPath(),
                     domainArgument: 'Shared',
+                    structures: $this->resolveDomainArgument(),
                     nameArgument: $this->resolveNameArgument(),
-                    endsWith: 'Contracts\\Database\\Factories',
+                    endsWith: 'Contracts\\Database\\Factories'
                 )
             ),
-            factoryContractAlias: $this->resolveFactoryNameSuffix()
+            contractAlias: $this->resolveFactoryNameSuffix()
         );
     }
 

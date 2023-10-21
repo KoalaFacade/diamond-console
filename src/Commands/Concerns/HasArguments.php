@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
  */
 trait HasArguments
 {
-    protected function resolveDomainArgument(): string
+    public function resolveDomainArgument(): string
     {
         /** @var string $argument */
         $argument = $this->argument(key: 'domain');
