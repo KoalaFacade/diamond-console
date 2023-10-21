@@ -3,23 +3,22 @@
 namespace Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate new DTO')
     ->tap(function () {
-        $filePath = base_path(path: applicationPath() . '/DataTransferObjects/Post/PostData.php');
+        $fileName = '/DataTransferObjects/PostData.php';
 
-        expect(value: File::exists(path: $filePath))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'Post', prefix: applicationPath()))->toBeFalse();
 
-        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:install Post');
         Artisan::call(command: 'application:make:data-transfer-object PostData Post');
 
-        expect(value: File::exists(path: $filePath))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'Post', prefix: applicationPath()))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: File::get(path: $filePath),
+                    haystack: fileGet(relativeFileName: $fileName, domain: 'Post', prefix: applicationPath()),
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
@@ -28,18 +27,17 @@ it(description: 'can generate new DTO')
 
 it(description: 'can generate new DTO with separator')
     ->tap(function () {
-        $filePath = base_path(path: applicationPath() . '/DataTransferObjects/Post/Foo/BarData.php');
+        $fileName = '/DataTransferObjects/Foo/BarData.php';
 
-        expect(value: File::exists(path: $filePath))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'Post', prefix: applicationPath()))->toBeFalse();
 
-        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:install Post');
         Artisan::call(command: 'application:make:data-transfer-object Foo/BarData Post');
 
-        expect(value: File::exists(path: $filePath))
-            ->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'Post', prefix: applicationPath()))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: File::get(path: $filePath),
+                    haystack: fileGet(relativeFileName: $fileName, domain: 'Post', prefix: applicationPath()),
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )
@@ -49,18 +47,18 @@ it(description: 'can generate new DTO with separator')
 
 it(description: 'can force generate exists DTO')
     ->tap(function () {
-        $filePath = base_path(path: applicationPath() . '/DataTransferObjects/Post/PostData.php');
+        $fileName = '/DataTransferObjects/PostData.php';
 
-        expect(value: File::exists(path: $filePath))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'Post', prefix: applicationPath()))->toBeFalse();
 
-        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:install Post');
         Artisan::call(command: 'application:make:data-transfer-object PostData Post');
         Artisan::call(command: 'application:make:data-transfer-object PostData Post --force');
 
-        expect(value: File::exists(path: $filePath))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'Post', prefix: applicationPath()))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: File::get(path: $filePath),
+                    haystack: fileGet(relativeFileName: $fileName, domain: 'Post', prefix: applicationPath()),
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
@@ -69,16 +67,18 @@ it(description: 'can force generate exists DTO')
 
 it(description: 'cannot generate the DTO, if the DTO already exists')
     ->tap(function () {
-        $filePath = base_path(path: applicationPath() . '/DataTransferObjects/Post/PostData.php');
+        $fileName = '/DataTransferObjects/PostData.php';
 
-        expect(value: File::exists(path: $filePath))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'Post', prefix: applicationPath()))->toBeFalse();
 
-        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:install Post');
         Artisan::call(command: 'application:make:data-transfer-object PostData Post');
 
-        expect(value: File::exists(path: $filePath))->toBeTrue();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'Post', prefix: applicationPath()))->toBeTrue();
 
         Artisan::call(command: 'application:make:data-transfer-object PostData Post');
+
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'Post', prefix: applicationPath()))->toBeTrue();
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);
