@@ -3,10 +3,9 @@
 namespace KoalaFacade\DiamondConsole\Commands\Application;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
-use KoalaFacade\DiamondConsole\Commands\Application\Concerns\InteractsWithConsoleInApplication;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasArguments;
 use KoalaFacade\DiamondConsole\Commands\Concerns\HasOptions;
+use KoalaFacade\DiamondConsole\Commands\Concerns\InteractsWithConsole;
 use KoalaFacade\DiamondConsole\Contracts\Console;
 use KoalaFacade\DiamondConsole\DataTransferObjects\NamespaceData;
 use KoalaFacade\DiamondConsole\DataTransferObjects\PlaceholderData;
@@ -14,48 +13,49 @@ use KoalaFacade\DiamondConsole\Support\Source;
 
 class ResourceMakeCommand extends Command implements Console
 {
-    use HasArguments, HasOptions, InteractsWithConsoleInApplication;
+    use HasArguments, HasOptions, InteractsWithConsole;
 
     protected $signature = 'application:make:resource {name} {domain} {--model=} {--force}';
 
-    protected $description = 'Create a new resource';
+    protected $description = 'Create a new Resource';
 
     public function beforeCreate(): void
     {
-        $this->info(string: 'Generating resource file to your project');
+        $this->info(string: 'Generating action file to your project');
     }
 
     public function afterCreate(): void
     {
-        $this->info(string: 'Successfully generate resource file');
+        $this->info(string: 'Successfully generate action file');
     }
 
     public function getNamespace(): string
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveApplicationPath() . '\\Http',
-                domainArgument: 'Resources\\' . $this->resolveDomainArgument(),
+                domainArgument: $this->resolveDomainArgument(),
+                structures: Source::resolveApplicationPath(),
                 nameArgument: $this->resolveNameArgument(),
+                endsWith: 'Resources',
             )
         );
     }
 
     public function getStubPath(): string
     {
-        $stub = 'application/resource';
+        $stubs = 'application/resource';
 
         if ($this->resolveModelOption()) {
-            $stub .= '-model';
+            $stubs .= '-model';
         }
 
-        return Source::resolveStubForPath(name: $stub);
+        return Source::resolveStubForPath(name: $stubs);
     }
 
     public function resolvePlaceholders(): PlaceholderData
     {
         return new PlaceholderData(
-            namespace: Str::ucfirst(string: $this->getNamespace()),
+            namespace: $this->getNamespace(),
             class: $this->getClassName(),
             model: $this->resolveModelOption(),
             modelNamespace: $this->resolveModelNamespace()
@@ -67,10 +67,10 @@ class ResourceMakeCommand extends Command implements Console
         if ($this->resolveModelOption()) {
             $namespace = Source::resolveNamespace(
                 data: new NamespaceData(
-                    structures: Source::resolveDomainPath(),
-                    domainArgument: 'Shared\\' . $this->resolveDomainArgument(),
+                    domainArgument: $this->resolveDomainArgument(),
+                    structures: Source::resolveInfrastructurePath(),
                     nameArgument: $this->resolveModelOption(),
-                    endsWith: 'Models\\' . $this->resolveModelOption(),
+                    endsWith: 'Database\\Models',
                 )
             );
         }
