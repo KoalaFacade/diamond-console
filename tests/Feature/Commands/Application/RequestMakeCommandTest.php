@@ -3,23 +3,22 @@
 namespace Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use KoalaFacade\DiamondConsole\Exceptions\FileAlreadyExistException;
 
 it(description: 'can generate new Request class')
     ->tap(function () {
-        $fileName = app_path(path: 'Http/Requests/User/StoreUserRequest.php');
+        $fileName = 'Requests/StoreUserRequest.php';
 
-        expect(value: File::exists(path: $fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: applicationPath()))->toBeFalse();
 
-        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:install User');
         Artisan::call(command: 'application:make:request StoreUserRequest User');
 
-        expect(value: File::exists(path: $fileName))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: applicationPath()))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: File::get(path: $fileName),
+                    haystack: fileGet(relativeFileName: $fileName, domain: 'User', prefix: applicationPath()),
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
@@ -28,17 +27,17 @@ it(description: 'can generate new Request class')
 
 it(description: 'can generate new Request class with separator')
     ->tap(function () {
-        $fileName = app_path(path: 'Http/Requests/User/Foo/BarRequest.php');
+        $fileName = 'Requests/Foo/BarRequest.php';
 
-        expect(value: File::exists(path: $fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: applicationPath()))->toBeFalse();
 
-        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:install User');
         Artisan::call(command: 'application:make:request Foo/BarRequest User');
 
-        expect(value: File::exists(path: $fileName))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: applicationPath()))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: File::get(path: $fileName),
+                    haystack: fileGet(relativeFileName: $fileName, domain: 'User', prefix: applicationPath()),
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
@@ -47,18 +46,18 @@ it(description: 'can generate new Request class with separator')
 
 it(description: 'can force generate exists Request class')
     ->tap(function () {
-        $fileName = app_path(path: 'Http/Requests/User/StoreUserRequest.php');
+        $fileName = 'Requests/StoreUserRequest.php';
 
-        expect(value: File::exists(path: $fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: applicationPath()))->toBeFalse();
 
-        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:install User');
         Artisan::call(command: 'application:make:request StoreUserRequest User');
         Artisan::call(command: 'application:make:request StoreUserRequest User --force');
 
-        expect(value: File::exists(path: $fileName))->toBeTrue()
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: applicationPath()))->toBeTrue()
             ->and(
                 value: Str::contains(
-                    haystack: File::get(path: $fileName),
+                    haystack: fileGet(relativeFileName: $fileName, domain: 'User', prefix: applicationPath()),
                     needles: ['{{ class }}', '{{ namespace }}']
                 )
             )->toBeFalse();
@@ -67,18 +66,18 @@ it(description: 'can force generate exists Request class')
 
 it(description: 'cannot generate the Request, if the Request already exists')
     ->tap(function () {
-        $fileName = app_path(path: 'Http/Requests/User/StoreUserRequest.php');
+        $fileName = 'Requests/StoreUserRequest.php';
 
-        expect(value: File::exists(path: $fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: applicationPath()))->toBeFalse();
 
-        Artisan::call(command: 'diamond:install');
+        Artisan::call(command: 'domain:install User');
         Artisan::call(command: 'application:make:request StoreUserRequest User');
 
-        expect(value: File::exists(path: $fileName))->toBeTrue();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: applicationPath()))->toBeTrue();
 
         Artisan::call(command: 'application:make:request StoreUserRequest User');
 
-        expect(value: File::exists(path: $fileName))->toBeFalse();
+        expect(value: fileExists(relativeFileName: $fileName, domain: 'User', prefix: applicationPath()))->toBeFalse();
     })
     ->group(groups: 'commands')
     ->throws(exception: FileAlreadyExistException::class);

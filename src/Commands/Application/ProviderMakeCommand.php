@@ -1,6 +1,6 @@
 <?php
 
-namespace KoalaFacade\DiamondConsole\Commands\Infrastructure;
+namespace KoalaFacade\DiamondConsole\Commands\Application;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
@@ -16,7 +16,7 @@ class ProviderMakeCommand extends Command implements Console
 {
     use HasArguments, HasOptions, InteractsWithConsole;
 
-    protected $signature = 'infrastructure:make:provider {name} {domain} {--force}';
+    protected $signature = 'application:make:provider {name} {domain} {--force}';
 
     protected $description = 'Create a new service provider class';
 
@@ -34,8 +34,8 @@ class ProviderMakeCommand extends Command implements Console
     {
         return Source::resolveNamespace(
             data: new NamespaceData(
-                structures: Source::resolveInfrastructurePath(),
                 domainArgument: $this->resolveDomainArgument(),
+                structures: Source::resolveApplicationPath(),
                 nameArgument: $this->resolveNameArgument(),
                 endsWith: 'Providers',
             )
@@ -44,7 +44,7 @@ class ProviderMakeCommand extends Command implements Console
 
     public function getStubPath(): string
     {
-        return Source::resolveStubForPath(name: 'infrastructure/provider');
+        return Source::resolveStubForPath(name: 'application/provider');
     }
 
     public function resolvePlaceholders(): PlaceholderData
